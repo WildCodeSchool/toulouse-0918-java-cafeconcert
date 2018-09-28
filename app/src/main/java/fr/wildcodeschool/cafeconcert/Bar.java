@@ -2,16 +2,16 @@ package fr.wildcodeschool.cafeconcert;
 
 public class Bar {
 
+    /* Declaration variables*/
     private String barName;
     private String phoneNumber;
-    private double geoShape;
     private double geoPoint;
+    private double geoShape;
     private String webUrl;
+    private int isLiked; // 1 if liked, 0 if disliked, 2 if neutral
 
-    private boolean isLiked; // null if neutral, true if liked, false if disliked
-
-
-    public Bar(String barName, String phoneNumber, double geoShape, double geoPoint, String webUrl, boolean isLiked) {
+    /*Constructor*/
+    public Bar(String barName, String phoneNumber, double geoPoint, double geoShape, String webUrl, int isLiked) {
         this.barName = barName;
         this.phoneNumber = phoneNumber;
         this.geoShape = geoShape;
@@ -20,6 +20,7 @@ public class Bar {
         this.isLiked = isLiked;
     }
 
+    /*Getters and setters*/
     public String getBarName() {
         return barName;
     }
@@ -60,12 +61,12 @@ public class Bar {
         this.webUrl = webUrl;
     }
 
-    public boolean isLiked() {
+    public int getIsLiked() {
         return isLiked;
     }
 
-    public void setLiked(boolean liked) {
-        isLiked = liked;
+    public void setIsLiked(int isLiked) {
+        isLiked = isLiked;
     }
 
 
