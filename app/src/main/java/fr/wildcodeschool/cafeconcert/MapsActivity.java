@@ -15,8 +15,6 @@ import java.util.ArrayList;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    // Create a LatLngBounds that includes the city of Adelaide in Australia.
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +26,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
     }
-
+  // TODO : à supprimer quand la méthode de création de bar sera à jour
     public ArrayList<Bar> creatingBars() {
 
         ArrayList<Bar> bars = new ArrayList<Bar>();
@@ -70,7 +68,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 new LatLng(43.565428, 1.411854), new LatLng(43.642094 , 1.480995));
         mMap.setLatLngBoundsForCameraTarget(toulouseBounds);
 
-        // Add a marker in Toulouse and move the camera
+        // Zoomer sur Toulouse à partir d'un point
         LatLng toulouse = new LatLng(43.6043, 1.4437);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(toulouse, 13));
 
@@ -78,15 +76,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         ArrayList<Bar> bars = creatingBars(); //Instantiation of an arrayList of café-concert objects
         CreateMarkers(bars);
-
+        // Todo : Supprimer creatingBars et remplacer par la nouvelle méthode de création de bars
 
 
     }
 
+    // Creation des marqueurs via une liste de bars - Assigne un marqueur pour chaque bar à partir de son nom, sa position
+
     public void CreateMarkers(ArrayList<Bar> bars){
         for (Bar monBar :bars) {
             LatLng barposition = new LatLng(monBar.getGeoPoint(), monBar.getGeoShape());
-            mMap.addMarker(new MarkerOptions().position(barposition).title(monBar.getBarName()));
+
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(barposition);
+            markerOptions.title(monBar.getBarName());
+            markerOptions.snippet(monBar.getPhoneNumber()+ "\r\n" + monBar.getWebUrl());
+
+            mMap.addMarker(markerOptions);
 
         }
     }
