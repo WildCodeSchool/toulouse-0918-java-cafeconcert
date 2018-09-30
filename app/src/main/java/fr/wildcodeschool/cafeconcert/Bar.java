@@ -69,5 +69,4 @@ public class Bar {
         isLiked = isLiked;
     }
 
-
 }
