@@ -14,7 +14,18 @@ import java.util.ArrayList;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
+    final static double TOULOUSE_LATITUDE = 43.6043;
+    final static double TOULOUSE_LONGITUDE = 1.4437;
+    final static double TOULOUSE_LATITUDE_BORDURES_BOT = 43.565428;
+    final static double TOULOUSE_LONGITUDE_BORDURES_BOT = 1.411854;
+    final static double TOULOUSE_LATITUDE_BORDURES_TOP = 43.642094;
+    final static double TOULOUSE_LONGITUDE_BORDURES_TOP = 1.480995;
+    final static int ZOOM_LVL = 13;
     private GoogleMap mMap;
+
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,16 +73,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
 
         mMap = googleMap;
-
         // mettre en place les bordures de la carte
         LatLngBounds toulouseBounds = new LatLngBounds(
-                new LatLng(43.565428, 1.411854), new LatLng(43.642094 , 1.480995));
+                new LatLng(TOULOUSE_LATITUDE_BORDURES_BOT, TOULOUSE_LONGITUDE_BORDURES_BOT), new LatLng(TOULOUSE_LATITUDE_BORDURES_TOP , TOULOUSE_LONGITUDE_BORDURES_TOP));
         mMap.setLatLngBoundsForCameraTarget(toulouseBounds);
-
         // Zoomer sur Toulouse à partir d'un point
-        LatLng toulouse = new LatLng(43.6043, 1.4437);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(toulouse, 13));
-
+        LatLng toulouse = new LatLng(TOULOUSE_LATITUDE, TOULOUSE_LONGITUDE);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(toulouse, ZOOM_LVL));
 
 
         ArrayList<Bar> bars = creatingBars(); //Instantiation of an arrayList of café-concert objects
