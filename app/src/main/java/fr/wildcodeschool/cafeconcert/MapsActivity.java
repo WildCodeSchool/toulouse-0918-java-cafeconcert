@@ -1,7 +1,16 @@
 package fr.wildcodeschool.cafeconcert;
 
+import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.view.GestureDetectorCompat;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -22,9 +31,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     final static double TOULOUSE_LONGITUDE_BORDURES_TOP = 1.480995;
     final static int ZOOM_LVL = 13;
     private GoogleMap mMap;
-
-
-
+    private GestureDetectorCompat mGestureObject;
+    private MotionEvent mMotionEvent;
 
 
     @Override
@@ -35,6 +43,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        final ImageView goList = findViewById(R.id.goList);
+        //onTouch du Drawable à droite (fleche), go sur l'activity list bar
+        goList.setOnTouchListener(new View.OnTouchListener(){
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_UP){
+
+                    Intent intent = new Intent(MapsActivity.this, BarListActivity.class);
+                    startActivity(intent);
+                    return true;
+                }
+                return false;
+            }
+        });
 
     }
   // TODO : à supprimer quand la méthode de création de bar sera à jour
@@ -59,6 +81,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return bars;
 
     }
+
+
 
     /**
      * Manipulates the map once available.
@@ -104,6 +128,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         }
     }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event){
+        this.mGestureObject.onTouchEvent(event);
+        return super.onTouchEvent(event);
+    }
+    //now create the gesture Object Class
+
+
+
+
+
+
+
 
 
 }
