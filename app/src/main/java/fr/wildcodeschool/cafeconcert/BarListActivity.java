@@ -19,11 +19,11 @@ public class BarListActivity extends AppCompatActivity {
         gestureObject = new GestureDetectorCompat(this, new BarListActivity.LearnGesture());
         final ImageView goToMap = findViewById(R.id.goToMap);
 
+        //onTouchListener pour aller sur l'activité map
         goToMap.setOnTouchListener(new View.OnTouchListener(){
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if(event.getAction() == MotionEvent.ACTION_UP){
-
                     Intent goToMap = new Intent(BarListActivity.this, MapsActivity.class);
                     startActivity(goToMap);
                     return true;
@@ -41,6 +41,7 @@ public class BarListActivity extends AppCompatActivity {
     }
     //now create the gesture Object Class
 
+    //swipe pour aller sur l'activité map
     class LearnGesture extends GestureDetector.SimpleOnGestureListener{
         //SimpleOnGestureListener is the listener for the gestures we want
 
