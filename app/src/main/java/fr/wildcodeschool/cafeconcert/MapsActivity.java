@@ -31,8 +31,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     final static double TOULOUSE_LONGITUDE_BORDURES_TOP = 1.480995;
     final static int ZOOM_LVL = 13;
     private GoogleMap mMap;
-    private GestureDetectorCompat gestureObject;
-    private MotionEvent motionEvent;
+    private GestureDetectorCompat mGestureObject;
+    private MotionEvent mMotionEvent;
 
 
     @Override
@@ -131,7 +131,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public boolean onTouchEvent(MotionEvent event){
-        this.gestureObject.onTouchEvent(event);
+        this.mGestureObject.onTouchEvent(event);
         return super.onTouchEvent(event);
     }
     //now create the gesture Object Class

@@ -11,12 +11,12 @@ import android.widget.ImageView;
 
 public class BarListActivity extends AppCompatActivity {
 
-    private GestureDetectorCompat gestureObject;
+    private GestureDetectorCompat mGestureObject;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bar_list);
-        gestureObject = new GestureDetectorCompat(this, new BarListActivity.LearnGesture());
+        mGestureObject = new GestureDetectorCompat(this, new BarListActivity.LearnGesture());
         final ImageView goToMap = findViewById(R.id.goToMap);
 
         //onTouchListener pour aller sur l'activité map
@@ -36,7 +36,7 @@ public class BarListActivity extends AppCompatActivity {
 
     @Override
     public boolean onTouchEvent(MotionEvent event){
-        this.gestureObject.onTouchEvent(event);
+        this.mGestureObject.onTouchEvent(event);
         return super.onTouchEvent(event);
     }
     //now create the gesture Object Class
@@ -47,14 +47,14 @@ public class BarListActivity extends AppCompatActivity {
 
         @Override
         public boolean onFling(MotionEvent event1, MotionEvent event2, float velocityX, float velocityY){
-            if(event2.getX()>event1.getX() && (Math.abs(event2.getY()-event1.getY())<150)){
+            if(event2.getX() > event1.getX() && (Math.abs(event2.getY()-event1.getY()) < 150)){
 
                 Intent intent = new Intent(BarListActivity.this, MapsActivity.class);
                 startActivity(intent);
                 //swipe gauche à droite
 
             }
-            else if(event2.getX()<event1.getX()){
+            else if(event2.getX() < event1.getX()){
                 //swipe droite à gauche
             }
             return true;
