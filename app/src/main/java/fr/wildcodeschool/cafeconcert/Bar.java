@@ -9,15 +9,17 @@ public class Bar {
     private double geoShape;
     private String webUrl;
     private int isLiked; // 1 if liked, 0 if disliked, 2 if neutral
+    private int picture; // Pour un drawable le type est 'int'
 
     /*Constructor*/
-    public Bar(String barName, String phoneNumber, double geoPoint, double geoShape, String webUrl, int isLiked) {
+    public Bar(String barName, String phoneNumber, double geoPoint, double geoShape, String webUrl, int isLiked, int picture) {
         this.barName = barName;
         this.phoneNumber = phoneNumber;
         this.geoShape = geoShape;
         this.geoPoint = geoPoint;
         this.webUrl = webUrl;
         this.isLiked = isLiked;
+        this.picture = picture;
     }
 
     /*Getters and setters*/
@@ -69,4 +71,7 @@ public class Bar {
         isLiked = isLiked;
     }
 
+    public int getPicture() { return picture; }
+
+    public void setPicture(int picture) { this.picture = picture; }
 }
