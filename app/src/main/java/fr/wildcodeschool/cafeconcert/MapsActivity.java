@@ -32,9 +32,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     final static int ZOOM_LVL = 13;
     private GoogleMap mMap;
     private GestureDetectorCompat gestureObject;
-
-
-
+    private MotionEvent motionEvent;
 
 
     @Override
@@ -46,13 +44,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         final ImageView goList = findViewById(R.id.goList);
-        gestureObject = new GestureDetectorCompat(this, new LearnGesture());
-
-        goList.setOnClickListener(new View.OnClickListener() {
+        //onTouch du Drawable à droite (fleche), go sur l'activity list bar
+        goList.setOnTouchListener(new View.OnTouchListener(){
             @Override
-            public void onClick(View v) {
-                Intent goToList = new Intent(MapsActivity.this, ListActivity.class);
-                startActivity(goToList);
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_UP){
+
+                    Intent intent = new Intent(MapsActivity.this, BarListActivity.class);
+                    startActivity(intent);
+                    return true;
+                }
+                return false;
             }
         });
 
@@ -134,24 +136,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
     //now create the gesture Object Class
 
-    class LearnGesture extends GestureDetector.SimpleOnGestureListener{
-        //SimpleOnGestureListener is the listener for the gestures we want
 
-        @Override
-        public boolean onFling(MotionEvent event1, MotionEvent event2, float velocityX, float velocityY){
-            if(event2.getX()>event1.getX()){
-                //swipe gauche à droite
-
-            }
-            else if(event2.getX()<event1.getX() && (event2.getY()-event1.getY()>50 || event1.getY()-event2.getY()>50)){
-                //swipe droite à gauche
-                Intent intent = new Intent(MapsActivity.this, ListActivity.class);
-                startActivity(intent);
-
-            }
-            return true;
-        }
-    }
 
 
 
