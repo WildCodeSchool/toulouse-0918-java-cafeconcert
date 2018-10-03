@@ -7,7 +7,7 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/fondpopup"
+        android:id="@+id/fondPopup"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -17,7 +17,7 @@
         app:srcCompat="@drawable/fondpopup" />
 
     <ImageView
-        android:id="@+id/dontlikebutton"
+        android:id="@+id/dontLikeButton"
         style="@style/borderPopup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -29,11 +29,11 @@
         android:clickable="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/borderimgbar"
+        app:layout_constraintTop_toBottomOf="@+id/borderImgBar"
         app:srcCompat="?android:attr/textSelectHandleLeft" />
 
     <ImageView
-        android:id="@+id/borderimgbar"
+        android:id="@+id/borderImgBar"
         style="@style/borderPopup"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -42,11 +42,11 @@
         app:srcCompat="@android:color/black" />
 
     <ImageView
-        android:id="@+id/borderlike"
+        android:id="@+id/borderLike"
         style="@style/borderPopup"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/likebutton"
+        app:layout_constraintTop_toBottomOf="@+id/likeButton"
         app:srcCompat="@android:color/black" />
 
     <TextView
@@ -82,7 +82,7 @@
         app:srcCompat="@android:drawable/stat_sys_phone_call" />
 
     <ImageView
-        android:id="@+id/likebutton"
+        android:id="@+id/likeButton"
         style="@style/borderPopup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -94,7 +94,7 @@
         android:clickable="true"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/borderimgbar"
+        app:layout_constraintTop_toBottomOf="@+id/borderImgBar"
         app:srcCompat="?android:attr/textSelectHandleRight" />
 
     <ImageView
@@ -146,7 +146,7 @@
         app:srcCompat="@android:drawable/alert_dark_frame" />
 
     <ImageView
-        android:id="@+id/mapbutton"
+        android:id="@+id/mapButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -159,7 +159,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/borderlike"
+        app:layout_constraintTop_toBottomOf="@+id/borderLike"
         app:srcCompat="@android:drawable/ic_dialog_map" />
 
 </android.support.constraint.ConstraintLayout>

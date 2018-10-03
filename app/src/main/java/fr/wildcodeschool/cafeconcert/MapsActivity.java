@@ -1,27 +1,20 @@
 package fr.wildcodeschool.cafeconcert;
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.support.v4.view.GestureDetectorCompat;
-import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
+
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -45,6 +38,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     final static int ZOOM_LVL = 13;
 
     private GoogleMap mMap;
+    private ArrayList<Bar> bars;
+    private ArrayList<Marker> mMarkers = new ArrayList<>();
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -72,8 +67,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 return false;
             }
         });
-
-
 
 
     }
@@ -135,15 +128,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     // Creation des marqueurs via une liste de bars - Assigne un marqueur pour chaque bar à partir de son nom, sa position
 
     public void CreateMarkers(ArrayList<Bar> bars) {
+
         for (final Bar monBar : bars) {
             LatLng barposition = new LatLng(monBar.getGeoPoint(), monBar.getGeoShape());
-
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(barposition);
-            markerOptions.title(null);
             markerOptions.snippet(null);
             Marker marker = mMap.addMarker(markerOptions);
             marker.setTag(monBar);
+            mMarkers.add(marker);
+            boolean focus = false;
+
         }
 
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
@@ -151,22 +146,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public boolean onMarkerClick(Marker marker) {
 
                 LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-                View popUpView = inflater.inflate(R.layout.custom_info_adapter,null);
+                View popUpView = inflater.inflate(R.layout.custom_info_adapter, null);
 
                 //creation fenetre popup
                 int width = LinearLayout.LayoutParams.WRAP_CONTENT;
                 int height = LinearLayout.LayoutParams.WRAP_CONTENT;
                 boolean focusable = true;
-                PopupWindow popUp = new PopupWindow(popUpView,width,height,focusable);
+                PopupWindow popUp = new PopupWindow(popUpView, width, height, focusable);
 
                 //show popup
-                popUp.showAtLocation(popUpView, Gravity.CENTER,0,0); //SI BUG CA DOIT ETRE ICI TODO
+                popUp.showAtLocation(popUpView, Gravity.CENTER, 0, 0);
 
-                //SetText
-
-                //////////////////////////////////////////////////////////////////////////////////////////
-
-                final Bar bar=(Bar) marker.getTag();
+                final Bar bar = (Bar) marker.getTag();
 
                 TextView barName = popUpView.findViewById(R.id.barTitlePopup);
                 ImageView phone = popUpView.findViewById(R.id.phoneButton);
@@ -180,7 +171,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     @Override
                     public void onClick(View v) {
 
-                        String uri = "tel:" + bar.getPhoneNumber() ;
+                        String uri = "tel:" + bar.getPhoneNumber();
                         Intent intent = new Intent(Intent.ACTION_DIAL);
                         intent.setData(Uri.parse(uri));
                         startActivity(intent);
@@ -192,8 +183,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     @Override
                     public void onClick(View v) {
                         String url = bar.getWebUrl();
-                        if (url.charAt(0)=='w'){
-                            url="http://"+url;
+                        if (url.charAt(0) == 'w') {
+                            url = "http://" + url;
                         }
                         Intent i = new Intent(Intent.ACTION_VIEW);
                         i.setData(Uri.parse(url));
