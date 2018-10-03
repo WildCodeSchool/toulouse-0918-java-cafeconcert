@@ -1,19 +1,25 @@
 package fr.wildcodeschool.cafeconcert;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.view.GestureDetectorCompat;
 import android.view.GestureDetector;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,16 +43,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     final static double TOULOUSE_LATITUDE_BORDURES_TOP = 43.642094;
     final static double TOULOUSE_LONGITUDE_BORDURES_TOP = 1.480995;
     final static int ZOOM_LVL = 13;
+
     private GoogleMap mMap;
-
-
-
 
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -55,10 +60,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         ImageView goList = findViewById(R.id.goList);
 
         //onTouch du Drawable à droite (fleche), go sur l'activity list bar
-        goList.setOnTouchListener(new View.OnTouchListener(){
+        goList.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_UP){
+                if (event.getAction() == MotionEvent.ACTION_UP) {
 
                     Intent intent = new Intent(MapsActivity.this, BarListActivity.class);
                     startActivity(intent);
@@ -68,8 +73,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
+
+
+
     }
-  // TODO : à supprimer quand la méthode de création de bar sera à jour
+
+    // TODO : à supprimer quand la méthode de création de bar sera à jour
     public ArrayList<Bar> creatingBars() {
 
         ArrayList<Bar> bars = new ArrayList<Bar>();
@@ -93,7 +102,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -109,7 +117,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
         // mettre en place les bordures de la carte
         LatLngBounds toulouseBounds = new LatLngBounds(
-                new LatLng(TOULOUSE_LATITUDE_BORDURES_BOT, TOULOUSE_LONGITUDE_BORDURES_BOT), new LatLng(TOULOUSE_LATITUDE_BORDURES_TOP , TOULOUSE_LONGITUDE_BORDURES_TOP));
+                new LatLng(TOULOUSE_LATITUDE_BORDURES_BOT, TOULOUSE_LONGITUDE_BORDURES_BOT), new LatLng(TOULOUSE_LATITUDE_BORDURES_TOP, TOULOUSE_LONGITUDE_BORDURES_TOP));
         mMap.setLatLngBoundsForCameraTarget(toulouseBounds);
         // Zoomer sur Toulouse à partir d'un point
         LatLng toulouse = new LatLng(TOULOUSE_LATITUDE, TOULOUSE_LONGITUDE);
@@ -119,37 +127,89 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         CreateMarkers(bars);
 
 
-
-
-
         // Todo : Supprimer creatingBars et remplacer par la nouvelle méthode de création de bars
-
 
 
     }
 
     // Creation des marqueurs via une liste de bars - Assigne un marqueur pour chaque bar à partir de son nom, sa position
 
-    public void CreateMarkers(ArrayList<Bar> bars){
-        for (final Bar monBar :bars) {
+    public void CreateMarkers(ArrayList<Bar> bars) {
+        for (final Bar monBar : bars) {
             LatLng barposition = new LatLng(monBar.getGeoPoint(), monBar.getGeoShape());
 
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(barposition);
-            markerOptions.title(monBar.getBarName());
+            markerOptions.title(null);
+            markerOptions.snippet(null);
             //on instancie un nouvel InfoWindowData, on y applique un bar, les infos transitent jusqu'au CustomInfoWindowGoogleMap
-            InfoWindowData infoBar = new InfoWindowData();
-            infoBar.setBar(monBar);
-            CustomInfoWindowGoogleMap customInfoWindow = new CustomInfoWindowGoogleMap(this);
-            //on set les infos de customInfoWindow sur le marqueur en question
-            mMap.setInfoWindowAdapter(customInfoWindow);
+
             Marker marker = mMap.addMarker(markerOptions);
-            marker.setTag(infoBar);
-            }
+            marker.setTag(monBar);
         }
+
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+
+                LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+                View popUpView = inflater.inflate(R.layout.custom_info_adapter,null);
+
+                //creation fenetre popup
+                int width = LinearLayout.LayoutParams.WRAP_CONTENT;
+                int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+                boolean focusable = true;
+                PopupWindow popUp = new PopupWindow(popUpView,width,height,focusable);
+
+                //show popup
+                popUp.showAtLocation(popUpView, Gravity.CENTER,0,0); //SI BUG CA DOIT ETRE ICI TODO
+
+                //SetText
+
+                //////////////////////////////////////////////////////////////////////////////////////////
+
+                final Bar bar=(Bar) marker.getTag();
+
+                TextView barName = popUpView.findViewById(R.id.barTitlePopup);
+                ImageView phone = popUpView.findViewById(R.id.phoneButton);
+                ImageView web = popUpView.findViewById(R.id.webButton);
+                phone.setImageResource(R.drawable.common_full_open_on_phone);
+                web.setImageResource(R.drawable.ic_launcher_background);
+                popUpView.setBackground(getDrawable(R.drawable.fondpopup));
+                barName.setText(bar.getBarName());
+
+                phone.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        String uri = "tel:" + bar.getPhoneNumber() ;
+                        Intent intent = new Intent(Intent.ACTION_DIAL);
+                        intent.setData(Uri.parse(uri));
+                        startActivity(intent);
+
+                    }
+                });
+
+                web.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String url = bar.getWebUrl();
+                        if (url.charAt(0)=='w'){
+                            url="http://"+url;
+                        }
+                        Intent i = new Intent(Intent.ACTION_VIEW);
+                        i.setData(Uri.parse(url));
+                        startActivity(i);
+                    }
+                });
+
+                return false;
+            }
+        });
     }
 
 
+}
 
 
 
