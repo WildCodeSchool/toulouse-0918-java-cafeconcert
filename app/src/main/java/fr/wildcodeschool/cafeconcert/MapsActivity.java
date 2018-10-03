@@ -24,6 +24,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -40,7 +41,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     final static double TOULOUSE_LATITUDE_BORDURES_TOP = 43.642094;
     final static double TOULOUSE_LONGITUDE_BORDURES_TOP = 1.480995;
     final static int ZOOM_LVL_BY_DEFAULT = 13;
-    final static float ZOOM_LVL_ON_USER = 15.0f;
+    final static float ZOOM_LVL_ON_USER = 15.76f;
 
     private GoogleMap mMap;
     private GestureDetectorCompat mGestureObject;
@@ -108,8 +109,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng toulouse = new LatLng(TOULOUSE_LATITUDE, TOULOUSE_LONGITUDE);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(toulouse, ZOOM_LVL_BY_DEFAULT));
         // Set user localisation and ask permission to get it
-        mMap.setMyLocationEnabled(true);
         checkUserLocationPermission();
+        //TODO placer également cet appel dans le OnCreate.
+
+        //Configuration map
+        UiSettings mMapConfig = mMap.getUiSettings();
+        mMapConfig.setZoomControlsEnabled(true);
+        mMapConfig.setCompassEnabled(true);
 
         ArrayList<Bar> bars = MainActivity.creatingBars(); //Instantiation of an arrayList of café-concert objects
         CreateMarkers(bars);
@@ -135,6 +141,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     /* If all required permissions are granted, set a marker on User Position*/
     private void initLocation() {
         // Get the last known position of the user
+        mMap.setMyLocationEnabled(true);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         mFusedLocationClient.getLastLocation()
                 .addOnSuccessListener(this, new OnSuccessListener<Location>() {
