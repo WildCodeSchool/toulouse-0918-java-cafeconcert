@@ -15,4 +15,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/goToMap"
+        android:layout_width="40dp"
+        android:layout_height="0dp"
+        android:clickable="true"
+        android:rotation="180"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/swipe_map" />
+
+    <ImageView
+        android:id="@+id/arrowGoToMap"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:rotation="270"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/goToMap"
+        app:layout_constraintStart_toStartOf="@+id/goToMap"
+        app:layout_constraintTop_toTopOf="@+id/goToMap"
+        app:srcCompat="@android:drawable/arrow_up_float" />
+
 </android.support.constraint.ConstraintLayout>
