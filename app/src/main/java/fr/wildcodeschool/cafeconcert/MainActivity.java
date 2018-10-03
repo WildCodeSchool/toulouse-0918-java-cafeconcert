@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
 
     /*Return an ArrayList "bars" composed with 6 instantiated "Bars" Objects.
     Useful for tests before implementation of an appropriate database */
-    public ArrayList<Bar> creatingBars() {
+    public static ArrayList<Bar> creatingBars() {
 
         ArrayList<Bar> bars = new ArrayList<Bar>();
 
