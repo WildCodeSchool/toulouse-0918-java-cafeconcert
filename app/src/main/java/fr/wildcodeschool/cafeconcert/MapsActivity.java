@@ -115,7 +115,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng toulouse = new LatLng(TOULOUSE_LATITUDE, TOULOUSE_LONGITUDE);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(toulouse, ZOOM_LVL));
 
-
         ArrayList<Bar> bars = creatingBars();//Instantiation of an arrayList of café-concert objects
         CreateMarkers(bars);
 
@@ -138,27 +137,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(barposition);
             markerOptions.title(monBar.getBarName());
-            markerOptions.snippet(monBar.getPhoneNumber()+ "\r\n" + monBar.getWebUrl());
-
             //on instancie un nouvel InfoWindowData, on y applique un bar, les infos transitent jusqu'au CustomInfoWindowGoogleMap
-
             InfoWindowData infoBar = new InfoWindowData();
             infoBar.setBar(monBar);
-
             CustomInfoWindowGoogleMap customInfoWindow = new CustomInfoWindowGoogleMap(this);
             //on set les infos de customInfoWindow sur le marqueur en question
             mMap.setInfoWindowAdapter(customInfoWindow);
-
             Marker marker = mMap.addMarker(markerOptions);
             marker.setTag(infoBar);
-
             }
-
-
         }
-
-
-
     }
 
 

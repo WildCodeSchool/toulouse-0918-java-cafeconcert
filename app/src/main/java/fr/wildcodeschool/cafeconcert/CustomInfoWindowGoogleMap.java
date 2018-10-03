@@ -23,19 +23,17 @@ public class CustomInfoWindowGoogleMap implements GoogleMap.InfoWindowAdapter{
     }
 
     @Override
-
     //on récupère les infos du InfoWindowData, qui est initialisé dans le onMapCreate, avec le bar indiqué
     public View getInfoContents(Marker marker) {
         View view = ((Activity)context).getLayoutInflater()
                 .inflate(R.layout.custom_info_adapter, null);
-
         TextView name = view.findViewById(R.id.barTitlePopup);
-
         InfoWindowData infoWindowData = (InfoWindowData) marker.getTag();
         //le bar qui est étudié dans cette infoWindow
         Bar studyBar = infoWindowData.getBar();
-
         name.setText(studyBar.getBarName());
+
+        //TODO : Rajouter les autres infos des bars. Là j'ai juste mis le texte pour vérifier le fonctionnement
 
         return view;
     }

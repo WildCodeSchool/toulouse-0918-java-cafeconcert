@@ -5,7 +5,6 @@ package fr.wildcodeschool.cafeconcert;
 
         private Bar bar;
 
-
         public Bar getBar() {
             return bar;
         }
@@ -13,7 +12,5 @@ package fr.wildcodeschool.cafeconcert;
         public void setBar(Bar bar) {
             this.bar = bar;
         }
-
-
     }
 
