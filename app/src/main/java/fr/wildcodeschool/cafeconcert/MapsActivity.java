@@ -1,15 +1,21 @@
 package fr.wildcodeschool.cafeconcert;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.view.GestureDetectorCompat;
 import android.view.GestureDetector;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -17,6 +23,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
@@ -31,10 +38,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     final static double TOULOUSE_LONGITUDE_BORDURES_TOP = 1.480995;
     final static int ZOOM_LVL = 13;
     private GoogleMap mMap;
-    private GestureDetectorCompat mGestureObject;
-    private MotionEvent mMotionEvent;
 
 
+
+
+
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,7 +52,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        final ImageView goList = findViewById(R.id.goList);
+        ImageView goList = findViewById(R.id.goList);
+
         //onTouch du Drawable à droite (fleche), go sur l'activity list bar
         goList.setOnTouchListener(new View.OnTouchListener(){
             @Override
@@ -106,9 +116,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(toulouse, ZOOM_LVL));
 
 
-        ArrayList<Bar> bars = creatingBars(); //Instantiation of an arrayList of café-concert objects
+        ArrayList<Bar> bars = creatingBars();//Instantiation of an arrayList of café-concert objects
         CreateMarkers(bars);
+
+
+
+
+
         // Todo : Supprimer creatingBars et remplacer par la nouvelle méthode de création de bars
+
 
 
     }
@@ -116,7 +132,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     // Creation des marqueurs via une liste de bars - Assigne un marqueur pour chaque bar à partir de son nom, sa position
 
     public void CreateMarkers(ArrayList<Bar> bars){
-        for (Bar monBar :bars) {
+        for (final Bar monBar :bars) {
             LatLng barposition = new LatLng(monBar.getGeoPoint(), monBar.getGeoShape());
 
             MarkerOptions markerOptions = new MarkerOptions();
@@ -124,24 +140,30 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             markerOptions.title(monBar.getBarName());
             markerOptions.snippet(monBar.getPhoneNumber()+ "\r\n" + monBar.getWebUrl());
 
-            mMap.addMarker(markerOptions);
+            //on instancie un nouvel InfoWindowData, on y applique un bar, les infos transitent jusqu'au CustomInfoWindowGoogleMap
+
+            InfoWindowData infoBar = new InfoWindowData();
+            infoBar.setBar(monBar);
+
+            CustomInfoWindowGoogleMap customInfoWindow = new CustomInfoWindowGoogleMap(this);
+            //on set les infos de customInfoWindow sur le marqueur en question
+            mMap.setInfoWindowAdapter(customInfoWindow);
+
+            Marker marker = mMap.addMarker(markerOptions);
+            marker.setTag(infoBar);
+
+            }
+
 
         }
+
+
+
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event){
-        this.mGestureObject.onTouchEvent(event);
-        return super.onTouchEvent(event);
-    }
-    //now create the gesture Object Class
 
 
 
 
 
 
-
-
-
-}
