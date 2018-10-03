@@ -142,8 +142,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             markerOptions.position(barposition);
             markerOptions.title(null);
             markerOptions.snippet(null);
-            //on instancie un nouvel InfoWindowData, on y applique un bar, les infos transitent jusqu'au CustomInfoWindowGoogleMap
-
             Marker marker = mMap.addMarker(markerOptions);
             marker.setTag(monBar);
         }
