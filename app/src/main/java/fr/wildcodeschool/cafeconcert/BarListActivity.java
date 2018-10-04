@@ -31,20 +31,10 @@ public class BarListActivity extends AppCompatActivity {
         listBar.setAdapter(adapter);
 
         mGestureObject = new GestureDetectorCompat(this, new BarListActivity.LearnGesture());
-        final ImageView goToMap = findViewById(R.id.goToMap);
 
-        //onTouchListener pour aller sur l'activité map
-        goToMap.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    Intent goToMap = new Intent(BarListActivity.this, MapsActivity.class);
-                    startActivity(goToMap);
-                    return true;
-                }
-                return false;
-            }
-        });
+        //Setting button to go to MapsActivity
+        final ImageView goToMap = findViewById(R.id.goToMap);
+        MapsActivity.transitionBetweenActivity(goToMap, BarListActivity.this, MapsActivity.class);
     }
 
 

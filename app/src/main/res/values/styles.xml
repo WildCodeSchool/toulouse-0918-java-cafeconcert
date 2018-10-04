@@ -8,9 +8,41 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
+
+    <style name="TitlePopup">
+        <item name="android:gravity">center</item>
+        <item name="android:layout_margin">8dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">0dp </item>
+        <item name="android:textSize">30dp</item>
+    </style>
+
+    <style name="borderPopup">
+
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginLeft">0dp</item>
+        <item name="android:layout_marginRight">0dp</item>
+        <item name="android:layout_width">0dp </item>
+        <item name="android:layout_height">1dp </item>
+        <item name="android:background">@android:color/black</item>
+
+    </style>
+
+    <style name="phoneButton">
+
+
+        <item name="android:layout_width">wrap_content </item>
+        <item name="android:layout_height">wrap_content </item>
+        <item name="android:background">@android:color/black</item>
+
+    </style>
+
+
 
 </resources>

@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Cafe Concert</string>
     <string name="title_activity_maps">Map</string>
+    <string name="gps_has_been_refused">Veuillez autoriser la localisation de votre position pour bénéficier pleinement des fonctionnalités de l\'application</string>
     <string name="nom_du_cafe">Nom du Café</string>
     <string name="profile">Profile</string>
     <string name="map">Map</string>
