@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 
+import android.graphics.drawable.AdaptiveIconDrawable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 
@@ -99,6 +100,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         //Setting button to go to BarListActivity
         final ImageView goList = findViewById(R.id.goList);
         transitionBetweenActivity(goList, MapsActivity.this, BarListActivity.class);
+
+        //#BurgerMenu Here I take the new toolbar to set it in my activity
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        drawer = findViewById(R.id.drawer_layout);
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+        //TODO: à ajouter liens dans le menus (le rendre fonctionnel)
     }
 
     /* Init a Listener on the ImageView triggerTransition. When touched, start the destination */
@@ -118,17 +130,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
-
-        //#BurgerMenu Here I take the new toolbar to set it in my activity
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        drawer = findViewById(R.id.drawer_layout);
-
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-        //TODO: à ajouter liens dans le menus (le rendre fonctionnel)
     }
 
     //#BurgerMenu For not leaving the activity immediately
@@ -177,9 +178,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     /* Generate a bitmap to be used as custom marker.
      * Is different depending on bar status (liked/disliked/neutral) */
+    //TODO FIX THIS SH... METHOD
     private Bitmap setCustomsMarkers(Bar monBar) {
 
-        BitmapDrawable drawableLike =(BitmapDrawable)getResources().getDrawable(R.mipmap.marker_like);
+        BitmapDrawable drawableLike = (BitmapDrawable) getResources().getDrawable(R.mipmap.marker_like);
         Bitmap likeMarker = Bitmap.createScaledBitmap(drawableLike.getBitmap(), MARKER_WIDTH, MARKER_HEIGHT, false);
 
         BitmapDrawable drawableDislike =(BitmapDrawable)getResources().getDrawable(R.mipmap.marker_dislike);
@@ -202,6 +204,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (mGestureObject != null) {
+            this.mGestureObject.onTouchEvent(event);
+        }
+        return super.onTouchEvent(event);
+    }
 
 
     /* Creating bars markers on the map with a list of bars set as arguments
@@ -216,7 +225,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             markerOptions.position(barposition);
 
             markerOptions.snippet(null);
-            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(setCustomsMarkers(monBar)));
+            //TODO Reactivate this when method fixed
+            //markerOptions.icon(BitmapDescriptorFactory.fromBitmap(setCustomsMarkers(monBar)));
 
             Marker marker = mMap.addMarker(markerOptions);
             marker.setTag(monBar);
@@ -224,15 +234,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             boolean focus = false;
 
         }
-
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (mGestureObject != null) {
-            this.mGestureObject.onTouchEvent(event);
-        }
-        return super.onTouchEvent(event);
-    }
 
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
