@@ -1,7 +1,10 @@
 package fr.wildcodeschool.cafeconcert;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import java.util.ArrayList;
 
@@ -11,10 +14,22 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        Button button = (Button) findViewById(R.id.button_visiteur);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this,MapsActivity.class));
+            }
+        });
+        Button buttonScription = (Button) findViewById(R.id.button_inscription);
+        buttonScription.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this,InscriptionActivity.class));
+            }
+        });
         ArrayList<Bar> bars = creatingBars(); //Instantiation of an arrayList of café-concert objects
     }
-
 
     /*Return an ArrayList "bars" composed with 6 instantiated "Bars" Objects.
     Useful for tests before implementation of an appropriate database */
@@ -37,9 +52,7 @@ public class MainActivity extends AppCompatActivity {
         bars.add(carsonCity);
 
         return bars;
-
     }
-
 
 
 }
