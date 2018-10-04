@@ -11,10 +11,11 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 
+
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.Gravity;import android.widget.Toast;
@@ -61,7 +62,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.ArrayList;
 
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, NavigationView.OnNavigationItemSelectedListener{
 
     final static double TOULOUSE_LATITUDE = 43.6043;
     final static double TOULOUSE_LONGITUDE = 1.4437;
@@ -69,9 +70,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     final static double TOULOUSE_LONGITUDE_BORDURES_BOT = 1.411854;
     final static double TOULOUSE_LATITUDE_BORDURES_TOP = 43.642094;
     final static double TOULOUSE_LONGITUDE_BORDURES_TOP = 1.480995;
+    final static int POPUP_WIDTH = 600;
+    final static int POPUP_POSITION_X = 0;
+    final static int POPUP_POSITION_Y = 0;
     final static int MARKER_HEIGHT = 72;
     final static int MARKER_WIDTH = 72;
-
     final static int ZOOM_LVL_BY_DEFAULT = 13;
     final static float ZOOM_LVL_ON_USER = 15.76f;
 
@@ -85,12 +88,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private FusedLocationProviderClient mFusedLocationClient;
 
 
-
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_maps);
         // Setting map
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -98,7 +99,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapFragment.getMapAsync(this);
 
         //onTouch du Drawable à droite (fleche), go sur l'activity list bar
-
         //Setting button to go to BarListActivity
         final ImageView goList = findViewById(R.id.goList);
         transitionBetweenActivity(goList, MapsActivity.this, BarListActivity.class);
@@ -108,17 +108,47 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         setSupportActionBar(toolbar);
 
         drawer = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+        navigationView.setCheckedItem(R.id.nav_map);
         //TODO: à ajouter liens dans le menus (le rendre fonctionnel)
+    }
+
+    //#BurgerMenu
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.nav_map:
+                startActivity(new Intent(this, MapsActivity.class));
+                break;
+            case R.id.nav_bar_list:
+                startActivity(new Intent(this, BarListActivity.class));
+                break;
+            case R.id.nav_share:
+                Toast.makeText(this, "Shared", Toast.LENGTH_SHORT).show();
+                break;
+        }
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    //#BurgerMenu For not leaving the activity immediately
+    @Override
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     /* Init a Listener on the ImageView triggerTransition. When touched, start the destination */
     public static void transitionBetweenActivity(ImageView triggerTransition, final Context context, final Class destination) {
         //onTouch du Drawable à droite (fleche), go sur l'activity list bar
-
         triggerTransition.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -134,15 +164,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
-    //#BurgerMenu For not leaving the activity immediately
-    @Override
-    public void onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
+
     
     /**
      * Manipulates the map once avalable.
@@ -177,7 +199,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         CreateMarkers(bars);
 
     }
-
     /* Generate a bitmap to be used as custom marker.
      * Is different depending on bar status (liked/disliked/neutral) */
     //TODO FIX THIS SH... METHOD
@@ -217,18 +238,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         return super.onTouchEvent(event);
     }
 
-
     /* Creating bars markers on the map with a list of bars set as arguments
      */
     public void CreateMarkers(ArrayList<Bar> bars) {
 
         for (final Bar monBar : bars) {
-
-
             LatLng barposition = new LatLng(monBar.getGeoPoint(), monBar.getGeoShape());
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(barposition);
-
             markerOptions.snippet(null);
             //TODO Reactivate this when method fixed
             //markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.love_ping));
@@ -238,64 +255,72 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             marker.setTag(monBar);
             mMarkers.add(marker);
             boolean focus = false;
-
         }
 
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-
-                LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-                View popUpView = inflater.inflate(R.layout.custom_info_adapter, null);
-
-                //creation fenetre popup
-                int width = LinearLayout.LayoutParams.WRAP_CONTENT;
-                int height = LinearLayout.LayoutParams.WRAP_CONTENT;
-                boolean focusable = true;
-                PopupWindow popUp = new PopupWindow(popUpView, width, height, focusable);
-
-                //show popup
-                popUp.showAtLocation(popUpView, Gravity.CENTER, 0, 0);
-
-                final Bar bar = (Bar) marker.getTag();
-
-                TextView barName = popUpView.findViewById(R.id.barTitlePopup);
-                ImageView phone = popUpView.findViewById(R.id.phoneButton);
-                ImageView web = popUpView.findViewById(R.id.webButton);
-                phone.setImageResource(R.drawable.common_full_open_on_phone);
-                web.setImageResource(R.drawable.ic_launcher_background);
-                popUpView.setBackground(getDrawable(R.drawable.fondpopup));
-                barName.setText(bar.getBarName());
-
-                phone.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String uri = "tel:" + bar.getPhoneNumber();
-                        Intent intent = new Intent(Intent.ACTION_DIAL);
-                        intent.setData(Uri.parse(uri));
-                        startActivity(intent);
-
-                    }
-                });
-
-                web.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String url = bar.getWebUrl();
-                        if (url.charAt(0) == 'w') {
-                            url = "http://" + url;
-                        }
-                        Intent i = new Intent(Intent.ACTION_VIEW);
-                        i.setData(Uri.parse(url));
-                        startActivity(i);
-                    }
-                });
-
+                popupBuilder(marker);
                 return false;
             }
         });
     }
+    private void popupBuilder(Marker marker){
 
+        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        View popUpView = inflater.inflate(R.layout.custom_info_adapter, null);
+
+        //creation fenetre popup
+        int width = POPUP_WIDTH;
+        int height = ConstraintLayout.LayoutParams.WRAP_CONTENT;
+        boolean focusable = true;
+        PopupWindow popUp = new PopupWindow(popUpView, width, height, focusable);
+
+        //show popup
+        popUp.showAtLocation(popUpView, Gravity.CENTER, POPUP_POSITION_X, POPUP_POSITION_Y); //
+
+        final Bar bar = (Bar) marker.getTag();
+
+        TextView barName = popUpView.findViewById(R.id.barTitlePopup);
+        ImageView phone = popUpView.findViewById(R.id.phoneButton);
+        ImageView web = popUpView.findViewById(R.id.webButton);
+        ImageView like = popUpView.findViewById(R.id.likeButton);
+        ImageView dontLike = popUpView.findViewById(R.id.dontLikeButton);
+        ImageView navigate = popUpView.findViewById(R.id.mapButton);
+        ImageView photoBar = popUpView.findViewById(R.id.photoBar);
+
+        navigate.setImageResource(R.mipmap.navigate);
+        photoBar.setImageResource(R.mipmap.fonddecran);
+        phone.setImageResource(R.mipmap.phonelogo);
+        web.setImageResource(R.mipmap.globeicon);
+        like.setImageResource(R.mipmap.heartempty);
+        dontLike.setImageResource(R.mipmap.brokenheart_empty);
+        popUpView.setBackground(getDrawable(R.drawable.fondpopup));
+        barName.setText(bar.getBarName());
+
+        phone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String uri = "tel:" + bar.getPhoneNumber();
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse(uri));
+                startActivity(intent);
+            }
+        });
+
+        web.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = bar.getWebUrl();
+                if (url.charAt(0) == 'w') {
+                    url = "http://" + url;
+                }
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+            }
+        });
+    }
     /* If all required permissions are granted, set a marker on User Position*/
     private void initLocation() {
         // Get the last known position of the user
@@ -312,8 +337,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         }
                     }
                 });
-
-
         mLocationManager = (LocationManager) this.getSystemService(this.LOCATION_SERVICE);
         LocationListener locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
@@ -328,7 +351,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onProviderDisabled(String provider) {
             }
         };
-
         // initialisation de la vérification du déplacement par GPS et par réseau WIFI
         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
         mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
@@ -340,11 +362,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLong, ZOOM_LVL_ON_USER));
     }
 
-
     /* Check if User has accepted GPS location. If not, trigger "onRequestPermissionsresult".
      * If user has already refused it, draw a toast with a warning.
      */
-    private void checkUserLocationPermission() { //Méthode qui teste si le GPS est bien activé
+    private void checkUserLocationPermission() {
+        //Méthode qui teste si le GPS est bien activé
         // vérification de l'autorisation d'accéder à la position GPS
         if (ContextCompat.checkSelfPermission(MapsActivity.this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
@@ -366,7 +388,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             initLocation();
         }
     }
-
 
     /* Whenever permission for location GPS is asked, this method does the job.
      * If user refuses, draw a toast with a warning.
