@@ -4,6 +4,8 @@ package fr.wildcodeschool.cafeconcert;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -133,6 +135,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+
+
     /* Creating bars markers on the map with a list of bars set as arguments
      */
     public void CreateMarkers(ArrayList<Bar> bars) {
@@ -146,6 +150,35 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             marker.setTag(monBar);
             mMarkers.add(marker);
             boolean focus = false;
+
+
+            //TODO set les mimpap en fonction du boolean isliked
+
+            int height = 65;
+            int width = 65;
+            BitmapDrawable drawableLike =(BitmapDrawable)getResources().getDrawable(R.mipmap.marker_like_round);
+            Bitmap likeMarker = Bitmap.createScaledBitmap(drawableLike.getBitmap(), width, height, false);
+            BitmapDrawable drawableDislike =(BitmapDrawable)getResources().getDrawable(R.mipmap.marker_dislike_round);
+            Bitmap dislikeMarker = Bitmap.createScaledBitmap(drawableDislike.getBitmap(), width, height, false);
+            BitmapDrawable drawableNeutral =(BitmapDrawable)getResources().getDrawable(R.mipmap.marker_neutral_round);
+            Bitmap neutralMarker = Bitmap.createScaledBitmap(drawableNeutral.getBitmap(), width, height, false);
+            Bitmap markerIcon;
+            switch (monBar.getIsLiked()) {
+                case 1:  markerIcon = likeMarker;
+                    break;
+                case 0:  markerIcon = dislikeMarker;
+                    break;
+                default: markerIcon = neutralMarker;
+                    break;
+            }
+
+
+            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(markerIcon));
+
+
+
+
+
         }
 
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
