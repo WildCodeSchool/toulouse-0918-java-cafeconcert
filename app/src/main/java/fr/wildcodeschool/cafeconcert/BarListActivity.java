@@ -30,17 +30,13 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bar_list);
-
-
         //Take the bars's info already created in MainActivity
         ListView listBar = findViewById(R.id.list_bar);
         ArrayList<Bar> arrayListBar = MainActivity.creatingBars();
 
         BarAdapter adapter = new BarAdapter(this, arrayListBar);
         listBar.setAdapter(adapter);
-
         mGestureObject = new GestureDetectorCompat(this, new BarListActivity.LearnGesture());
-
         //Setting button to go to MapsActivity
         final ImageView goToMap = findViewById(R.id.goToMap);
         MapsActivity.transitionBetweenActivity(goToMap, BarListActivity.this, MapsActivity.class);
@@ -86,7 +82,6 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
             super.onBackPressed();
         }
     }
-
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {

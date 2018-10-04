@@ -95,7 +95,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapFragment.getMapAsync(this);
 
         //onTouch du Drawable à droite (fleche), go sur l'activity list bar
-
         //Setting button to go to BarListActivity
         final ImageView goList = findViewById(R.id.goList);
         transitionBetweenActivity(goList, MapsActivity.this, BarListActivity.class);
@@ -328,8 +327,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         }
                     }
                 });
-
-
         mLocationManager = (LocationManager) this.getSystemService(this.LOCATION_SERVICE);
         LocationListener locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
@@ -344,7 +341,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onProviderDisabled(String provider) {
             }
         };
-
         // initialisation de la vérification du déplacement par GPS et par réseau WIFI
         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
         mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
@@ -355,7 +351,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         LatLng latLong = new LatLng(userLocation.getLatitude(), userLocation.getLongitude());
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLong, ZOOM_LVL_ON_USER));
     }
-
 
     /* Check if User has accepted GPS location. If not, trigger "onRequestPermissionsresult".
      * If user has already refused it, draw a toast with a warning.
@@ -382,7 +377,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             initLocation();
         }
     }
-
 
     /* Whenever permission for location GPS is asked, this method does the job.
      * If user refuses, draw a toast with a warning.

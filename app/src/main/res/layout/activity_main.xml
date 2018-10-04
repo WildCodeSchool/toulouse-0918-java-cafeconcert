@@ -1,18 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/blueee"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
+    <EditText
+        android:id="@+id/edit_pseudo"
+        style="@style/etConnexion"
+        android:layout_marginTop="72dp"
+        android:drawableLeft="@drawable/ic_action_person"
+        android:hint="@string/pseudo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:fontFamily="@font/aref_ruqaa"/>
+
+    <EditText
+        android:id="@+id/edit_password"
+        style="@style/etConnexion"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="50dp"
+        android:drawableLeft="@drawable/ic_action_pass"
+        android:hint="@string/password"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_pseudo"
+        app:fontFamily="@font/aref_ruqaa"
+        />
+
+    <Button style="@style/buttonOval"
+        android:id="@+id/button_inscription"
+        android:layout_alignParentBottom="false"
+        android:layout_marginBottom="130dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_toStartOf="@+id/button_inscription"
+        android:elevation="10dp"
+        android:includeFontPadding="false"
+        android:text="@string/s_inscrire"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:fontFamily="@font/aref_ruqaa"/>
+
+    <Button style="@style/buttonOval"
+        android:id="@+id/button_connexion"
+        android:layout_marginBottom="40dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:elevation="10dp"
+        android:text="@string/se_connecter"
+        app:layout_constraintBottom_toTopOf="@+id/button_inscription"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:fontFamily="@font/aref_ruqaa"/>
+
+    <Button
+        android:id="@+id/button_visiteur"
+        style="@style/buttonTransparent"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="50dp"
+        android:elevation="10dp"
+        android:text="@string/continuer_en_tant_que_visiteur"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_inscription"
+        app:fontFamily="@font/aref_ruqaa"/>
+
 
 </android.support.constraint.ConstraintLayout>

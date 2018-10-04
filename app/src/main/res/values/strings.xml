@@ -1,8 +1,17 @@
 <resources>
     <string name="app_name">Cafe Concert</string>
     <string name="title_activity_maps">Map</string>
+    <string name="continuer_en_tant_que_visiteur">Continuer en tant que visiteur</string>
+    <string name="se_connecter">se connecter</string>
+    <string name="s_inscrire">S\'inscrire</string>
+    <string name="saisissez_votre_mot_de_passe">Saisissez votre mot de passe</string>
+    <string name="valider">Valider !</string>
+    <string name="choisissez_un_pseudo">Choisissez un pseudo</string>
     <string name="gps_has_been_refused">Veuillez autoriser la localisation de votre position pour bénéficier pleinement des fonctionnalités de l\'application</string>
     <string name="nom_du_cafe">Nom du Café</string>
+    <string name="renseignez_une_adresse_e_mail">Renseignez une adresse e-mail</string>
+    <string name="pseudo">Pseudo</string>
+    <string name="password">Password</string>
     <string name="profile">Profile</string>
     <string name="map">Map</string>
     <string name="bar_list">Bar list</string>
