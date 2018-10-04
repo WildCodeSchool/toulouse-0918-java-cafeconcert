@@ -1,14 +1,24 @@
 package fr.wildcodeschool.cafeconcert;
 
+
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.view.Gravity;import android.widget.Toast;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.TextView;
+import android.widget.Toast;
 import android.support.v4.view.GestureDetectorCompat;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
-
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -16,8 +26,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.widget.Toast;
-
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -27,6 +35,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
@@ -40,24 +49,35 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     final static double TOULOUSE_LONGITUDE_BORDURES_BOT = 1.411854;
     final static double TOULOUSE_LATITUDE_BORDURES_TOP = 43.642094;
     final static double TOULOUSE_LONGITUDE_BORDURES_TOP = 1.480995;
-    final static int ZOOM_LVL_BY_DEFAULT = 13;
-    final static float ZOOM_LVL_ON_USER = 15.76f;
 
+    final static int ZOOM_LVL_BY_DEFAULT = 13;
+    final static float ZOOM_LVL_ON_USER = 15.76f;  
+  
     private GoogleMap mMap;
+    private ArrayList<Bar> bars;
+    private ArrayList<Marker> mMarkers = new ArrayList<>(); 
     private GestureDetectorCompat mGestureObject;
     private MotionEvent mMotionEvent;
     private LocationManager mLocationManager = null;
     private FusedLocationProviderClient mFusedLocationClient;
 
 
+
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_maps);
         // Setting map
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        ImageView goList = findViewById(R.id.goList);
+
+        //onTouch du Drawable à droite (fleche), go sur l'activity list bar
+        goList.setOnTouchListener(new View.OnTouchListener() {
         //Setting button to go to BarListActivity
         final ImageView goList = findViewById(R.id.goList);
         transitionBetweenActivity(goList, MapsActivity.this, BarListActivity.class);
@@ -79,17 +99,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
-    }
 
-    //TODO commenter cette méthode pour rendre son utilité explicite. A quoi elle sert ?
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        this.mGestureObject.onTouchEvent(event);
-        return super.onTouchEvent(event);
     }
 
     /**
-     * Manipulates the map once available.
+     * Manipulates the map once avalable.
      * This callback is triggered when the map is ready to be used.
      * This is where we can add markers or lines, add listeners or move the camera. In this case,
      * we just add a marker near Sydney, Australia.
@@ -125,16 +139,74 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     /* Creating bars markers on the map with a list of bars set as arguments
      */
     public void CreateMarkers(ArrayList<Bar> bars) {
-        for (Bar monBar : bars) {
+        
+        for (final Bar monBar : bars) {
             LatLng barposition = new LatLng(monBar.getGeoPoint(), monBar.getGeoShape());
-
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(barposition);
-            markerOptions.title(monBar.getBarName());
-            markerOptions.snippet(monBar.getPhoneNumber() + "\r\n" + monBar.getWebUrl());
+            markerOptions.snippet(null);
+            Marker marker = mMap.addMarker(markerOptions);
+            marker.setTag(monBar);
+            mMarkers.add(marker);
+            boolean focus = false;
 
-            mMap.addMarker(markerOptions);
+        }
 
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+
+                LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+                View popUpView = inflater.inflate(R.layout.custom_info_adapter, null);
+
+                //creation fenetre popup
+                int width = LinearLayout.LayoutParams.WRAP_CONTENT;
+                int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+                boolean focusable = true;
+                PopupWindow popUp = new PopupWindow(popUpView, width, height, focusable);
+
+                //show popup
+                popUp.showAtLocation(popUpView, Gravity.CENTER, 0, 0);
+
+                final Bar bar = (Bar) marker.getTag();
+
+                TextView barName = popUpView.findViewById(R.id.barTitlePopup);
+                ImageView phone = popUpView.findViewById(R.id.phoneButton);
+                ImageView web = popUpView.findViewById(R.id.webButton);
+                phone.setImageResource(R.drawable.common_full_open_on_phone);
+                web.setImageResource(R.drawable.ic_launcher_background);
+                popUpView.setBackground(getDrawable(R.drawable.fondpopup));
+                barName.setText(bar.getBarName());
+
+                phone.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        String uri = "tel:" + bar.getPhoneNumber();
+                        Intent intent = new Intent(Intent.ACTION_DIAL);
+                        intent.setData(Uri.parse(uri));
+                        startActivity(intent);
+
+                    }
+                });
+
+                web.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String url = bar.getWebUrl();
+                        if (url.charAt(0) == 'w') {
+                            url = "http://" + url;
+                        }
+                        Intent i = new Intent(Intent.ACTION_VIEW);
+                        i.setData(Uri.parse(url));
+                        startActivity(i);
+                    }
+                });
+
+                return false;
+            }
+        });
+    }
         }
     }
 
@@ -176,6 +248,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
         mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
     }
+
 
     /* Center the camera on the User Location*/
     private void moveCamera(Location userLocation) {
@@ -232,4 +305,3 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-}
