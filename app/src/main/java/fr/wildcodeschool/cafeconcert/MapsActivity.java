@@ -4,6 +4,12 @@ package fr.wildcodeschool.cafeconcert;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+
+import android.graphics.drawable.AdaptiveIconDrawable;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+
+
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -84,7 +90,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_maps);
         // Setting map
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -92,10 +97,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapFragment.getMapAsync(this);
 
         //onTouch du Drawable à droite (fleche), go sur l'activity list bar
-
         //Setting button to go to BarListActivity
         final ImageView goList = findViewById(R.id.goList);
         transitionBetweenActivity(goList, MapsActivity.this, BarListActivity.class);
+
 
         //#BurgerMenu Here I take the new toolbar to set it in my activity
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -108,8 +113,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         toggle.syncState();
         //TODO: à ajouter liens dans le menus (le rendre fonctionnel)
     }
-
-
 
     /* Init a Listener on the ImageView triggerTransition. When touched, start the destination */
     public static void transitionBetweenActivity(ImageView triggerTransition, final Context context, final Class destination) {
@@ -173,9 +176,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
     /* Generate a bitmap to be used as custom marker.
      * Is different depending on bar status (liked/disliked/neutral) */
+    //TODO FIX THIS SH... METHOD
     private Bitmap setCustomsMarkers(Bar monBar) {
 
-        BitmapDrawable drawableLike =(BitmapDrawable)getResources().getDrawable(R.mipmap.marker_like);
+        BitmapDrawable drawableLike = (BitmapDrawable) getResources().getDrawable(R.mipmap.marker_like);
         Bitmap likeMarker = Bitmap.createScaledBitmap(drawableLike.getBitmap(), MARKER_WIDTH, MARKER_HEIGHT, false);
 
         BitmapDrawable drawableDislike =(BitmapDrawable)getResources().getDrawable(R.mipmap.marker_dislike);
@@ -197,6 +201,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         return markerIcon;
 
     }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (mGestureObject != null) {
+            this.mGestureObject.onTouchEvent(event);
+        }
+        return super.onTouchEvent(event);
+    }
+
     /* Creating bars markers on the map with a list of bars set as arguments
      */
     public void CreateMarkers(ArrayList<Bar> bars) {
@@ -206,6 +219,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(barposition);
             markerOptions.snippet(null);
+
+            //TODO Reactivate this when method fixed
             //markerOptions.icon(BitmapDescriptorFactory.fromBitmap(setCustomsMarkers(monBar)));
 
             Marker marker = mMap.addMarker(markerOptions);
@@ -294,8 +309,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         }
                     }
                 });
-
-
         mLocationManager = (LocationManager) this.getSystemService(this.LOCATION_SERVICE);
         LocationListener locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
@@ -310,7 +323,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onProviderDisabled(String provider) {
             }
         };
-
         // initialisation de la vérification du déplacement par GPS et par réseau WIFI
         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
         mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);

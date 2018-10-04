@@ -22,8 +22,6 @@ public class BarListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bar_list);
-
-
         //Take the bars's info already created in MainActivity
         ListView listBar = findViewById(R.id.list_bar);
         ArrayList<Bar> arrayListBar = MainActivity.creatingBars();
@@ -34,7 +32,6 @@ public class BarListActivity extends AppCompatActivity {
         //Setting button to go to MapsActivity
         final ImageView goToMap = findViewById(R.id.goToMap);
         MapsActivity.transitionBetweenActivity(goToMap, BarListActivity.this, MapsActivity.class);
-
     }
 
 }
