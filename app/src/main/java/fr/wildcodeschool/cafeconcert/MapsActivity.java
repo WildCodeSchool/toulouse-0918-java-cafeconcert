@@ -193,9 +193,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         web.setImageResource(R.mipmap.globeicon);
         like.setImageResource(R.mipmap.heartempty);
         dontLike.setImageResource(R.mipmap.brokenheart_empty);
-
-
-
         popUpView.setBackground(getDrawable(R.drawable.fondpopup));
         barName.setText(bar.getBarName());
 
@@ -206,7 +203,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Intent intent = new Intent(Intent.ACTION_DIAL);
                 intent.setData(Uri.parse(uri));
                 startActivity(intent);
-
             }
         });
 
