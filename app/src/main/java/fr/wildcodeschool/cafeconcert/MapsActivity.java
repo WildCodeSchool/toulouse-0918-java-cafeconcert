@@ -50,6 +50,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     final static double TOULOUSE_LONGITUDE_BORDURES_BOT = 1.411854;
     final static double TOULOUSE_LATITUDE_BORDURES_TOP = 43.642094;
     final static double TOULOUSE_LONGITUDE_BORDURES_TOP = 1.480995;
+    final static int POPUP_WIDTH = 600;
 
     final static int ZOOM_LVL_BY_DEFAULT = 13;
     final static float ZOOM_LVL_ON_USER = 15.76f;
@@ -166,7 +167,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         View popUpView = inflater.inflate(R.layout.custom_info_adapter, null);
 
         //creation fenetre popup
-        int width = 600;
+        int width = POPUP_WIDTH;
         int height = ConstraintLayout.LayoutParams.WRAP_CONTENT;
         boolean focusable = true;
         PopupWindow popUp = new PopupWindow(popUpView, width, height, focusable);
