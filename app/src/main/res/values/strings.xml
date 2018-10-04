@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">Cafe Concert</string>
     <string name="title_activity_maps">Map</string>
+    <string name="continuer_en_tant_que_visiteur">Continuer en tant que visiteur</string>
+    <string name="se_connecter">se connecter</string>
+    <string name="s_inscrire">S\'inscrire</string>
+    <string name="saisissez_votre_mot_de_passe">Saisissez votre mot de passe</string>
+    <string name="valider">Valider !</string>
+    <string name="choisissez_un_pseudo">Choisissez un pseudo</string>
 </resources>

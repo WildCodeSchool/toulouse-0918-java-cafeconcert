@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/blueee"
+    tools:context=".InscriptionActivity">
+
+    <EditText style="@style/etRemplir"
+        android:layout_marginBottom="316dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="30dp"
+        android:ems="10"
+        app:fontFamily="@font/aref_ruqaa"
+        android:hint="@string/saisissez_votre_mot_de_passe"
+        android:inputType="textPassword"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.549"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button style="@style/buttonOval"
+        android:id="@+id/bValider"
+        android:layout_marginBottom="100dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:text="@string/valider"
+        app:fontFamily="@font/aref_ruqaa"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.505"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText style="@style/etRemplir"
+        android:id="@+id/etPseudo"
+        android:layout_marginBottom="36dp"
+        android:layout_marginEnd="9dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="9dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="150dp"
+        android:ems="10"
+        app:fontFamily="@font/aref_ruqaa"
+        android:hint="@string/choisissez_un_pseudo"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/editText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.577"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</android.support.constraint.ConstraintLayout>
