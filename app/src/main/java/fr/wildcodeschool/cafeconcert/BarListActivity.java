@@ -1,8 +1,11 @@
 package fr.wildcodeschool.cafeconcert;
 
+
+import android.support.v7.app.AppCompatActivity;
+import android.widget.ListView;
+import java.util.ArrayList;
 import android.content.Intent;
 import android.support.v4.view.GestureDetectorCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -12,25 +15,25 @@ import android.widget.ImageView;
 public class BarListActivity extends AppCompatActivity {
 
     private GestureDetectorCompat mGestureObject;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bar_list);
-        mGestureObject = new GestureDetectorCompat(this, new BarListActivity.LearnGesture());
-        final ImageView goToMap = findViewById(R.id.goToMap);
 
-        //onTouchListener pour aller sur l'activité map
-        goToMap.setOnTouchListener(new View.OnTouchListener(){
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_UP){
-                    Intent goToMap = new Intent(BarListActivity.this, MapsActivity.class);
-                    startActivity(goToMap);
-                    return true;
-                }
-                return false;
-            }
-        });
+
+        //Take the bars's info already created in MainActivity
+        ListView listBar = findViewById(R.id.list_bar);
+        ArrayList<Bar> arrayListBar = MainActivity.creatingBars();
+
+        BarAdapter adapter = new BarAdapter(this, arrayListBar);
+        listBar.setAdapter(adapter);
+
+        mGestureObject = new GestureDetectorCompat(this, new BarListActivity.LearnGesture());
+
+        //Setting button to go to MapsActivity
+        final ImageView goToMap = findViewById(R.id.goToMap);
+        MapsActivity.transitionBetweenActivity(goToMap, BarListActivity.this, MapsActivity.class);
     }
 
 
