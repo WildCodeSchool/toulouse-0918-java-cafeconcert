@@ -4,6 +4,8 @@ package fr.wildcodeschool.cafeconcert;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -33,6 +35,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -49,6 +52,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     final static double TOULOUSE_LONGITUDE_BORDURES_BOT = 1.411854;
     final static double TOULOUSE_LATITUDE_BORDURES_TOP = 43.642094;
     final static double TOULOUSE_LONGITUDE_BORDURES_TOP = 1.480995;
+    final static int MARKER_HEIGHT = 72;
+    final static int MARKER_WIDTH = 72;
 
     final static int ZOOM_LVL_BY_DEFAULT = 13;
     final static float ZOOM_LVL_ON_USER = 15.76f;
@@ -133,19 +138,52 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+    /* Generate a bitmap to be used as custom marker.
+     * Is different depending on bar status (liked/disliked/neutral) */
+    private Bitmap setCustomsMarkers(Bar monBar) {
+
+        BitmapDrawable drawableLike =(BitmapDrawable)getResources().getDrawable(R.mipmap.marker_like);
+        Bitmap likeMarker = Bitmap.createScaledBitmap(drawableLike.getBitmap(), MARKER_WIDTH, MARKER_HEIGHT, false);
+
+        BitmapDrawable drawableDislike =(BitmapDrawable)getResources().getDrawable(R.mipmap.marker_dislike);
+        Bitmap dislikeMarker = Bitmap.createScaledBitmap(drawableDislike.getBitmap(), MARKER_WIDTH, MARKER_HEIGHT, false);
+
+        BitmapDrawable drawableNeutral =(BitmapDrawable)getResources().getDrawable(R.mipmap.marker_neutral);
+        Bitmap neutralMarker = Bitmap.createScaledBitmap(drawableNeutral.getBitmap(), MARKER_WIDTH, MARKER_HEIGHT, false);
+
+        Bitmap markerIcon;
+        switch (monBar.getIsLiked()) {
+            case 1:  markerIcon = likeMarker;
+                break;
+            case 0:  markerIcon = dislikeMarker;
+                break;
+            default: markerIcon = neutralMarker;
+                break;
+        }
+
+        return markerIcon;
+
+    }
+
+
     /* Creating bars markers on the map with a list of bars set as arguments
      */
     public void CreateMarkers(ArrayList<Bar> bars) {
 
         for (final Bar monBar : bars) {
+
+
             LatLng barposition = new LatLng(monBar.getGeoPoint(), monBar.getGeoShape());
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(barposition);
             markerOptions.snippet(null);
+            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(setCustomsMarkers(monBar)));
+
             Marker marker = mMap.addMarker(markerOptions);
             marker.setTag(monBar);
             mMarkers.add(marker);
             boolean focus = false;
+
         }
 
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
