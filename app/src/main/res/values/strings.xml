@@ -2,4 +2,13 @@
     <string name="app_name">Cafe Concert</string>
     <string name="title_activity_maps">Map</string>
     <string name="nom_du_cafe">Nom du Café</string>
+    <string name="profile">Profile</string>
+    <string name="map">Map</string>
+    <string name="bar_list">Bar list</string>
+    <string name="favorite">Favorite</string>
+    <string name="be_social">Be Social</string>
+    <string name="share">Share</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string> //#BurgerMenu String need for onBackPressed method
+    <string name="navigation_drawer_close">Close navigation drawer</string> //#BurgerMenu String need for onBackPressed method
+    <string name="cafe_concert">Cafe Concert</string>
 </resources>

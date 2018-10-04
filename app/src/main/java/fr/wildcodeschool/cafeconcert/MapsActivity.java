@@ -1,10 +1,18 @@
 package fr.wildcodeschool.cafeconcert;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.view.GestureDetectorCompat;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.GestureDetector;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -21,7 +29,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     final static double TOULOUSE_LATITUDE = 43.6043;
     final static double TOULOUSE_LONGITUDE = 1.4437;
@@ -33,6 +41,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private GestureDetectorCompat mGestureObject;
     private MotionEvent mMotionEvent;
+    private DrawerLayout drawer;
 
 
     @Override
@@ -45,10 +54,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
         final ImageView goList = findViewById(R.id.goList);
         //onTouch du Drawable à droite (fleche), go sur l'activity list bar
-        goList.setOnTouchListener(new View.OnTouchListener(){
+        goList.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_UP){
+                if (event.getAction() == MotionEvent.ACTION_UP) {
 
                     Intent intent = new Intent(MapsActivity.this, BarListActivity.class);
                     startActivity(intent);
@@ -58,8 +67,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
+        //#BurgerMenu Here I take the new toolbar to set it in my activity
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        drawer = findViewById(R.id.drawer_layout);
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+        //TODO: à ajouter liens dans le menus (le rendre fonctionnel)
     }
-  // TODO : à supprimer quand la méthode de création de bar sera à jour
+
+    //#BurgerMenu For not leaving the activity immediately
+    @Override
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    // TODO : à supprimer quand la méthode de création de bar sera à jour
     public ArrayList<Bar> creatingBars() {
 
         ArrayList<Bar> bars = new ArrayList<Bar>();
@@ -83,7 +113,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -99,7 +128,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
         // mettre en place les bordures de la carte
         LatLngBounds toulouseBounds = new LatLngBounds(
-                new LatLng(TOULOUSE_LATITUDE_BORDURES_BOT, TOULOUSE_LONGITUDE_BORDURES_BOT), new LatLng(TOULOUSE_LATITUDE_BORDURES_TOP , TOULOUSE_LONGITUDE_BORDURES_TOP));
+                new LatLng(TOULOUSE_LATITUDE_BORDURES_BOT, TOULOUSE_LONGITUDE_BORDURES_BOT), new LatLng(TOULOUSE_LATITUDE_BORDURES_TOP, TOULOUSE_LONGITUDE_BORDURES_TOP));
         mMap.setLatLngBoundsForCameraTarget(toulouseBounds);
         // Zoomer sur Toulouse à partir d'un point
         LatLng toulouse = new LatLng(TOULOUSE_LATITUDE, TOULOUSE_LONGITUDE);
@@ -115,14 +144,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     // Creation des marqueurs via une liste de bars - Assigne un marqueur pour chaque bar à partir de son nom, sa position
 
-    public void CreateMarkers(ArrayList<Bar> bars){
-        for (Bar monBar :bars) {
+    public void CreateMarkers(ArrayList<Bar> bars) {
+        for (Bar monBar : bars) {
             LatLng barposition = new LatLng(monBar.getGeoPoint(), monBar.getGeoShape());
 
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(barposition);
             markerOptions.title(monBar.getBarName());
-            markerOptions.snippet(monBar.getPhoneNumber()+ "\r\n" + monBar.getWebUrl());
+            markerOptions.snippet(monBar.getPhoneNumber() + "\r\n" + monBar.getWebUrl());
 
             mMap.addMarker(markerOptions);
 
@@ -130,18 +159,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event){
-        this.mGestureObject.onTouchEvent(event);
+    public boolean onTouchEvent(MotionEvent event) {
+        if (mGestureObject != null) {
+            this.mGestureObject.onTouchEvent(event);
+        }
         return super.onTouchEvent(event);
     }
+
+
     //now create the gesture Object Class
-
-
-
-
-
-
-
 
 
 }
