@@ -51,16 +51,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     final static double TOULOUSE_LONGITUDE_BORDURES_TOP = 1.480995;
 
     final static int ZOOM_LVL_BY_DEFAULT = 13;
-    final static float ZOOM_LVL_ON_USER = 15.76f;  
-  
+    final static float ZOOM_LVL_ON_USER = 15.76f;
+
     private GoogleMap mMap;
     private ArrayList<Bar> bars;
-    private ArrayList<Marker> mMarkers = new ArrayList<>(); 
+    private ArrayList<Marker> mMarkers = new ArrayList<>();
     private GestureDetectorCompat mGestureObject;
     private MotionEvent mMotionEvent;
     private LocationManager mLocationManager = null;
     private FusedLocationProviderClient mFusedLocationClient;
-
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -74,10 +73,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        ImageView goList = findViewById(R.id.goList);
-
         //onTouch du Drawable à droite (fleche), go sur l'activity list bar
-        goList.setOnTouchListener(new View.OnTouchListener() {
+
         //Setting button to go to BarListActivity
         final ImageView goList = findViewById(R.id.goList);
         transitionBetweenActivity(goList, MapsActivity.this, BarListActivity.class);
@@ -139,7 +136,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     /* Creating bars markers on the map with a list of bars set as arguments
      */
     public void CreateMarkers(ArrayList<Bar> bars) {
-        
+
         for (final Bar monBar : bars) {
             LatLng barposition = new LatLng(monBar.getGeoPoint(), monBar.getGeoShape());
             MarkerOptions markerOptions = new MarkerOptions();
@@ -149,7 +146,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             marker.setTag(monBar);
             mMarkers.add(marker);
             boolean focus = false;
-
         }
 
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
@@ -181,7 +177,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 phone.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
                         String uri = "tel:" + bar.getPhoneNumber();
                         Intent intent = new Intent(Intent.ACTION_DIAL);
                         intent.setData(Uri.parse(uri));
@@ -207,8 +202,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
     }
-        }
-    }
 
     /* If all required permissions are granted, set a marker on User Position*/
     private void initLocation() {
@@ -226,7 +219,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         }
                     }
                 });
-
 
 
         mLocationManager = (LocationManager) this.getSystemService(this.LOCATION_SERVICE);
@@ -257,8 +249,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     /* Check if User has accepted GPS location. If not, trigger "onRequestPermissionsresult".
-    * If user has already refused it, draw a toast with a warning.
-    */
+     * If user has already refused it, draw a toast with a warning.
+     */
     private void checkUserLocationPermission() { //Méthode qui teste si le GPS est bien activé
         // vérification de l'autorisation d'accéder à la position GPS
         if (ContextCompat.checkSelfPermission(MapsActivity.this,
@@ -283,8 +275,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     /* Whenever permission for location GPS is asked, this method does the job.
-    * If user refuses, draw a toast with a warning.
-    */
+     * If user refuses, draw a toast with a warning.
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
@@ -303,5 +295,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         }
     }
+
+}
 
 
