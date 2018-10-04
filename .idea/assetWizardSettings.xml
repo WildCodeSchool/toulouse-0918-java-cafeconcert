@@ -44,12 +44,12 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="backgroundImage" value="$USER_HOME$/Desktop/ping.png" />
+                                      <entry key="backgroundImage" value="$USER_HOME$/Desktop/Café-concert/love_break_ping.png" />
                                       <entry key="backgroundLayerName" value="ic_launcher_background" />
-                                      <entry key="foregroundImage" value="$USER_HOME$/Desktop/ping.png" />
-                                      <entry key="foregroundLayerName" value="custom_marker_neutral" />
+                                      <entry key="foregroundImage" value="$USER_HOME$/Desktop/Café-concert/love_break_ping.png" />
+                                      <entry key="foregroundLayerName" value="custom_marker_dislike" />
                                       <entry key="legacyIconShape" value="NONE" />
-                                      <entry key="outputName" value="marker_neutral" />
+                                      <entry key="outputName" value="marker_dislike" />
                                       <entry key="webIconShape" value="NONE" />
                                     </map>
                                   </option>

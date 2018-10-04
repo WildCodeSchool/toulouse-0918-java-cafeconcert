@@ -184,10 +184,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         BitmapDrawable drawableLike = (BitmapDrawable) getResources().getDrawable(R.mipmap.marker_like);
         Bitmap likeMarker = Bitmap.createScaledBitmap(drawableLike.getBitmap(), MARKER_WIDTH, MARKER_HEIGHT, false);
 
-        BitmapDrawable drawableDislike =(BitmapDrawable)getResources().getDrawable(R.mipmap.marker_dislike);
+        BitmapDrawable drawableDislike =(BitmapDrawable)getResources().getDrawable(R.mipmap.marker_dislike_round);
         Bitmap dislikeMarker = Bitmap.createScaledBitmap(drawableDislike.getBitmap(), MARKER_WIDTH, MARKER_HEIGHT, false);
 
-        BitmapDrawable drawableNeutral =(BitmapDrawable)getResources().getDrawable(R.mipmap.marker_neutral);
+        BitmapDrawable drawableNeutral =(BitmapDrawable)getResources().getDrawable(R.mipmap.marker_neutral_round);
         Bitmap neutralMarker = Bitmap.createScaledBitmap(drawableNeutral.getBitmap(), MARKER_WIDTH, MARKER_HEIGHT, false);
 
         Bitmap markerIcon;
@@ -200,7 +200,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 break;
         }
 
-        return markerIcon;
+        return likeMarker;
 
     }
 
@@ -226,7 +226,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             markerOptions.snippet(null);
             //TODO Reactivate this when method fixed
-            //markerOptions.icon(BitmapDescriptorFactory.fromBitmap(setCustomsMarkers(monBar)));
+            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(setCustomsMarkers(monBar)));
 
             Marker marker = mMap.addMarker(markerOptions);
             marker.setTag(monBar);
