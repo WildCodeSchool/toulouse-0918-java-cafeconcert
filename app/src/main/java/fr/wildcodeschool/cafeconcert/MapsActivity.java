@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.Gravity;import android.widget.Toast;
@@ -165,8 +166,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         View popUpView = inflater.inflate(R.layout.custom_info_adapter, null);
 
         //creation fenetre popup
-        int width = LinearLayout.LayoutParams.WRAP_CONTENT;
-        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        int width = 600;
+        int height = ConstraintLayout.LayoutParams.WRAP_CONTENT;
         boolean focusable = true;
         PopupWindow popUp = new PopupWindow(popUpView, width, height, focusable);
 
@@ -178,8 +179,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         TextView barName = popUpView.findViewById(R.id.barTitlePopup);
         ImageView phone = popUpView.findViewById(R.id.phoneButton);
         ImageView web = popUpView.findViewById(R.id.webButton);
-        phone.setImageResource(R.drawable.common_full_open_on_phone);
-        web.setImageResource(R.drawable.ic_launcher_background);
+        ImageView like = popUpView.findViewById(R.id.likeButton);
+        ImageView dontLike = popUpView.findViewById(R.id.dontLikeButton);
+        ImageView navigate = popUpView.findViewById(R.id.mapButton);
+        ImageView photoBar = popUpView.findViewById(R.id.photoBar);
+
+        navigate.setImageResource(R.mipmap.navigate);
+        photoBar.setImageResource(R.mipmap.fonddecran);
+        phone.setImageResource(R.mipmap.phonelogo);
+        web.setImageResource(R.mipmap.globeicon);
+        like.setImageResource(R.mipmap.heartempty);
+        dontLike.setImageResource(R.mipmap.brokenheart_empty);
+
+
+
         popUpView.setBackground(getDrawable(R.drawable.fondpopup));
         barName.setText(bar.getBarName());
 

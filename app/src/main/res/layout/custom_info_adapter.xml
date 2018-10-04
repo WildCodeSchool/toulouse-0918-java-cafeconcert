@@ -19,18 +19,18 @@
     <ImageView
         android:id="@+id/dontLikeButton"
         style="@style/borderPopup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:background="@android:color/background_light"
         android:clickable="true"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/borderImgBar"
-        app:srcCompat="?android:attr/textSelectHandleLeft" />
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toBottomOf="@+id/borderImgBar" />
 
     <ImageView
         android:id="@+id/borderImgBar"
@@ -68,39 +68,39 @@
     <ImageView
         android:id="@+id/phoneButton"
         style="@style/borderPopup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:background="@android:color/background_light"
         android:clickable="true"
-        app:layout_constraintEnd_toStartOf="@+id/guideline"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/borderTitle"
-        app:srcCompat="@android:drawable/stat_sys_phone_call" />
+        app:layout_constraintTop_toBottomOf="@+id/borderTitle" />
 
     <ImageView
         android:id="@+id/likeButton"
         style="@style/borderPopup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:background="@android:color/background_light"
         android:clickable="true"
-        app:layout_constraintEnd_toStartOf="@+id/guideline"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/borderImgBar"
-        app:srcCompat="?android:attr/textSelectHandleRight" />
+        app:layout_constraintTop_toBottomOf="@+id/borderImgBar" />
 
     <ImageView
         android:id="@+id/webButton"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
@@ -108,19 +108,10 @@
         android:clickable="true"
         app:layout_constraintBottom_toBottomOf="@+id/phoneButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toTopOf="@+id/phoneButton"
         app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@android:drawable/ic_menu_info_details" />
-
-    <android.support.constraint.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintGuide_begin="192dp"
-        app:layout_constraintStart_toStartOf="parent" />
+        tools:background="@android:color/background_light" />
 
     <ImageView
         android:id="@+id/borderPhone"
@@ -133,8 +124,8 @@
 
     <ImageView
         android:id="@+id/photoBar"
-        android:layout_width="65dp"
-        android:layout_height="113dp"
+        android:layout_width="wrap_content"
+        android:layout_height="175dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
@@ -142,13 +133,12 @@
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/borderPhone"
-        app:srcCompat="@android:drawable/alert_dark_frame" />
+        app:layout_constraintTop_toBottomOf="@+id/borderPhone" />
 
     <ImageView
         android:id="@+id/mapButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
@@ -159,7 +149,13 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/borderLike"
-        app:srcCompat="@android:drawable/ic_dialog_map" />
+        app:layout_constraintTop_toBottomOf="@+id/borderLike" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@android:dimen/thumbnail_height" />
 
 </android.support.constraint.ConstraintLayout>
