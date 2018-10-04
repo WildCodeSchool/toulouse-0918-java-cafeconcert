@@ -4,6 +4,8 @@ package fr.wildcodeschool.cafeconcert;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.FragmentActivity;
@@ -17,6 +19,15 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v4.view.GestureDetectorCompat;
+
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.GestureDetector;
+import android.view.MenuItem;
+
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -34,6 +45,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -42,7 +54,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.ArrayList;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     final static double TOULOUSE_LATITUDE = 43.6043;
     final static double TOULOUSE_LONGITUDE = 1.4437;
@@ -53,7 +65,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     final static int POPUP_WIDTH = 600;
     final static int POPUP_POSITION_X = 0;
     final static int POPUP_POSITION_Y = 0;
-
+    final static int MARKER_HEIGHT = 72;
+    final static int MARKER_WIDTH = 72;
     final static int ZOOM_LVL_BY_DEFAULT = 13;
     final static float ZOOM_LVL_ON_USER = 15.76f;
 
@@ -62,6 +75,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ArrayList<Marker> mMarkers = new ArrayList<>();
     private GestureDetectorCompat mGestureObject;
     private MotionEvent mMotionEvent;
+    private DrawerLayout drawer;
     private LocationManager mLocationManager = null;
     private FusedLocationProviderClient mFusedLocationClient;
 
@@ -82,7 +96,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //Setting button to go to BarListActivity
         final ImageView goList = findViewById(R.id.goList);
         transitionBetweenActivity(goList, MapsActivity.this, BarListActivity.class);
+
+        //#BurgerMenu Here I take the new toolbar to set it in my activity
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        drawer = findViewById(R.id.drawer_layout);
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+        //TODO: à ajouter liens dans le menus (le rendre fonctionnel)
     }
+
+
 
     /* Init a Listener on the ImageView triggerTransition. When touched, start the destination */
     public static void transitionBetweenActivity(ImageView triggerTransition, final Context context, final Class destination) {
@@ -100,7 +127,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
-
+    }
+    //#BurgerMenu For not leaving the activity immediately
+    @Override
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     /**
@@ -136,7 +171,32 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         CreateMarkers(bars);
 
     }
+    /* Generate a bitmap to be used as custom marker.
+     * Is different depending on bar status (liked/disliked/neutral) */
+    private Bitmap setCustomsMarkers(Bar monBar) {
 
+        BitmapDrawable drawableLike =(BitmapDrawable)getResources().getDrawable(R.mipmap.marker_like);
+        Bitmap likeMarker = Bitmap.createScaledBitmap(drawableLike.getBitmap(), MARKER_WIDTH, MARKER_HEIGHT, false);
+
+        BitmapDrawable drawableDislike =(BitmapDrawable)getResources().getDrawable(R.mipmap.marker_dislike);
+        Bitmap dislikeMarker = Bitmap.createScaledBitmap(drawableDislike.getBitmap(), MARKER_WIDTH, MARKER_HEIGHT, false);
+
+        BitmapDrawable drawableNeutral =(BitmapDrawable)getResources().getDrawable(R.mipmap.marker_neutral);
+        Bitmap neutralMarker = Bitmap.createScaledBitmap(drawableNeutral.getBitmap(), MARKER_WIDTH, MARKER_HEIGHT, false);
+
+        Bitmap markerIcon;
+        switch (monBar.getIsLiked()) {
+            case 1:  markerIcon = likeMarker;
+                break;
+            case 0:  markerIcon = dislikeMarker;
+                break;
+            default: markerIcon = neutralMarker;
+                break;
+        }
+
+        return markerIcon;
+
+    }
     /* Creating bars markers on the map with a list of bars set as arguments
      */
     public void CreateMarkers(ArrayList<Bar> bars) {
@@ -146,6 +206,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(barposition);
             markerOptions.snippet(null);
+            //markerOptions.icon(BitmapDescriptorFactory.fromBitmap(setCustomsMarkers(monBar)));
+
             Marker marker = mMap.addMarker(markerOptions);
             marker.setTag(monBar);
             mMarkers.add(marker);
@@ -155,14 +217,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-
                 popupBuilder(marker);
                 return false;
-
             }
         });
     }
-
     private void popupBuilder(Marker marker){
 
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -219,7 +278,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
     }
-
     /* If all required permissions are granted, set a marker on User Position*/
     private void initLocation() {
         // Get the last known position of the user
@@ -268,7 +326,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     /* Check if User has accepted GPS location. If not, trigger "onRequestPermissionsresult".
      * If user has already refused it, draw a toast with a warning.
      */
-    private void checkUserLocationPermission() { //Méthode qui teste si le GPS est bien activé
+    private void checkUserLocationPermission() {
+        //Méthode qui teste si le GPS est bien activé
         // vérification de l'autorisation d'accéder à la position GPS
         if (ContextCompat.checkSelfPermission(MapsActivity.this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
