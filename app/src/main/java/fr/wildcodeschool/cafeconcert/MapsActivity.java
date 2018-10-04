@@ -5,7 +5,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.AdaptiveIconDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 
@@ -113,7 +115,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setCheckedItem(R.id.nav_map);
-        //TODO: à ajouter liens dans le menus (le rendre fonctionnel)
     }
 
     //#BurgerMenu
@@ -162,7 +163,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
-
     
     /**
      * Manipulates the map once avalable.
@@ -197,31 +197,32 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         CreateMarkers(bars);
 
     }
+
     /* Generate a bitmap to be used as custom marker.
      * Is different depending on bar status (liked/disliked/neutral) */
-    //TODO FIX THIS SH... METHOD
     private Bitmap setCustomsMarkers(Bar monBar) {
 
-        BitmapDrawable drawableLike = (BitmapDrawable) getResources().getDrawable(R.mipmap.marker_like);
-        Bitmap likeMarker = Bitmap.createScaledBitmap(drawableLike.getBitmap(), MARKER_WIDTH, MARKER_HEIGHT, false);
 
-        BitmapDrawable drawableDislike =(BitmapDrawable)getResources().getDrawable(R.mipmap.marker_dislike);
-        Bitmap dislikeMarker = Bitmap.createScaledBitmap(drawableDislike.getBitmap(), MARKER_WIDTH, MARKER_HEIGHT, false);
+        Bitmap initialLikeMarker= BitmapFactory.decodeResource(this.getResources(),
+                R.drawable.love_ping);
+        Bitmap likeMarker = Bitmap.createScaledBitmap(initialLikeMarker, MARKER_WIDTH, MARKER_HEIGHT, false);
 
-        BitmapDrawable drawableNeutral =(BitmapDrawable)getResources().getDrawable(R.mipmap.marker_neutral);
-        Bitmap neutralMarker = Bitmap.createScaledBitmap(drawableNeutral.getBitmap(), MARKER_WIDTH, MARKER_HEIGHT, false);
+        Bitmap initialDislikeMarker= BitmapFactory.decodeResource(this.getResources(),
+                R.drawable.love_break_ping);
+        Bitmap dislikeMarker = Bitmap.createScaledBitmap(initialDislikeMarker, MARKER_WIDTH, MARKER_HEIGHT, false);
 
-        Bitmap markerIcon;
+        Bitmap initialNeutralMarker= BitmapFactory.decodeResource(this.getResources(),
+                R.drawable.neutral_ping);
+        Bitmap neutralMarker = Bitmap.createScaledBitmap(initialNeutralMarker, MARKER_WIDTH, MARKER_HEIGHT, false);
+
+
         switch (monBar.getIsLiked()) {
-            case 1:  markerIcon = likeMarker;
-                break;
-            case 0:  markerIcon = dislikeMarker;
-                break;
-            default: markerIcon = neutralMarker;
-                break;
-        }
+            case 1:  return likeMarker;
 
-        return markerIcon;
+            case 0:  return dislikeMarker;
+
+            default: return neutralMarker;
+        }
 
     }
 
@@ -243,7 +244,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             markerOptions.position(barposition);
             markerOptions.snippet(null);
             //TODO Reactivate this when method fixed
-            //markerOptions.icon(BitmapDescriptorFactory.fromBitmap(setCustomsMarkers(monBar)));
+            //markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.love_ping));
+            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(setCustomsMarkers(monBar)));
 
             Marker marker = mMap.addMarker(markerOptions);
             marker.setTag(monBar);
@@ -259,6 +261,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
     }
+
     private void popupBuilder(Marker marker){
 
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
