@@ -115,7 +115,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setCheckedItem(R.id.nav_map);
-        //TODO: à ajouter liens dans le menus (le rendre fonctionnel)
     }
 
     //#BurgerMenu
@@ -164,7 +163,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
-
     
     /**
      * Manipulates the map once avalable.
@@ -199,9 +197,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         CreateMarkers(bars);
 
     }
+
     /* Generate a bitmap to be used as custom marker.
      * Is different depending on bar status (liked/disliked/neutral) */
-    //TODO FIX THIS SH... METHOD
     private Bitmap setCustomsMarkers(Bar monBar) {
 
 
@@ -224,9 +222,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             case 0:  return dislikeMarker;
 
             default: return neutralMarker;
-
         }
-
 
     }
 
@@ -265,6 +261,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
     }
+
     private void popupBuilder(Marker marker){
 
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
