@@ -51,6 +51,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     final static double TOULOUSE_LATITUDE_BORDURES_TOP = 43.642094;
     final static double TOULOUSE_LONGITUDE_BORDURES_TOP = 1.480995;
     final static int POPUP_WIDTH = 600;
+    final static int POPUP_POSITION_X = 0;
+    final static int POPUP_POSITION_Y = 0;
 
     final static int ZOOM_LVL_BY_DEFAULT = 13;
     final static float ZOOM_LVL_ON_USER = 15.76f;
@@ -173,7 +175,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         PopupWindow popUp = new PopupWindow(popUpView, width, height, focusable);
 
         //show popup
-        popUp.showAtLocation(popUpView, Gravity.CENTER, 0, 0);
+        popUp.showAtLocation(popUpView, Gravity.CENTER, POPUP_POSITION_X, POPUP_POSITION_Y); //
 
         final Bar bar = (Bar) marker.getTag();
 
