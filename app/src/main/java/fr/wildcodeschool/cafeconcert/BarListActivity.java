@@ -1,16 +1,17 @@
 package fr.wildcodeschool.cafeconcert;
 
 
-import android.support.v7.app.AppCompatActivity;
-import android.widget.ListView;
-import java.util.ArrayList;
 import android.content.Intent;
-import android.support.v4.view.GestureDetectorCompat;
 import android.os.Bundle;
+import android.support.v4.view.GestureDetectorCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ListView;
+
+import java.util.ArrayList;
 
 public class BarListActivity extends AppCompatActivity {
 
@@ -33,25 +34,25 @@ public class BarListActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event){
+    public boolean onTouchEvent(MotionEvent event) {
         this.mGestureObject.onTouchEvent(event);
         return super.onTouchEvent(event);
     }
     //now create the gesture Object Class
 
     //swipe pour aller sur l'activité map
-    class LearnGesture extends GestureDetector.SimpleOnGestureListener{
+    class LearnGesture extends GestureDetector.SimpleOnGestureListener {
         //SimpleOnGestureListener is the listener for the gestures we want
 
         @Override
-        public boolean onFling(MotionEvent event1, MotionEvent event2, float velocityX, float velocityY){
-            if(event2.getX() > event1.getX() && (Math.abs(event2.getY()-event1.getY()) < 150)){
+        public boolean onFling(MotionEvent event1, MotionEvent event2, float velocityX, float velocityY) {
+            if (event2.getX() > event1.getX() && (Math.abs(event2.getY() - event1.getY()) < 150)) {
 
                 Intent intent = new Intent(BarListActivity.this, MapsActivity.class);
                 startActivity(intent);
                 //swipe gauche à droite
-            }
-            else if(event2.getX() < event1.getX()){
+
+            } else if (event2.getX() < event1.getX()) {
                 //swipe droite à gauche
             }
             return true;
