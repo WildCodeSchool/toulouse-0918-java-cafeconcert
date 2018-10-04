@@ -66,7 +66,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_maps);
         // Setting map
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -74,12 +73,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
         //onTouch du Drawable à droite (fleche), go sur l'activity list bar
-
         //Setting button to go to BarListActivity
         final ImageView goList = findViewById(R.id.goList);
         transitionBetweenActivity(goList, MapsActivity.this, BarListActivity.class);
     }
-
     /* Init a Listener on the ImageView triggerTransition. When touched, start the destination */
     public static void transitionBetweenActivity(ImageView triggerTransition, final Context context, final Class destination) {
         //onTouch du Drawable à droite (fleche), go sur l'activity list bar
@@ -95,8 +92,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 return false;
             }
         });
-
-
     }
 
     /**
@@ -219,8 +214,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         }
                     }
                 });
-
-
         mLocationManager = (LocationManager) this.getSystemService(this.LOCATION_SERVICE);
         LocationListener locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
@@ -235,19 +228,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onProviderDisabled(String provider) {
             }
         };
-
         // initialisation de la vérification du déplacement par GPS et par réseau WIFI
         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
         mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
     }
-
-
     /* Center the camera on the User Location*/
     private void moveCamera(Location userLocation) {
         LatLng latLong = new LatLng(userLocation.getLatitude(), userLocation.getLongitude());
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLong, ZOOM_LVL_ON_USER));
     }
-
     /* Check if User has accepted GPS location. If not, trigger "onRequestPermissionsresult".
      * If user has already refused it, draw a toast with a warning.
      */
@@ -273,7 +262,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             initLocation();
         }
     }
-
     /* Whenever permission for location GPS is asked, this method does the job.
      * If user refuses, draw a toast with a warning.
      */

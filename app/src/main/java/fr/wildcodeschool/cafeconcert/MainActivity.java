@@ -28,13 +28,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this,InscriptionActivity.class));
             }
         });
-
-
-
         ArrayList<Bar> bars = creatingBars(); //Instantiation of an arrayList of café-concert objects
-
     }
-
 
     /*Return an ArrayList "bars" composed with 6 instantiated "Bars" Objects.
     Useful for tests before implementation of an appropriate database */
@@ -57,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
         bars.add(carsonCity);
 
         return bars;
-
     }
 
 
