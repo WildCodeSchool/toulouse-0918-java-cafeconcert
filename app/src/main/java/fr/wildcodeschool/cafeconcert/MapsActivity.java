@@ -152,53 +152,58 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public boolean onMarkerClick(Marker marker) {
 
-                LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-                View popUpView = inflater.inflate(R.layout.custom_info_adapter, null);
-
-                //creation fenetre popup
-                int width = LinearLayout.LayoutParams.WRAP_CONTENT;
-                int height = LinearLayout.LayoutParams.WRAP_CONTENT;
-                boolean focusable = true;
-                PopupWindow popUp = new PopupWindow(popUpView, width, height, focusable);
-
-                //show popup
-                popUp.showAtLocation(popUpView, Gravity.CENTER, 0, 0);
-
-                final Bar bar = (Bar) marker.getTag();
-
-                TextView barName = popUpView.findViewById(R.id.barTitlePopup);
-                ImageView phone = popUpView.findViewById(R.id.phoneButton);
-                ImageView web = popUpView.findViewById(R.id.webButton);
-                phone.setImageResource(R.drawable.common_full_open_on_phone);
-                web.setImageResource(R.drawable.ic_launcher_background);
-                popUpView.setBackground(getDrawable(R.drawable.fondpopup));
-                barName.setText(bar.getBarName());
-
-                phone.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String uri = "tel:" + bar.getPhoneNumber();
-                        Intent intent = new Intent(Intent.ACTION_DIAL);
-                        intent.setData(Uri.parse(uri));
-                        startActivity(intent);
-
-                    }
-                });
-
-                web.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String url = bar.getWebUrl();
-                        if (url.charAt(0) == 'w') {
-                            url = "http://" + url;
-                        }
-                        Intent i = new Intent(Intent.ACTION_VIEW);
-                        i.setData(Uri.parse(url));
-                        startActivity(i);
-                    }
-                });
-
+                popupBuilder(marker);
                 return false;
+
+            }
+        });
+    }
+
+    private void popupBuilder(Marker marker){
+
+        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        View popUpView = inflater.inflate(R.layout.custom_info_adapter, null);
+
+        //creation fenetre popup
+        int width = LinearLayout.LayoutParams.WRAP_CONTENT;
+        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        boolean focusable = true;
+        PopupWindow popUp = new PopupWindow(popUpView, width, height, focusable);
+
+        //show popup
+        popUp.showAtLocation(popUpView, Gravity.CENTER, 0, 0);
+
+        final Bar bar = (Bar) marker.getTag();
+
+        TextView barName = popUpView.findViewById(R.id.barTitlePopup);
+        ImageView phone = popUpView.findViewById(R.id.phoneButton);
+        ImageView web = popUpView.findViewById(R.id.webButton);
+        phone.setImageResource(R.drawable.common_full_open_on_phone);
+        web.setImageResource(R.drawable.ic_launcher_background);
+        popUpView.setBackground(getDrawable(R.drawable.fondpopup));
+        barName.setText(bar.getBarName());
+
+        phone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String uri = "tel:" + bar.getPhoneNumber();
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse(uri));
+                startActivity(intent);
+
+            }
+        });
+
+        web.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = bar.getWebUrl();
+                if (url.charAt(0) == 'w') {
+                    url = "http://" + url;
+                }
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
             }
         });
     }
