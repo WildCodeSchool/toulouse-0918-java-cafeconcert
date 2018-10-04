@@ -88,7 +88,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_maps);
         // Setting map
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -112,7 +111,36 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+        navigationView.setCheckedItem(R.id.nav_map);
         //TODO: à ajouter liens dans le menus (le rendre fonctionnel)
+    }
+
+    //#BurgerMenu
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.nav_map:
+                startActivity(new Intent(this, MapsActivity.class));
+                break;
+            case R.id.nav_bar_list:
+                startActivity(new Intent(this, BarListActivity.class));
+                break;
+            case R.id.nav_share:
+                Toast.makeText(this, "Shared", Toast.LENGTH_SHORT).show();
+                break;
+        }
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    //#BurgerMenu For not leaving the activity immediately
+    @Override
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     /* Init a Listener on the ImageView triggerTransition. When touched, start the destination */
@@ -134,28 +162,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
-    //#BurgerMenu
 
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.nav_bar_list:
-                startActivity(new Intent(this, BarListActivity.class));
-                break;
-        }
-        return true;
-    }
-
-    //#BurgerMenu For not leaving the activity immediately
-    @Override
-    public void onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
     
     /**
      * Manipulates the map once avalable.
