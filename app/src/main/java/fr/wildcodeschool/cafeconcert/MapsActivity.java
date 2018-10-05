@@ -264,8 +264,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public void adaptLikesButton(ImageView like, ImageView dontLike, Bar bar, Marker marker) {
-        //like.setImageResource(R.mipmap.heartempty);
-        //dontLike.setImageResource(R.mipmap.brokenheart_empty);
 
         Bitmap initialLikeMarker= BitmapFactory.decodeResource(this.getResources(),
                 R.drawable.love_ping);
@@ -298,12 +296,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             like.setImageBitmap(neutralLikeMarker);
             marker.setIcon(BitmapDescriptorFactory.fromBitmap(dislikeMarker));
         }
-
-        Toast toast = Toast.makeText(getApplicationContext(),
-                "Valeur du bar : " + bar.getIsLiked(),
-                Toast.LENGTH_SHORT);
-
-        toast.show();
 
     }
 

@@ -90,8 +90,6 @@ public class Bar {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(this.barName, isLiked);
         editor.commit();
-        this.isLiked = isLiked;
-
 
     }
 
