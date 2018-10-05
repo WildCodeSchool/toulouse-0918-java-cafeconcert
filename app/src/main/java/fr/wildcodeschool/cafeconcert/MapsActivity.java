@@ -71,6 +71,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     final static double TOULOUSE_LATITUDE_BORDURES_TOP = 43.642094;
     final static double TOULOUSE_LONGITUDE_BORDURES_TOP = 1.480995;
     final static int POPUP_WIDTH = 600;
+    final static int POPUP_HEIGHT = 1000;
     final static int POPUP_POSITION_X = 0;
     final static int POPUP_POSITION_Y = 0;
     final static int MARKER_HEIGHT = 72;
@@ -269,7 +270,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         //creation fenetre popup
         int width = POPUP_WIDTH;
-        int height = ConstraintLayout.LayoutParams.WRAP_CONTENT;
+        int height = POPUP_HEIGHT;
         boolean focusable = true;
         PopupWindow popUp = new PopupWindow(popUpView, width, height, focusable);
 
