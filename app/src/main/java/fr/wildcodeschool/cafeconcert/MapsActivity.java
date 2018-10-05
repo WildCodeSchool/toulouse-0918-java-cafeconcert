@@ -281,11 +281,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 R.drawable.neutral_like_icon);
         Bitmap neutralLikeMarker = Bitmap.createScaledBitmap(nLikeMarker, MARKER_WIDTH, MARKER_HEIGHT, false);
 
+        Bitmap initialNeutralMarker= BitmapFactory.decodeResource(this.getResources(),
+                R.drawable.neutral_ping);
+        Bitmap neutralMarker = Bitmap.createScaledBitmap(initialNeutralMarker, MARKER_WIDTH, MARKER_HEIGHT, false);
+
         like.setImageBitmap(neutralLikeMarker);
         dontLike.setImageBitmap(neutralDislikeMarker);
 
         //0 dislike, 1 like, 2 neutral
-        if(bar.getIsLiked() == 1) {
+        if (bar.getIsLiked() == 1) {
             like.setImageBitmap(likeMarker);
             dontLike.setImageBitmap(neutralDislikeMarker);
 
@@ -295,6 +299,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             dontLike.setImageBitmap(dislikeMarker);
             like.setImageBitmap(neutralLikeMarker);
             marker.setIcon(BitmapDescriptorFactory.fromBitmap(dislikeMarker));
+        } else {
+            marker.setIcon(BitmapDescriptorFactory.fromBitmap(neutralMarker));
         }
 
     }
@@ -307,7 +313,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onClick(View v) {
 
-                if(bar.getIsLiked() != 1) {
+                if (bar.getIsLiked() != 1) {
                     bar.setIsLiked(1);
                     adaptLikesButton(like, dontLike, bar, marker);
                 }
@@ -319,7 +325,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         dontLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(bar.getIsLiked() != 0) {
+                if (bar.getIsLiked() != 0) {
                     bar.setIsLiked(0);
                     adaptLikesButton(like, dontLike, bar, marker);
                 }
