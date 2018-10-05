@@ -1,5 +1,9 @@
 package fr.wildcodeschool.cafeconcert;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
 public class Bar {
 
     /* Declaration variables*/
@@ -10,16 +14,29 @@ public class Bar {
     private String webUrl;
     private int isLiked; // 1 if liked, 0 if disliked, 2 if neutral
     private int picture; // Pour un drawable le type est 'int'
+    private Context context;
 
     /*Constructor*/
-    public Bar(String barName, String phoneNumber, double geoPoint, double geoShape, String webUrl, int isLiked, int picture) {
+    public Bar(String barName, String phoneNumber, double geoPoint, double geoShape, String webUrl, int isLiked, int picture, Context context) {
         this.barName = barName;
         this.phoneNumber = phoneNumber;
         this.geoShape = geoShape;
         this.geoPoint = geoPoint;
         this.webUrl = webUrl;
-        this.isLiked = isLiked;
         this.picture = picture;
+        this.context = context;
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        if (!sharedPreferences.contains(this.barName)) {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt(this.barName, isLiked);
+            editor.commit();
+            this.isLiked = isLiked;
+        } else {
+            this.isLiked = sharedPreferences.getInt(this.barName, 2);
+
+        }
+
     }
 
     /*Getters and setters*/
@@ -68,7 +85,14 @@ public class Bar {
     }
 
     public void setIsLiked(int isLiked) {
-        isLiked = isLiked;
+        this.isLiked = isLiked;
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(this.barName, isLiked);
+        editor.commit();
+        this.isLiked = isLiked;
+
+
     }
 
     public int getPicture() { return picture; }

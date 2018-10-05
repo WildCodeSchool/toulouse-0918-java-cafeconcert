@@ -33,7 +33,7 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
         setContentView(R.layout.activity_bar_list);
         //Take the bars's info already created in MainActivity
         ListView listBar = findViewById(R.id.list_bar);
-        ArrayList<Bar> arrayListBar = MainActivity.creatingBars();
+        ArrayList<Bar> arrayListBar = MainActivity.creatingBars(BarListActivity.this);
 
         BarAdapter adapter = new BarAdapter(this, arrayListBar);
         listBar.setAdapter(adapter);
