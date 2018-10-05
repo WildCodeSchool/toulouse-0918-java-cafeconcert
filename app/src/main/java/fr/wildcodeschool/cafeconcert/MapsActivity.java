@@ -317,6 +317,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     bar.setIsLiked(1);
                     adaptLikesButton(like, dontLike, bar, marker);
                 }
+                else {
+                    bar.setIsLiked(2);
+                    adaptLikesButton(like, dontLike, bar, marker);
+                }
 
             }
         });
@@ -327,6 +331,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onClick(View v) {
                 if (bar.getIsLiked() != 0) {
                     bar.setIsLiked(0);
+                    adaptLikesButton(like, dontLike, bar, marker);
+                }
+                else {
+                    bar.setIsLiked(2);
                     adaptLikesButton(like, dontLike, bar, marker);
                 }
             }
