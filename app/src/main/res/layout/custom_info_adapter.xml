@@ -16,10 +16,17 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/fondpopup" />
 
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
     <ImageView
         android:id="@+id/dontLikeButton"
         style="@style/borderPopup"
-        android:layout_width="0dp"
+        android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
@@ -68,7 +75,7 @@
     <ImageView
         android:id="@+id/phoneButton"
         style="@style/borderPopup"
-        android:layout_width="0dp"
+        android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
@@ -84,7 +91,7 @@
     <ImageView
         android:id="@+id/likeButton"
         style="@style/borderPopup"
-        android:layout_width="0dp"
+        android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
@@ -99,7 +106,7 @@
 
     <ImageView
         android:id="@+id/webButton"
-        android:layout_width="0dp"
+        android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
@@ -150,12 +157,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/borderLike" />
-
-    <android.support.constraint.Guideline
-        android:id="@+id/guideline2"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="@android:dimen/thumbnail_height" />
 
 </android.support.constraint.ConstraintLayout>
