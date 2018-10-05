@@ -116,6 +116,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setCheckedItem(R.id.nav_map);
+
     }
 
     //#BurgerMenu
@@ -194,7 +195,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMapConfig.setZoomControlsEnabled(true);
         mMapConfig.setCompassEnabled(true);
 
-        ArrayList<Bar> bars = MainActivity.creatingBars(); //Instantiation of an arrayList of café-concert objects
+        ArrayList<Bar> bars = MainActivity.creatingBars(MapsActivity.this); //Instantiation of an arrayList of café-concert objects
         CreateMarkers(bars);
 
     }
@@ -263,6 +264,85 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
     }
 
+    public void adaptLikesButton(ImageView like, ImageView dontLike, Bar bar, Marker marker) {
+
+        Bitmap initialLikeMarker= BitmapFactory.decodeResource(this.getResources(),
+                R.drawable.love_ping);
+        Bitmap likeMarker = Bitmap.createScaledBitmap(initialLikeMarker, MARKER_WIDTH, MARKER_HEIGHT, false);
+
+        Bitmap initialDislikeMarker= BitmapFactory.decodeResource(this.getResources(),
+                R.drawable.love_break_ping);
+        Bitmap dislikeMarker = Bitmap.createScaledBitmap(initialDislikeMarker, MARKER_WIDTH, MARKER_HEIGHT, false);
+
+        Bitmap nDislikeMarker= BitmapFactory.decodeResource(this.getResources(),
+                R.drawable.neutral_dislike_icon);
+        Bitmap neutralDislikeMarker = Bitmap.createScaledBitmap(nDislikeMarker, MARKER_WIDTH, MARKER_HEIGHT, false);
+
+        Bitmap nLikeMarker= BitmapFactory.decodeResource(this.getResources(),
+                R.drawable.neutral_like_icon);
+        Bitmap neutralLikeMarker = Bitmap.createScaledBitmap(nLikeMarker, MARKER_WIDTH, MARKER_HEIGHT, false);
+
+        Bitmap initialNeutralMarker= BitmapFactory.decodeResource(this.getResources(),
+                R.drawable.neutral_ping);
+        Bitmap neutralMarker = Bitmap.createScaledBitmap(initialNeutralMarker, MARKER_WIDTH, MARKER_HEIGHT, false);
+
+        like.setImageBitmap(neutralLikeMarker);
+        dontLike.setImageBitmap(neutralDislikeMarker);
+
+        //0 dislike, 1 like, 2 neutral
+        if (bar.getIsLiked() == 1) {
+            like.setImageBitmap(likeMarker);
+            dontLike.setImageBitmap(neutralDislikeMarker);
+
+            marker.setIcon(BitmapDescriptorFactory.fromBitmap(likeMarker));
+
+        } else if(bar.getIsLiked() == 0) {
+            dontLike.setImageBitmap(dislikeMarker);
+            like.setImageBitmap(neutralLikeMarker);
+            marker.setIcon(BitmapDescriptorFactory.fromBitmap(dislikeMarker));
+        } else {
+            marker.setIcon(BitmapDescriptorFactory.fromBitmap(neutralMarker));
+        }
+
+    }
+
+    public void setUserOpinion(final ImageView like, final ImageView dontLike, final Bar bar, final Marker marker) {
+
+        //TODO Permettre de repasser en neutre
+
+        like.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (bar.getIsLiked() != 1) {
+                    bar.setIsLiked(1);
+                    adaptLikesButton(like, dontLike, bar, marker);
+                }
+                else {
+                    bar.setIsLiked(2);
+                    adaptLikesButton(like, dontLike, bar, marker);
+                }
+
+            }
+        });
+
+
+        dontLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (bar.getIsLiked() != 0) {
+                    bar.setIsLiked(0);
+                    adaptLikesButton(like, dontLike, bar, marker);
+                }
+                else {
+                    bar.setIsLiked(2);
+                    adaptLikesButton(like, dontLike, bar, marker);
+                }
+            }
+        });
+
+    }
+
     private void popupBuilder(Marker marker){
 
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -282,18 +362,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         TextView barName = popUpView.findViewById(R.id.barTitlePopup);
         ImageView phone = popUpView.findViewById(R.id.phoneButton);
         ImageView web = popUpView.findViewById(R.id.webButton);
-        ImageView like = popUpView.findViewById(R.id.likeButton);
-        ImageView dontLike = popUpView.findViewById(R.id.dontLikeButton);
         ImageView navigate = popUpView.findViewById(R.id.mapButton);
         ImageView photoBar = popUpView.findViewById(R.id.photoBar);
+        ImageView like = popUpView.findViewById(R.id.likeButton);
+        ImageView dontLike = popUpView.findViewById(R.id.dontLikeButton);
 
+        adaptLikesButton(like, dontLike, bar, marker);
+        setUserOpinion(like, dontLike, bar, marker);
         navigate.setImageResource(R.mipmap.navigate);
         photoBar.setImageResource(R.mipmap.fonddecran);
         phone.setImageResource(R.mipmap.phonelogo);
         web.setImageResource(R.mipmap.globeicon);
-        like.setImageResource(R.mipmap.heartempty);
-        dontLike.setImageResource(R.mipmap.brokenheart_empty);
+
         popUpView.setBackground(getDrawable(R.drawable.fondpopup));
+
+
         barName.setText(bar.getBarName());
 
         phone.setOnClickListener(new View.OnClickListener() {
