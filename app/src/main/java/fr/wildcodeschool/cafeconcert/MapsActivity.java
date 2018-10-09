@@ -122,7 +122,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
     
     //#BurgerMenu links
-
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
