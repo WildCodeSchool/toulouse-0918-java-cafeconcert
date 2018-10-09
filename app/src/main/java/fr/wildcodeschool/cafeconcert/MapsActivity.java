@@ -120,7 +120,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         navigationView.setCheckedItem(R.id.nav_map);
 
     }
-
+    
     //#BurgerMenu links
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -193,7 +193,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(toulouse, ZOOM_LVL_BY_DEFAULT));
         // Set user localisation and ask permission to get it
         checkUserLocationPermission();
-        //TODO placer également cet appel dans le OnCreate.
 
         //Configuration map
         UiSettings mMapConfig = mMap.getUiSettings();
@@ -250,8 +249,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(barposition);
             markerOptions.snippet(null);
-            //TODO Reactivate this when method fixed
-            //markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.love_ping));
             markerOptions.icon(BitmapDescriptorFactory.fromBitmap(setCustomsMarkers(monBar)));
 
             Marker marker = mMap.addMarker(markerOptions);
@@ -378,12 +375,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         photoBar.setImageResource(R.mipmap.fonddecran);
         phone.setImageResource(R.mipmap.phonelogo);
         web.setImageResource(R.mipmap.globeicon);
-
         popUpView.setBackground(getDrawable(R.drawable.fondpopup));
-
-
         barName.setText(bar.getBarName());
 
+        //Navigation button
+        MainActivity.setNavigation(navigate, bar, MapsActivity.this);
+
+        //Phone button
         phone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -394,6 +392,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
+        //Website button
         web.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
