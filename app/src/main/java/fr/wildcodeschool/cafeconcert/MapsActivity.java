@@ -310,8 +310,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public void setUserOpinion(final ImageView like, final ImageView dontLike, final Bar bar, final Marker marker) {
 
-        //TODO Permettre de repasser en neutre
-
         like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
