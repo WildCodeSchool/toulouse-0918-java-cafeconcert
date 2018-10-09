@@ -12,6 +12,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -36,6 +39,10 @@ public class MainActivity extends AppCompatActivity {
         });
         ArrayList<Bar> bars = creatingBars(MainActivity.this); //Instantiation of an arrayList of café-concert objects
 
+        // Write a message to the database
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("message");
+        myRef.setValue("Hello, World!");
     }
 
 
@@ -66,7 +73,6 @@ public class MainActivity extends AppCompatActivity {
 
     public static void setNavigation(ImageView navigate, final Bar bar, final Context context) {
 
-        //TODO transférer Navigation button
         navigate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

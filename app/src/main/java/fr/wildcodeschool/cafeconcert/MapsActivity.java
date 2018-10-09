@@ -108,6 +108,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+        //#BurgerMenu
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -118,12 +120,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         navigationView.setCheckedItem(R.id.nav_map);
 
     }
+    
+    //#BurgerMenu links
 
-
-    //#BurgerMenu
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
+            case R.id.nav_profile:
+                startActivity(new Intent(this, Profile.class));
+                break;
             case R.id.nav_map:
                 startActivity(new Intent(this, MapsActivity.class));
                 break;
