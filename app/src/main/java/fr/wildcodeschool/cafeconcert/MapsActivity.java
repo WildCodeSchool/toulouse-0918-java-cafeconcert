@@ -375,10 +375,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         photoBar.setImageResource(R.mipmap.fonddecran);
         phone.setImageResource(R.mipmap.phonelogo);
         web.setImageResource(R.mipmap.globeicon);
-
         popUpView.setBackground(getDrawable(R.drawable.fondpopup));
-
-
         barName.setText(bar.getBarName());
 
         //Navigation button
