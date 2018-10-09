@@ -35,8 +35,6 @@ public class BarAdapter extends ArrayAdapter<Bar> {
         ibBar.setBackgroundResource(bar.getPicture());
         MainActivity.setNavigation(navigate, bar, getContext());
 
-
-
         // Return the completed view to render on screen
         return convertView;
     }
