@@ -1,5 +1,6 @@
 package fr.wildcodeschool.cafeconcert;
 
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -18,15 +19,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.view.Gravity;
-import android.view.Menu;
-import android.widget.Toast;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
-import android.widget.TextView;
-import android.widget.Toast;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -35,6 +27,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -96,6 +89,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private FusedLocationProviderClient mFusedLocationClient;
     private boolean filter = false;
 
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,7 +108,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         //#BurgerMenu Here I take the new toolbar to set it in my activity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
 
         //#BurgerMenu
         drawer = findViewById(R.id.drawer_layout);
@@ -187,7 +180,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 startActivity(new Intent(this, Profile.class));
                 break;
             case R.id.nav_map:
-                startActivity(new Intent(this, MapsActivity.class));
                 break;
             case R.id.nav_bar_list:
                 startActivity(new Intent(this, BarListActivity.class));
@@ -250,7 +242,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 return false;
             }
         });
-
     }
 
     /**
@@ -393,7 +384,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         } else {
             marker.setIcon(BitmapDescriptorFactory.fromBitmap(neutralMarker));
         }
-
     }
 
     public void setUserOpinion(final ImageView like, final ImageView dontLike, final Bar bar, final Marker marker) {
@@ -484,7 +474,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
     }
-
     /* If all required permissions are granted, set a marker on User Position*/
     private void initLocation() {
         // Get the last known position of the user
@@ -575,3 +564,5 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 }
+
+

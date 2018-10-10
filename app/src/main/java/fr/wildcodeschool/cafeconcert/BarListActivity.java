@@ -1,6 +1,7 @@
 package fr.wildcodeschool.cafeconcert;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.view.GestureDetector;
 import android.view.Menu;
 
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -36,7 +38,6 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bar_list);
-
         //Take the bars's info already created in MainActivity
         ListView listBar = findViewById(R.id.list_bar);
         bars = MainActivity.creatingBars(BarListActivity.this);
@@ -121,12 +122,14 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
     }
 
     //#BurgerMenu put links between activities
-    //TODO: Ajouter les liens vers le profile et les favoris
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         ListView listBar = findViewById(R.id.list_bar);
         CheckBox checkboxFilter = findViewById(R.id.checkBoxFilter);
         switch (item.getItemId()) {
+            case R.id.nav_profile:
+                startActivity(new Intent(this, Profile.class));
+                break;
             case R.id.nav_map:
                 Intent intentMap = new Intent(this, MapsActivity.class);
                 startActivity(intentMap);
