@@ -1,5 +1,6 @@
 package fr.wildcodeschool.cafeconcert;
 
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -100,7 +101,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
         //#BurgerMenu
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -111,24 +111,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         toggle.syncState();
         navigationView.setCheckedItem(R.id.nav_map);
         checkMenuCreated(drawer);
-    }
-
-    /* Init a Listener on the ImageView triggerTransition. When touched, start the destination */
-    public static void transitionBetweenActivity(ImageView triggerTransition, final Context context, final Class destination) {
-        //onTouch du Drawable à droite (fleche), go sur l'activity list bar
-        triggerTransition.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-
-                    Intent intent = new Intent(context, destination);
-                    context.startActivity(intent);
-                    return true;
-                }
-                return false;
-            }
-        });
-
     }
 
     //#BurgerMenu
@@ -192,7 +174,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 startActivity(new Intent(this, Profile.class));
                 break;
             case R.id.nav_map:
-                startActivity(new Intent(this, MapsActivity.class));
                 break;
             case R.id.nav_bar_list:
                 startActivity(new Intent(this, BarListActivity.class));
@@ -239,6 +220,23 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             super.onBackPressed();
         }
     }
+
+    /* Init a Listener on the ImageView triggerTransition. When touched, start the destination */
+    public static void transitionBetweenActivity(ImageView triggerTransition, final Context context, final Class destination) {
+        //onTouch du Drawable à droite (fleche), go sur l'activity list bar
+        triggerTransition.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    Intent intent = new Intent(context, destination);
+                    context.startActivity(intent);
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
+
 
     /**
      * Manipulates the map once avalable.
@@ -379,7 +377,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         } else {
             marker.setIcon(BitmapDescriptorFactory.fromBitmap(neutralMarker));
         }
-
     }
 
     public void setUserOpinion(final ImageView like, final ImageView dontLike, final Bar bar, final Marker marker) {
@@ -470,7 +467,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
     }
-
     /* If all required permissions are granted, set a marker on User Position*/
     private void initLocation() {
         // Get the last known position of the user
@@ -561,3 +557,5 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 }
+
+

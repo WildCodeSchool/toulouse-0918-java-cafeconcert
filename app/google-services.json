@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "536916017816-qoiia702c65bbnur98o1ptohlrcb3v81.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "fr.wildcodeschool.cafeconcert",
+            "certificate_hash": "b21d71c281fbfb2b717fedf19184930a9d8c4511"
+          }
+        },
+        {
           "client_id": "536916017816-3f89mjg94dl72285suih9l6arulv38p1.apps.googleusercontent.com",
           "client_type": 3
         }
