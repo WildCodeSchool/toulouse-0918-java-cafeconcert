@@ -126,7 +126,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setCheckedItem(R.id.nav_map);
+        checkMenuCreated(drawer);
 
+
+
+    }
+
+    public void checkMenuCreated(DrawerLayout drawer) {
         drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
@@ -150,12 +156,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             }
         });
-
-
-
     }
-
-
     //#BurgerMenu
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
