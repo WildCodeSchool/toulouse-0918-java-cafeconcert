@@ -13,6 +13,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.GestureDetector;
+import android.view.Menu;
+
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
@@ -91,7 +94,34 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
         });
     }
 
-    //#BurgerMenu
+    //#ShareMenu : Inflate the share menu
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.share_menu, menu);
+        return true;
+    }
+
+    //#ShareMenu : Send a text
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.share:
+                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                sharingIntent.setType("text/plain");
+                String shareBodyText = getString(R.string.share_text);
+                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,"Subject here");
+                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBodyText);
+                startActivity(Intent.createChooser(sharingIntent, "Shearing Option"));
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    //#BurgerMenu put links between activities
+    //TODO: Ajouter les liens vers le profile et les favoris
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         ListView listBar = findViewById(R.id.list_bar);
