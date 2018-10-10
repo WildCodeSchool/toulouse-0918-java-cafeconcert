@@ -2,13 +2,15 @@ package fr.wildcodeschool.cafeconcert;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
+import android.widget.ImageView;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
@@ -34,6 +36,10 @@ public class MainActivity extends AppCompatActivity {
         });
         ArrayList<Bar> bars = creatingBars(MainActivity.this); //Instantiation of an arrayList of café-concert objects
 
+        // Write a message to the database
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("message");
+        myRef.setValue("Hello, World!");
     }
 
 
@@ -61,5 +67,18 @@ public class MainActivity extends AppCompatActivity {
         return bars;
     }
 
+    /*Launch Googlemaps on Navigation mode.
+     * User position as departure, bar coordonates as destination */
+    public static void setNavigation(ImageView navigate, final Bar bar, final Context context) {
+
+        navigate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                        Uri.parse("http://maps.google.com/maps?.34&daddr=" + bar.getGeoPoint()+ "," + bar.getGeoShape()));
+                context.startActivity(intent);
+            }
+        });
+    }
 
 }

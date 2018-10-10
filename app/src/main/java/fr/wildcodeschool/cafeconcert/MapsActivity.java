@@ -104,7 +104,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         // Setting map
-
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -118,6 +117,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+        //#BurgerMenu
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -148,8 +149,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             @Override
             public void onDrawerClosed(@NonNull View drawerView) {
-
             }
+
 
             @Override
             public void onDrawerStateChanged(int newState) {
@@ -163,6 +164,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         CheckBox checkboxFilter = findViewById(R.id.checkBoxFilter);
         //filterSwitch();
         switch (item.getItemId()){
+            case R.id.nav_profile:
+                startActivity(new Intent(this, Profile.class));
+                break;
             case R.id.nav_map:
                 startActivity(new Intent(this, MapsActivity.class));
                 break;
@@ -320,8 +324,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(barposition);
             markerOptions.snippet(null);
-            //TODO Reactivate this when method fixed
-            //markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.love_ping));
             markerOptions.icon(BitmapDescriptorFactory.fromBitmap(setCustomsMarkers(monBar)));
 
             Marker marker = mMap.addMarker(markerOptions);
@@ -382,8 +384,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public void setUserOpinion(final ImageView like, final ImageView dontLike, final Bar bar, final Marker marker) {
-
-        //TODO Permettre de repasser en neutre
 
         like.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -448,12 +448,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         photoBar.setImageResource(R.mipmap.fonddecran);
         phone.setImageResource(R.mipmap.phonelogo);
         web.setImageResource(R.mipmap.globeicon);
-
         popUpView.setBackground(getDrawable(R.drawable.fondpopup));
-
-
         barName.setText(bar.getBarName());
 
+        //Navigation button
+        MainActivity.setNavigation(navigate, bar, MapsActivity.this);
+
+        //Phone button
         phone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -464,6 +465,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
+        //Website button
         web.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

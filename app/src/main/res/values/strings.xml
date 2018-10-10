@@ -19,7 +19,12 @@
     <string name="like">Like</string>
     <string name="be_social">Be Social</string>
     <string name="share">Share</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string> //#BurgerMenu String need for onBackPressed method
-    <string name="navigation_drawer_close">Close navigation drawer</string> //#BurgerMenu String need for onBackPressed method
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    //#BurgerMenu String need for onBackPressed method
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    //#BurgerMenu String need for onBackPressed method
     <string name="cafe_concert">Cafe Concert</string>
+    <string name="nom_du_bar">Nom du bar</string>
+    <string name="mes_coup_coeur">Mes coup de coeur :</string>
+    <string name="profil">Profil</string>
 </resources>
