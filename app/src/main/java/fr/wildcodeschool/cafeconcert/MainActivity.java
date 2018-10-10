@@ -13,14 +13,11 @@ import android.widget.Toast;
 import android.net.Uri;
 import android.widget.ImageView;
 
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
@@ -30,7 +27,20 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        Button button = (Button) findViewById(R.id.button_visiteur);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this,MapsActivity.class));
+            }
+        });
+        Button buttonScription = (Button) findViewById(R.id.button_inscription);
+        buttonScription.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this,InscriptionActivity.class));
+            }
+        });
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
@@ -92,12 +102,12 @@ public class MainActivity extends AppCompatActivity {
 
         ArrayList<Bar> bars = new ArrayList<Bar>();
 
-        Bar cafePopulaire = new Bar("Le Café Populaire", "05 61 63 07 00", 43.60441137, 1.451458914, "https://www.facebook.com/cafepopulairetoulouse/", 0, R.drawable.common_full_open_on_phone, context);
-        Bar saintDesSeins = new Bar("Le Saint des Seins", "05 61 22 11 39", 43.60347105, 1.436443523, "www.lesaintdesseins.com", 1, R.drawable.common_full_open_on_phone, context);
-        Bar puertoHabana = new Bar("Puerto Habana", "05 61 54 45 61", 43.59900788, 1.45668714, "http://www.puerto-habana.com", 2, R.drawable.common_full_open_on_phone, context);
-        Bar citronBleu = new Bar("Citron Bleu", "05 62 17 54 06", 43.59882153, 1.442793398, "http://www.lecitronbleu.fr", 0, R.drawable.common_full_open_on_phone, context);
-        Bar maisonBlanche = new Bar("La Maison Blanche", "09 52 92 57 22", 43.60972002, 1.439207355, "www.cafe-maison-blanche.fr", 1, R.drawable.common_full_open_on_phone, context);
-        Bar carsonCity = new Bar("Le Carson City", "05 61 42 02 22", 43.59822031, 1.434274003, "http://www.restaurant-carsoncity.com", 2, R.drawable.common_full_open_on_phone, context);
+        Bar cafePopulaire = new Bar("Le Café Populaire", "05 61 63 07 00", 43.60441137, 1.451458914, "https://www.facebook.com/cafepopulairetoulouse/", 0, R.drawable.photodecafe, context);
+        Bar saintDesSeins = new Bar("Le Saint des Seins", "05 61 22 11 39", 43.60347105, 1.436443523, "www.lesaintdesseins.com", 1, R.drawable.photodecafe, context);
+        Bar puertoHabana = new Bar("Puerto Habana", "05 61 54 45 61", 43.59900788, 1.45668714, "http://www.puerto-habana.com", 2, R.drawable.photodecafe, context);
+        Bar citronBleu = new Bar("Citron Bleu", "05 62 17 54 06", 43.59882153, 1.442793398, "http://www.lecitronbleu.fr", 0, R.drawable.photodecafe, context);
+        Bar maisonBlanche = new Bar("La Maison Blanche", "09 52 92 57 22", 43.60972002, 1.439207355, "www.cafe-maison-blanche.fr", 1, R.drawable.photodecafe, context);
+        Bar carsonCity = new Bar("Le Carson City", "05 61 42 02 22", 43.59822031, 1.434274003, "http://www.restaurant-carsoncity.com", 2, R.drawable.photodecafe, context);
 
         bars.add(cafePopulaire);
         bars.add(saintDesSeins);
@@ -122,5 +132,4 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
 }
