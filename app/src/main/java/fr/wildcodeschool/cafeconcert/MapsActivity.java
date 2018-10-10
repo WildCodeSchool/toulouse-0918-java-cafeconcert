@@ -25,6 +25,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -75,21 +76,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private LocationManager mLocationManager = null;
     private FusedLocationProviderClient mFusedLocationClient;
 
-    /* Init a Listener on the ImageView triggerTransition. When touched, start the destination */
-    public static void transitionBetweenActivity(ImageView triggerTransition, final Context context, final Class destination) {
-        //onTouch du Drawable à droite (fleche), go sur l'activity list bar
-        triggerTransition.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    Intent intent = new Intent(context, destination);
-                    context.startActivity(intent);
-                    return true;
-                }
-                return false;
-            }
-        });
-    }
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -122,6 +108,31 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
+    //#ShareMenu : Inflate the share menu
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.share_menu, menu);
+        return true;
+    }
+
+    //#ShareMenu : Send a text
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.share:
+                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                sharingIntent.setType("text/plain");
+                String shareBodyText = getString(R.string.share_text);
+                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,"Subject here");
+                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBodyText);
+                startActivity(Intent.createChooser(sharingIntent, "Shearing Option"));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     //#BurgerMenu links
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -151,6 +162,23 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             super.onBackPressed();
         }
     }
+
+    /* Init a Listener on the ImageView triggerTransition. When touched, start the destination */
+    public static void transitionBetweenActivity(ImageView triggerTransition, final Context context, final Class destination) {
+        //onTouch du Drawable à droite (fleche), go sur l'activity list bar
+        triggerTransition.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    Intent intent = new Intent(context, destination);
+                    context.startActivity(intent);
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
+
 
     /**
      * Manipulates the map once avalable.
@@ -182,7 +210,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         ArrayList<Bar> bars = MainActivity.creatingBars(MapsActivity.this); //Instantiation of an arrayList of café-concert objects
         CreateMarkers(bars);
-
     }
 
     /* Generate a bitmap to be used as custom marker.
@@ -382,7 +409,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
     }
-
     /* If all required permissions are granted, set a marker on User Position*/
     private void initLocation() {
         // Get the last known position of the user
