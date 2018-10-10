@@ -100,7 +100,6 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         ListView listBar = findViewById(R.id.list_bar);
         CheckBox checkboxFilter = findViewById(R.id.checkBoxFilter);
-        //filterSwitch();
         switch (item.getItemId()){
             case R.id.nav_map:
                 Intent intentMap = new Intent(this, MapsActivity.class);
@@ -119,7 +118,6 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
                 else{
                     BarAdapter adapter = new BarAdapter(this, bars);
                     listBar.setAdapter(adapter);
-
                 }
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -145,9 +143,6 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
         }
         return arrayFilter;
     }
-
-
-
     //#BurgerMenu For not leaving the activity immediately
     @Override
     public void onBackPressed() {
@@ -157,5 +152,4 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
             super.onBackPressed();
         }
     }
-
 }
