@@ -41,8 +41,6 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         filter = sharedPreferences.getBoolean("filter", false);
-
-
         if (filter) {
             BarAdapter adapter = new BarAdapter(this, arrayFilter(bars));
             listBar.setAdapter(adapter);
@@ -168,8 +166,6 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
         }
         return arrayFilter;
     }
-
-
     //#BurgerMenu For not leaving the activity immediately
     @Override
     public void onBackPressed() {

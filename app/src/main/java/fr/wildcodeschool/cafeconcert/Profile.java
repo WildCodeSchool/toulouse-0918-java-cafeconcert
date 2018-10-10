@@ -64,8 +64,6 @@ public class Profile extends AppCompatActivity {
 
                 } else {
                     Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-
                     if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
                         dispatchTakePictureIntent();
                     }
