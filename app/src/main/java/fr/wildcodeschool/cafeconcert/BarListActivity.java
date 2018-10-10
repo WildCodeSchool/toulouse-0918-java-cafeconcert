@@ -108,7 +108,6 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
             case R.id.nav_bar_list:
                 Intent intentList = new Intent(this, BarListActivity.class);
                 startActivity(intentList);
-
                 break;
             case R.id.filterOk:
                 if(checkboxFilter.isChecked()){
@@ -124,7 +123,6 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
                 editor.putBoolean("filter", checkboxFilter.isChecked());
                 editor.commit();
                 filter=checkboxFilter.isChecked();
-
                 break;
             case R.id.nav_share:
                 Toast.makeText(this, "Shared", Toast.LENGTH_SHORT).show();
