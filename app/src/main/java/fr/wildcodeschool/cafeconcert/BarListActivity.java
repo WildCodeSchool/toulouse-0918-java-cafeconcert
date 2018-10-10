@@ -45,19 +45,13 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         filter = sharedPreferences.getBoolean("filter", false);
-
-
-
-        if(filter){
+        if( filter ){
             BarAdapter adapter = new BarAdapter(this, arrayFilter(bars));
             listBar.setAdapter(adapter);
-
-
         } else {
             BarAdapter adapter = new BarAdapter(this, bars);
             listBar.setAdapter(adapter);
         }
-        //checkboxFilter.setChecked(filter);
         //Setting button to go to MapsActivity
         final ImageView goToMap = findViewById(R.id.goToMap);
         MapsActivity.transitionBetweenActivity(goToMap, BarListActivity.this, MapsActivity.class);
@@ -75,9 +69,6 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
         toggle.syncState();
         navigationView.setCheckedItem(R.id.nav_bar_list);
         checkMenuCreated(drawer);
-
-
-
     }
 
 
@@ -156,7 +147,6 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
                 arrayFilter.add(monBar);
             }
         }
-
         return arrayFilter;
     }
 
