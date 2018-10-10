@@ -1,7 +1,6 @@
 package fr.wildcodeschool.cafeconcert;
 
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,17 +11,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.GestureDetector;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class BarListActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class BarListActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private GestureDetectorCompat mGestureObject;
     private DrawerLayout drawer;
@@ -57,15 +53,16 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
     }
 
     //#BurgerMenu put links between activities
-    //TODO: Ajouter les liens vers le profile et les favoris
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
+            case R.id.nav_profile:
+                startActivity(new Intent(this, Profile.class));
+                break;
             case R.id.nav_map:
                 startActivity(new Intent(this, MapsActivity.class));
                 break;
             case R.id.nav_bar_list:
-                startActivity(new Intent(this, BarListActivity.class));
                 break;
             case R.id.nav_share:
                 Toast.makeText(this, "Shared", Toast.LENGTH_SHORT).show();
@@ -83,5 +80,4 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
             super.onBackPressed();
         }
     }
-
 }

@@ -82,7 +82,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
-
                     Intent intent = new Intent(context, destination);
                     context.startActivity(intent);
                     return true;
@@ -90,7 +89,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 return false;
             }
         });
-
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -112,7 +110,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
         //#BurgerMenu
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -124,7 +121,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         navigationView.setCheckedItem(R.id.nav_map);
 
     }
-    
+
     //#BurgerMenu links
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -216,7 +213,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             default:
                 return neutralMarker;
         }
-
     }
 
     @Override
@@ -292,7 +288,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         } else {
             marker.setIcon(BitmapDescriptorFactory.fromBitmap(neutralMarker));
         }
-
     }
 
     public void setUserOpinion(final ImageView like, final ImageView dontLike, final Bar bar, final Marker marker) {
@@ -308,7 +303,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     bar.setIsLiked(2);
                     adaptLikesButton(like, dontLike, bar, marker);
                 }
-
             }
         });
 
@@ -325,7 +319,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
             }
         });
-
     }
 
     private void popupBuilder(Marker marker) {
@@ -479,7 +472,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         }
     }
-
 }
 
 
