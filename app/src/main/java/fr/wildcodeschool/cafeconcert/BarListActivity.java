@@ -46,13 +46,10 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
         if (filter) {
             BarAdapter adapter = new BarAdapter(this, arrayFilter(bars));
             listBar.setAdapter(adapter);
-
-
         } else {
             BarAdapter adapter = new BarAdapter(this, bars);
             listBar.setAdapter(adapter);
         }
-        //checkboxFilter.setChecked(filter);
         //Setting button to go to MapsActivity
         final ImageView goToMap = findViewById(R.id.goToMap);
         MapsActivity.transitionBetweenActivity(goToMap, BarListActivity.this, MapsActivity.class);
@@ -84,7 +81,6 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
             @Override
             public void onDrawerOpened(@NonNull View drawerView) {
 
-
             }
 
             @Override
@@ -97,7 +93,6 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
 
             }
         });
-
     }
 
     //#BurgerMenu
@@ -133,7 +128,6 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         ListView listBar = findViewById(R.id.list_bar);
         CheckBox checkboxFilter = findViewById(R.id.checkBoxFilter);
-        //filterSwitch();
         switch (item.getItemId()) {
             case R.id.nav_map:
                 Intent intentMap = new Intent(this, MapsActivity.class);
@@ -142,7 +136,6 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
             case R.id.nav_bar_list:
                 Intent intentList = new Intent(this, BarListActivity.class);
                 startActivity(intentList);
-
                 break;
             case R.id.filterOk:
                 if (checkboxFilter.isChecked()) {
@@ -151,14 +144,12 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
                 } else {
                     BarAdapter adapter = new BarAdapter(this, bars);
                     listBar.setAdapter(adapter);
-
                 }
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putBoolean("filter", checkboxFilter.isChecked());
                 editor.commit();
                 filter = checkboxFilter.isChecked();
-
                 break;
             case R.id.nav_share:
                 Toast.makeText(this, "Shared", Toast.LENGTH_SHORT).show();
@@ -175,7 +166,6 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
                 arrayFilter.add(monBar);
             }
         }
-
         return arrayFilter;
     }
 
