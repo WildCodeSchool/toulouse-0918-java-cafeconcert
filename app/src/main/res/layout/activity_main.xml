@@ -9,15 +9,15 @@
     tools:context=".MainActivity">
 
     <EditText
-        android:id="@+id/edit_pseudo"
+        android:id="@+id/edit_mail"
         style="@style/etConnexion"
         android:layout_marginTop="72dp"
         android:drawableLeft="@drawable/ic_action_person"
-        android:hint="@string/pseudo"
+        android:hint="mail"
+        app:fontFamily="@font/aref_ruqaa"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:fontFamily="@font/aref_ruqaa"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/edit_password"
@@ -34,7 +34,7 @@
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_pseudo"
+        app:layout_constraintTop_toBottomOf="@+id/edit_mail"
         app:fontFamily="@font/aref_ruqaa"
         />
 
