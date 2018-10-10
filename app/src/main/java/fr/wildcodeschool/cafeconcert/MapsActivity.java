@@ -113,6 +113,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         checkMenuCreated(drawer);
     }
 
+    //#BurgerMenu
+
     public void checkMenuCreated(DrawerLayout drawer) {
         drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
@@ -153,7 +155,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                 sharingIntent.setType("text/plain");
                 String shareBodyText = getString(R.string.share_text);
-                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,"Subject here");
+                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject here");
                 sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBodyText);
                 startActivity(Intent.createChooser(sharingIntent, "Shearing Option"));
                 return true;
@@ -258,7 +260,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(toulouse, ZOOM_LVL_BY_DEFAULT));
         // Set user localisation and ask permission to get it
         checkUserLocationPermission();
-        //TODO placer également cet appel dans le OnCreate.
 
         //Configuration map
         UiSettings mMapConfig = mMap.getUiSettings();
