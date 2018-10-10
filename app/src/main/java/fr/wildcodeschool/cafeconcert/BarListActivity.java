@@ -50,9 +50,6 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
             BarAdapter adapter = new BarAdapter(this, bars);
             listBar.setAdapter(adapter);
         }
-        //Setting button to go to MapsActivity
-        final ImageView goToMap = findViewById(R.id.goToMap);
-        MapsActivity.transitionBetweenActivity(goToMap, BarListActivity.this, MapsActivity.class);
 
         //#BurgerMenu Here I take the new toolbar to set it in my activity
         Toolbar toolbar = findViewById(R.id.toolbar);
