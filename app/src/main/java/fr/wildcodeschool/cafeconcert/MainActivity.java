@@ -5,11 +5,14 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.net.Uri;
+import android.widget.ImageView;
+
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -79,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        //mAuth.signOut(); // forcer la deconnexion de l'utilisateur
+        mAuth.signOut(); // forcer la deconnexion de l'utilisateur
         updateUI(currentUser);
     }
 
@@ -106,5 +109,18 @@ public class MainActivity extends AppCompatActivity {
         return bars;
     }
 
+    /*Launch Googlemaps on Navigation mode.
+     * User position as departure, bar coordonates as destination */
+    public static void setNavigation(ImageView navigate, final Bar bar, final Context context) {
+
+        navigate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                        Uri.parse("http://maps.google.com/maps?.34&daddr=" + bar.getGeoPoint()+ "," + bar.getGeoShape()));
+                context.startActivity(intent);
+            }
+        });
+    }
 
 }
