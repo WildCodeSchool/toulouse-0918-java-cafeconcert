@@ -75,9 +75,6 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
         toggle.syncState();
         navigationView.setCheckedItem(R.id.nav_bar_list);
         checkMenuCreated(drawer);
-
-
-
     }
 
 
