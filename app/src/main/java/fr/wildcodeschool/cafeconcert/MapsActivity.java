@@ -48,6 +48,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -64,7 +65,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.ArrayList;
 
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, NavigationView.OnNavigationItemSelectedListener{
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, NavigationView.OnNavigationItemSelectedListener {
 
     final static double TOULOUSE_LATITUDE = 43.6043;
     final static double TOULOUSE_LONGITUDE = 1.4437;
@@ -139,7 +140,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                 sharingIntent.setType("text/plain");
                 String shareBodyText = getString(R.string.share_text);
-                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,"Subject here");
+                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject here");
                 sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBodyText);
                 startActivity(Intent.createChooser(sharingIntent, "Shearing Option"));
                 return true;
@@ -147,11 +148,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 return super.onOptionsItemSelected(item);
         }
     }
-    
+
     //#BurgerMenu links
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.nav_profile:
                 startActivity(new Intent(this, Profile.class));
                 break;
@@ -197,7 +198,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
-    
+
     /**
      * Manipulates the map once avalable.
      * This callback is triggered when the map is ready to be used.
@@ -236,25 +237,28 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Bitmap setCustomsMarkers(Bar monBar) {
 
 
-        Bitmap initialLikeMarker= BitmapFactory.decodeResource(this.getResources(),
+        Bitmap initialLikeMarker = BitmapFactory.decodeResource(this.getResources(),
                 R.drawable.love_ping);
         Bitmap likeMarker = Bitmap.createScaledBitmap(initialLikeMarker, MARKER_WIDTH, MARKER_HEIGHT, false);
 
-        Bitmap initialDislikeMarker= BitmapFactory.decodeResource(this.getResources(),
+        Bitmap initialDislikeMarker = BitmapFactory.decodeResource(this.getResources(),
                 R.drawable.love_break_ping);
         Bitmap dislikeMarker = Bitmap.createScaledBitmap(initialDislikeMarker, MARKER_WIDTH, MARKER_HEIGHT, false);
 
-        Bitmap initialNeutralMarker= BitmapFactory.decodeResource(this.getResources(),
+        Bitmap initialNeutralMarker = BitmapFactory.decodeResource(this.getResources(),
                 R.drawable.neutral_ping);
         Bitmap neutralMarker = Bitmap.createScaledBitmap(initialNeutralMarker, MARKER_WIDTH, MARKER_HEIGHT, false);
 
 
         switch (monBar.getIsLiked()) {
-            case 1:  return likeMarker;
+            case 1:
+                return likeMarker;
 
-            case 0:  return dislikeMarker;
+            case 0:
+                return dislikeMarker;
 
-            default: return neutralMarker;
+            default:
+                return neutralMarker;
         }
 
     }
@@ -295,23 +299,23 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public void adaptLikesButton(ImageView like, ImageView dontLike, Bar bar, Marker marker) {
 
-        Bitmap initialLikeMarker= BitmapFactory.decodeResource(this.getResources(),
+        Bitmap initialLikeMarker = BitmapFactory.decodeResource(this.getResources(),
                 R.drawable.love_ping);
         Bitmap likeMarker = Bitmap.createScaledBitmap(initialLikeMarker, MARKER_WIDTH, MARKER_HEIGHT, false);
 
-        Bitmap initialDislikeMarker= BitmapFactory.decodeResource(this.getResources(),
+        Bitmap initialDislikeMarker = BitmapFactory.decodeResource(this.getResources(),
                 R.drawable.love_break_ping);
         Bitmap dislikeMarker = Bitmap.createScaledBitmap(initialDislikeMarker, MARKER_WIDTH, MARKER_HEIGHT, false);
 
-        Bitmap nDislikeMarker= BitmapFactory.decodeResource(this.getResources(),
+        Bitmap nDislikeMarker = BitmapFactory.decodeResource(this.getResources(),
                 R.drawable.neutral_dislike_icon);
         Bitmap neutralDislikeMarker = Bitmap.createScaledBitmap(nDislikeMarker, MARKER_WIDTH, MARKER_HEIGHT, false);
 
-        Bitmap nLikeMarker= BitmapFactory.decodeResource(this.getResources(),
+        Bitmap nLikeMarker = BitmapFactory.decodeResource(this.getResources(),
                 R.drawable.neutral_like_icon);
         Bitmap neutralLikeMarker = Bitmap.createScaledBitmap(nLikeMarker, MARKER_WIDTH, MARKER_HEIGHT, false);
 
-        Bitmap initialNeutralMarker= BitmapFactory.decodeResource(this.getResources(),
+        Bitmap initialNeutralMarker = BitmapFactory.decodeResource(this.getResources(),
                 R.drawable.neutral_ping);
         Bitmap neutralMarker = Bitmap.createScaledBitmap(initialNeutralMarker, MARKER_WIDTH, MARKER_HEIGHT, false);
 
@@ -325,7 +329,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             marker.setIcon(BitmapDescriptorFactory.fromBitmap(likeMarker));
 
-        } else if(bar.getIsLiked() == 0) {
+        } else if (bar.getIsLiked() == 0) {
             dontLike.setImageBitmap(dislikeMarker);
             like.setImageBitmap(neutralLikeMarker);
             marker.setIcon(BitmapDescriptorFactory.fromBitmap(dislikeMarker));
@@ -344,8 +348,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 if (bar.getIsLiked() != 1) {
                     bar.setIsLiked(1);
                     adaptLikesButton(like, dontLike, bar, marker);
-                }
-                else {
+                } else {
                     bar.setIsLiked(2);
                     adaptLikesButton(like, dontLike, bar, marker);
                 }
@@ -360,8 +363,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 if (bar.getIsLiked() != 0) {
                     bar.setIsLiked(0);
                     adaptLikesButton(like, dontLike, bar, marker);
-                }
-                else {
+                } else {
                     bar.setIsLiked(2);
                     adaptLikesButton(like, dontLike, bar, marker);
                 }
@@ -370,7 +372,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
-    private void popupBuilder(Marker marker){
+    private void popupBuilder(Marker marker) {
 
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         View popUpView = inflater.inflate(R.layout.custom_info_adapter, null);
@@ -431,6 +433,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
     }
+
     /* If all required permissions are granted, set a marker on User Position*/
     private void initLocation() {
         // Get the last known position of the user
