@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:shownIn="navigation_view">
 
@@ -16,11 +17,21 @@
             android:id="@+id/nav_bar_list"
             android:icon="@drawable/ic_bar"
             android:title="@string/bar_list" />
-        <item
-            android:id="@+id/nav_favorite"
-            android:icon="@drawable/ic_favorite"
-            android:title="@string/favorite" />
     </group>
+
+        <item android:title = "@string/favorite">
+            <menu>
+                <item
+                    android:id="@+id/app_bar_switch"
+                    android:title="@string/like"
+                    android:checkable="true"
+                    app:actionLayout="@layout/switch_item"/>
+                <item
+                    android:id="@+id/filterOk"
+                    android:title="@string/valider"/>
+            </menu>
+        </item>
+
 
     <item android:title="@string/be_social">
         <menu>

@@ -15,7 +15,8 @@
     <string name="profile">Profile</string>
     <string name="map">Map</string>
     <string name="bar_list">Bar list</string>
-    <string name="favorite">Favorite</string>
+    <string name="favorite">Filtre</string>
+    <string name="like">Like</string>
     <string name="be_social">Be Social</string>
     <string name="share">Share</string>
     <string name="navigation_drawer_open">Open navigation drawer</string> //#BurgerMenu String need for onBackPressed method

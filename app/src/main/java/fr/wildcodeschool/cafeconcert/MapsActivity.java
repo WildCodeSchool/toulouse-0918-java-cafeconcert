@@ -5,9 +5,11 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.AdaptiveIconDrawable;
 import android.graphics.drawable.Drawable;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 
@@ -18,7 +20,12 @@ import android.net.Uri;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.view.Gravity;import android.widget.Toast;
+import android.view.Gravity;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.Switch;
+import android.widget.Toast;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 
@@ -70,8 +77,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     final static double TOULOUSE_LONGITUDE_BORDURES_BOT = 1.411854;
     final static double TOULOUSE_LATITUDE_BORDURES_TOP = 43.642094;
     final static double TOULOUSE_LONGITUDE_BORDURES_TOP = 1.480995;
-    final static int POPUP_WIDTH = 600;
-    final static int POPUP_HEIGHT = 1000;
+    final static int POPUP_WIDTH = 700;
+    final static int POPUP_HEIGHT = 1100;
     final static int POPUP_POSITION_X = 0;
     final static int POPUP_POSITION_Y = 0;
     final static int MARKER_HEIGHT = 72;
@@ -80,13 +87,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     final static float ZOOM_LVL_ON_USER = 15.76f;
 
     private GoogleMap mMap;
-    private ArrayList<Bar> bars;
+    private ArrayList<Bar> bars ;
+    private ArrayList<Bar> filterBars;
     private ArrayList<Marker> mMarkers = new ArrayList<>();
     private GestureDetectorCompat mGestureObject;
     private MotionEvent mMotionEvent;
     private DrawerLayout drawer;
     private LocationManager mLocationManager = null;
     private FusedLocationProviderClient mFusedLocationClient;
+    private boolean filter=false;
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -95,6 +104,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         // Setting map
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -117,17 +127,62 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         toggle.syncState();
         navigationView.setCheckedItem(R.id.nav_map);
 
+        drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+                CheckBox checkboxFilter = findViewById(R.id.checkBoxFilter);
+                checkboxFilter.setChecked(filter);
+            }
+
+            @Override
+            public void onDrawerOpened(@NonNull View drawerView) {
+
+
+            }
+
+            @Override
+            public void onDrawerClosed(@NonNull View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
+
+
+
     }
+
 
     //#BurgerMenu
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        CheckBox checkboxFilter = findViewById(R.id.checkBoxFilter);
+        //filterSwitch();
         switch (item.getItemId()){
             case R.id.nav_map:
                 startActivity(new Intent(this, MapsActivity.class));
                 break;
             case R.id.nav_bar_list:
                 startActivity(new Intent(this, BarListActivity.class));
+                break;
+            case R.id.filterOk:
+
+                if(checkboxFilter.isChecked()){
+                    mMap.clear();
+                    CreateMarkers(arrayFilter(bars));
+                }
+                else{
+                    mMap.clear();
+                    CreateMarkers(bars);
+                }
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean("filter", checkboxFilter.isChecked());
+                editor.commit();
+                filter = checkboxFilter.isChecked();
                 break;
             case R.id.nav_share:
                 Toast.makeText(this, "Shared", Toast.LENGTH_SHORT).show();
@@ -136,6 +191,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    public ArrayList<Bar> arrayFilter(ArrayList<Bar> bars){
+        ArrayList<Bar> arrayFilter = new ArrayList<>();
+        for (Bar monBar : bars) {
+            if(monBar.getIsLiked()==1){
+                arrayFilter.add(monBar);
+            }
+        }
+
+        return arrayFilter;
+    }
+
 
     //#BurgerMenu For not leaving the activity immediately
     @Override
@@ -195,9 +262,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMapConfig.setZoomControlsEnabled(true);
         mMapConfig.setCompassEnabled(true);
 
-        ArrayList<Bar> bars = MainActivity.creatingBars(MapsActivity.this); //Instantiation of an arrayList of café-concert objects
-        CreateMarkers(bars);
-
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        filter = sharedPreferences.getBoolean("filter", false);
+        //Instantiation of an arrayList of café-concert objects
+        bars = (MainActivity.creatingBars(this));
+        if (filter) {
+            CreateMarkers(arrayFilter(bars));
+        } else {
+            bars = MainActivity.creatingBars(this);
+            CreateMarkers(bars);
+        }
     }
 
     /* Generate a bitmap to be used as custom marker.
