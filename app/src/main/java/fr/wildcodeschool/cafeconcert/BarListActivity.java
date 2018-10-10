@@ -33,7 +33,6 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
     private ArrayList<Bar> bars;
     private boolean filter=false;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,7 +70,6 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
         checkMenuCreated(drawer);
     }
 
-
     public void checkMenuCreated(DrawerLayout drawer){
         drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
@@ -82,7 +80,6 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
 
             @Override
             public void onDrawerOpened(@NonNull View drawerView) {
-
 
             }
 
@@ -96,7 +93,6 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
 
             }
         });
-
     }
 
     //#BurgerMenu
