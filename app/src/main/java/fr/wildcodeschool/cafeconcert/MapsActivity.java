@@ -26,6 +26,9 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.Toast;
+import android.view.Gravity;
+import android.view.Menu;
+import android.widget.Toast;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 
@@ -159,6 +162,33 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
     }
     //#BurgerMenu
+
+    //#ShareMenu : Inflate the share menu
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.share_menu, menu);
+        return true;
+    }
+
+    //#ShareMenu : Send a text
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.share:
+                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                sharingIntent.setType("text/plain");
+                String shareBodyText = getString(R.string.share_text);
+                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,"Subject here");
+                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBodyText);
+                startActivity(Intent.createChooser(sharingIntent, "Shearing Option"));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    //#BurgerMenu links
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         CheckBox checkboxFilter = findViewById(R.id.checkBoxFilter);
@@ -260,7 +290,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(toulouse, ZOOM_LVL_BY_DEFAULT));
         // Set user localisation and ask permission to get it
         checkUserLocationPermission();
-        //TODO placer également cet appel dans le OnCreate.
 
         //Configuration map
         UiSettings mMapConfig = mMap.getUiSettings();

@@ -1,10 +1,8 @@
 package fr.wildcodeschool.cafeconcert;
 
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -15,9 +13,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.GestureDetector;
+import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -26,19 +23,18 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class BarListActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class BarListActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private GestureDetectorCompat mGestureObject;
     private DrawerLayout drawer;
     private ArrayList<Bar> bars;
-    private boolean filter=false;
+    private boolean filter = false;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bar_list);
-
         //Take the bars's info already created in MainActivity
         ListView listBar = findViewById(R.id.list_bar);
         bars = MainActivity.creatingBars(BarListActivity.this);
@@ -47,8 +43,7 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
         filter = sharedPreferences.getBoolean("filter", false);
 
 
-
-        if(filter){
+        if (filter) {
             BarAdapter adapter = new BarAdapter(this, arrayFilter(bars));
             listBar.setAdapter(adapter);
 
@@ -78,7 +73,7 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
     }
 
 
-    public void checkMenuCreated(DrawerLayout drawer){
+    public void checkMenuCreated(DrawerLayout drawer) {
         drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
@@ -106,12 +101,40 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
     }
 
     //#BurgerMenu
+    //#ShareMenu : Inflate the share menu
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.share_menu, menu);
+        return true;
+    }
+
+    //#ShareMenu : Send a text
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.share:
+                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                sharingIntent.setType("text/plain");
+                String shareBodyText = getString(R.string.share_text);
+                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject here");
+                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBodyText);
+                startActivity(Intent.createChooser(sharingIntent, "Shearing Option"));
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    //#BurgerMenu put links between activities
+    //TODO: Ajouter les liens vers le profile et les favoris
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         ListView listBar = findViewById(R.id.list_bar);
         CheckBox checkboxFilter = findViewById(R.id.checkBoxFilter);
         //filterSwitch();
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.nav_map:
                 Intent intentMap = new Intent(this, MapsActivity.class);
                 startActivity(intentMap);
@@ -122,11 +145,10 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
 
                 break;
             case R.id.filterOk:
-                if(checkboxFilter.isChecked()){
+                if (checkboxFilter.isChecked()) {
                     BarAdapter adapter = new BarAdapter(this, arrayFilter(bars));
                     listBar.setAdapter(adapter);
-                }
-                else{
+                } else {
                     BarAdapter adapter = new BarAdapter(this, bars);
                     listBar.setAdapter(adapter);
 
@@ -135,7 +157,7 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putBoolean("filter", checkboxFilter.isChecked());
                 editor.commit();
-                filter=checkboxFilter.isChecked();
+                filter = checkboxFilter.isChecked();
 
                 break;
             case R.id.nav_share:
@@ -146,17 +168,16 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
         return true;
     }
 
-    public ArrayList<Bar> arrayFilter(ArrayList<Bar> bars){
+    public ArrayList<Bar> arrayFilter(ArrayList<Bar> bars) {
         ArrayList<Bar> arrayFilter = new ArrayList<>();
         for (Bar monBar : bars) {
-            if(monBar.getIsLiked()==1){
+            if (monBar.getIsLiked() == 1) {
                 arrayFilter.add(monBar);
             }
         }
 
         return arrayFilter;
     }
-
 
 
     //#BurgerMenu For not leaving the activity immediately
