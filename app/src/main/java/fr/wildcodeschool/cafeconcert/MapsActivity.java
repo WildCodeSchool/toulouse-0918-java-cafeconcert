@@ -1,53 +1,49 @@
 package fr.wildcodeschool.cafeconcert;
 
-
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.AdaptiveIconDrawable;
-import android.graphics.drawable.Drawable;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.net.Uri;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-
-
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
-import android.support.constraint.ConstraintLayout;
-import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.view.Menu;
 import android.widget.Toast;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
-
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v4.view.GestureDetectorCompat;
-
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.GestureDetector;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
-
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ImageView;
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
+import android.widget.PopupWindow;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -64,7 +60,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.ArrayList;
 
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, NavigationView.OnNavigationItemSelectedListener{
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, NavigationView.OnNavigationItemSelectedListener {
 
     final static double TOULOUSE_LATITUDE = 43.6043;
     final static double TOULOUSE_LONGITUDE = 1.4437;
@@ -72,8 +68,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     final static double TOULOUSE_LONGITUDE_BORDURES_BOT = 1.411854;
     final static double TOULOUSE_LATITUDE_BORDURES_TOP = 43.642094;
     final static double TOULOUSE_LONGITUDE_BORDURES_TOP = 1.480995;
-    final static int POPUP_WIDTH = 600;
-    final static int POPUP_HEIGHT = 1000;
+    final static int POPUP_WIDTH = 700;
+    final static int POPUP_HEIGHT = 1100;
     final static int POPUP_POSITION_X = 0;
     final static int POPUP_POSITION_Y = 0;
     final static int MARKER_HEIGHT = 72;
@@ -83,13 +79,31 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private GoogleMap mMap;
     private ArrayList<Bar> bars;
+    private ArrayList<Bar> filterBars;
     private ArrayList<Marker> mMarkers = new ArrayList<>();
     private GestureDetectorCompat mGestureObject;
     private MotionEvent mMotionEvent;
     private DrawerLayout drawer;
     private LocationManager mLocationManager = null;
     private FusedLocationProviderClient mFusedLocationClient;
+    private boolean filter = false;
 
+    /* Init a Listener on the ImageView triggerTransition. When touched, start the destination */
+    public static void transitionBetweenActivity(ImageView triggerTransition, final Context context, final Class destination) {
+        //onTouch du Drawable à droite (fleche), go sur l'activity list bar
+        triggerTransition.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+
+                    Intent intent = new Intent(context, destination);
+                    context.startActivity(intent);
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -120,7 +134,31 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setCheckedItem(R.id.nav_map);
+        checkMenuCreated(drawer);
+    }
 
+    public void checkMenuCreated(DrawerLayout drawer) {
+        drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+                CheckBox checkboxFilter = findViewById(R.id.checkBoxFilter);
+                checkboxFilter.setChecked(filter);
+            }
+
+            @Override
+            public void onDrawerOpened(@NonNull View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerClosed(@NonNull View drawerView) {
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
     }
 
     //#ShareMenu : Inflate the share menu
@@ -151,7 +189,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     //#BurgerMenu links
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
+        CheckBox checkboxFilter = findViewById(R.id.checkBoxFilter);
+        //filterSwitch();
+        switch (item.getItemId()) {
             case R.id.nav_profile:
                 startActivity(new Intent(this, Profile.class));
                 break;
@@ -161,12 +201,37 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             case R.id.nav_bar_list:
                 startActivity(new Intent(this, BarListActivity.class));
                 break;
+            case R.id.filterOk:
+
+                if (checkboxFilter.isChecked()) {
+                    mMap.clear();
+                    CreateMarkers(arrayFilter(bars));
+                } else {
+                    mMap.clear();
+                    CreateMarkers(bars);
+                }
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean("filter", checkboxFilter.isChecked());
+                editor.commit();
+                filter = checkboxFilter.isChecked();
+                break;
             case R.id.nav_share:
                 Toast.makeText(this, "Shared", Toast.LENGTH_SHORT).show();
                 break;
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public ArrayList<Bar> arrayFilter(ArrayList<Bar> bars) {
+        ArrayList<Bar> arrayFilter = new ArrayList<>();
+        for (Bar monBar : bars) {
+            if (monBar.getIsLiked() == 1) {
+                arrayFilter.add(monBar);
+            }
+        }
+        return arrayFilter;
     }
 
     //#BurgerMenu For not leaving the activity immediately
@@ -179,25 +244,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-    /* Init a Listener on the ImageView triggerTransition. When touched, start the destination */
-    public static void transitionBetweenActivity(ImageView triggerTransition, final Context context, final Class destination) {
-        //onTouch du Drawable à droite (fleche), go sur l'activity list bar
-        triggerTransition.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-
-                    Intent intent = new Intent(context, destination);
-                    context.startActivity(intent);
-                    return true;
-                }
-                return false;
-            }
-        });
-
-    }
-
-    
     /**
      * Manipulates the map once avalable.
      * This callback is triggered when the map is ready to be used.
@@ -220,15 +266,23 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(toulouse, ZOOM_LVL_BY_DEFAULT));
         // Set user localisation and ask permission to get it
         checkUserLocationPermission();
+        //TODO placer également cet appel dans le OnCreate.
 
         //Configuration map
         UiSettings mMapConfig = mMap.getUiSettings();
         mMapConfig.setZoomControlsEnabled(true);
         mMapConfig.setCompassEnabled(true);
 
-        ArrayList<Bar> bars = MainActivity.creatingBars(MapsActivity.this); //Instantiation of an arrayList of café-concert objects
-        CreateMarkers(bars);
-
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        filter = sharedPreferences.getBoolean("filter", false);
+        //Instantiation of an arrayList of café-concert objects
+        bars = (MainActivity.creatingBars(this));
+        if (filter) {
+            CreateMarkers(arrayFilter(bars));
+        } else {
+            bars = MainActivity.creatingBars(this);
+            CreateMarkers(bars);
+        }
     }
 
     /* Generate a bitmap to be used as custom marker.
@@ -236,27 +290,28 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Bitmap setCustomsMarkers(Bar monBar) {
 
 
-        Bitmap initialLikeMarker= BitmapFactory.decodeResource(this.getResources(),
+        Bitmap initialLikeMarker = BitmapFactory.decodeResource(this.getResources(),
                 R.drawable.love_ping);
         Bitmap likeMarker = Bitmap.createScaledBitmap(initialLikeMarker, MARKER_WIDTH, MARKER_HEIGHT, false);
 
-        Bitmap initialDislikeMarker= BitmapFactory.decodeResource(this.getResources(),
+        Bitmap initialDislikeMarker = BitmapFactory.decodeResource(this.getResources(),
                 R.drawable.love_break_ping);
         Bitmap dislikeMarker = Bitmap.createScaledBitmap(initialDislikeMarker, MARKER_WIDTH, MARKER_HEIGHT, false);
 
-        Bitmap initialNeutralMarker= BitmapFactory.decodeResource(this.getResources(),
+        Bitmap initialNeutralMarker = BitmapFactory.decodeResource(this.getResources(),
                 R.drawable.neutral_ping);
         Bitmap neutralMarker = Bitmap.createScaledBitmap(initialNeutralMarker, MARKER_WIDTH, MARKER_HEIGHT, false);
 
-
         switch (monBar.getIsLiked()) {
-            case 1:  return likeMarker;
+            case 1:
+                return likeMarker;
 
-            case 0:  return dislikeMarker;
+            case 0:
+                return dislikeMarker;
 
-            default: return neutralMarker;
+            default:
+                return neutralMarker;
         }
-
     }
 
     @Override
@@ -277,7 +332,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             markerOptions.position(barposition);
             markerOptions.snippet(null);
             markerOptions.icon(BitmapDescriptorFactory.fromBitmap(setCustomsMarkers(monBar)));
-
             Marker marker = mMap.addMarker(markerOptions);
             marker.setTag(monBar);
             mMarkers.add(marker);
@@ -295,23 +349,23 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public void adaptLikesButton(ImageView like, ImageView dontLike, Bar bar, Marker marker) {
 
-        Bitmap initialLikeMarker= BitmapFactory.decodeResource(this.getResources(),
+        Bitmap initialLikeMarker = BitmapFactory.decodeResource(this.getResources(),
                 R.drawable.love_ping);
         Bitmap likeMarker = Bitmap.createScaledBitmap(initialLikeMarker, MARKER_WIDTH, MARKER_HEIGHT, false);
 
-        Bitmap initialDislikeMarker= BitmapFactory.decodeResource(this.getResources(),
+        Bitmap initialDislikeMarker = BitmapFactory.decodeResource(this.getResources(),
                 R.drawable.love_break_ping);
         Bitmap dislikeMarker = Bitmap.createScaledBitmap(initialDislikeMarker, MARKER_WIDTH, MARKER_HEIGHT, false);
 
-        Bitmap nDislikeMarker= BitmapFactory.decodeResource(this.getResources(),
+        Bitmap nDislikeMarker = BitmapFactory.decodeResource(this.getResources(),
                 R.drawable.neutral_dislike_icon);
         Bitmap neutralDislikeMarker = Bitmap.createScaledBitmap(nDislikeMarker, MARKER_WIDTH, MARKER_HEIGHT, false);
 
-        Bitmap nLikeMarker= BitmapFactory.decodeResource(this.getResources(),
+        Bitmap nLikeMarker = BitmapFactory.decodeResource(this.getResources(),
                 R.drawable.neutral_like_icon);
         Bitmap neutralLikeMarker = Bitmap.createScaledBitmap(nLikeMarker, MARKER_WIDTH, MARKER_HEIGHT, false);
 
-        Bitmap initialNeutralMarker= BitmapFactory.decodeResource(this.getResources(),
+        Bitmap initialNeutralMarker = BitmapFactory.decodeResource(this.getResources(),
                 R.drawable.neutral_ping);
         Bitmap neutralMarker = Bitmap.createScaledBitmap(initialNeutralMarker, MARKER_WIDTH, MARKER_HEIGHT, false);
 
@@ -322,10 +376,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (bar.getIsLiked() == 1) {
             like.setImageBitmap(likeMarker);
             dontLike.setImageBitmap(neutralDislikeMarker);
-
             marker.setIcon(BitmapDescriptorFactory.fromBitmap(likeMarker));
-
-        } else if(bar.getIsLiked() == 0) {
+        } else if (bar.getIsLiked() == 0) {
             dontLike.setImageBitmap(dislikeMarker);
             like.setImageBitmap(neutralLikeMarker);
             marker.setIcon(BitmapDescriptorFactory.fromBitmap(dislikeMarker));
@@ -340,16 +392,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if (bar.getIsLiked() != 1) {
                     bar.setIsLiked(1);
                     adaptLikesButton(like, dontLike, bar, marker);
-                }
-                else {
+                } else {
                     bar.setIsLiked(2);
                     adaptLikesButton(like, dontLike, bar, marker);
                 }
-
             }
         });
 
@@ -360,17 +409,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 if (bar.getIsLiked() != 0) {
                     bar.setIsLiked(0);
                     adaptLikesButton(like, dontLike, bar, marker);
-                }
-                else {
+                } else {
                     bar.setIsLiked(2);
                     adaptLikesButton(like, dontLike, bar, marker);
                 }
             }
         });
-
     }
 
-    private void popupBuilder(Marker marker){
+    private void popupBuilder(Marker marker) {
 
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         View popUpView = inflater.inflate(R.layout.custom_info_adapter, null);
@@ -382,10 +429,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         PopupWindow popUp = new PopupWindow(popUpView, width, height, focusable);
 
         //show popup
-        popUp.showAtLocation(popUpView, Gravity.CENTER, POPUP_POSITION_X, POPUP_POSITION_Y); //
-
+        popUp.showAtLocation(popUpView, Gravity.CENTER, POPUP_POSITION_X, POPUP_POSITION_Y);
         final Bar bar = (Bar) marker.getTag();
-
         TextView barName = popUpView.findViewById(R.id.barTitlePopup);
         ImageView phone = popUpView.findViewById(R.id.phoneButton);
         ImageView web = popUpView.findViewById(R.id.webButton);
@@ -393,7 +438,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         ImageView photoBar = popUpView.findViewById(R.id.photoBar);
         ImageView like = popUpView.findViewById(R.id.likeButton);
         ImageView dontLike = popUpView.findViewById(R.id.dontLikeButton);
-
         adaptLikesButton(like, dontLike, bar, marker);
         setUserOpinion(like, dontLike, bar, marker);
         navigate.setImageResource(R.mipmap.navigate);
@@ -431,6 +475,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
     }
+
     /* If all required permissions are granted, set a marker on User Position*/
     private void initLocation() {
         // Get the last known position of the user
@@ -520,7 +565,4 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         }
     }
-
 }
-
-
