@@ -1,10 +1,8 @@
 package fr.wildcodeschool.cafeconcert;
 
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.AdaptiveIconDrawable;
@@ -12,8 +10,6 @@ import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-
-
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -97,7 +93,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private FusedLocationProviderClient mFusedLocationClient;
     private boolean filter=false;
 
-
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,9 +123,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         toggle.syncState();
         navigationView.setCheckedItem(R.id.nav_map);
         checkMenuCreated(drawer);
-
-
-
     }
 
     public void checkMenuCreated(DrawerLayout drawer) {
@@ -144,13 +136,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onDrawerOpened(@NonNull View drawerView) {
 
-
             }
 
             @Override
             public void onDrawerClosed(@NonNull View drawerView) {
             }
-
 
             @Override
             public void onDrawerStateChanged(int newState) {
@@ -163,7 +153,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         CheckBox checkboxFilter = findViewById(R.id.checkBoxFilter);
         //filterSwitch();
-        switch (item.getItemId()){
+        switch ( item.getItemId() ){
             case R.id.nav_profile:
                 startActivity(new Intent(this, Profile.class));
                 break;
@@ -175,7 +165,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 break;
             case R.id.filterOk:
 
-                if(checkboxFilter.isChecked()){
+                if( checkboxFilter.isChecked() ){
                     mMap.clear();
                     CreateMarkers(arrayFilter(bars));
                 }
@@ -204,7 +194,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 arrayFilter.add(monBar);
             }
         }
-
         return arrayFilter;
     }
 
@@ -234,10 +223,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 return false;
             }
         });
-
     }
-
-    
+   
     /**
      * Manipulates the map once avalable.
      * This callback is triggered when the map is ready to be used.
@@ -296,7 +283,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 R.drawable.neutral_ping);
         Bitmap neutralMarker = Bitmap.createScaledBitmap(initialNeutralMarker, MARKER_WIDTH, MARKER_HEIGHT, false);
 
-
         switch (monBar.getIsLiked()) {
             case 1:  return likeMarker;
 
@@ -304,7 +290,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             default: return neutralMarker;
         }
-
     }
 
     @Override
@@ -325,7 +310,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             markerOptions.position(barposition);
             markerOptions.snippet(null);
             markerOptions.icon(BitmapDescriptorFactory.fromBitmap(setCustomsMarkers(monBar)));
-
             Marker marker = mMap.addMarker(markerOptions);
             marker.setTag(monBar);
             mMarkers.add(marker);
@@ -370,9 +354,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (bar.getIsLiked() == 1) {
             like.setImageBitmap(likeMarker);
             dontLike.setImageBitmap(neutralDislikeMarker);
-
             marker.setIcon(BitmapDescriptorFactory.fromBitmap(likeMarker));
-
         } else if(bar.getIsLiked() == 0) {
             dontLike.setImageBitmap(dislikeMarker);
             like.setImageBitmap(neutralLikeMarker);
@@ -388,7 +370,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if (bar.getIsLiked() != 1) {
                     bar.setIsLiked(1);
                     adaptLikesButton(like, dontLike, bar, marker);
@@ -397,7 +378,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     bar.setIsLiked(2);
                     adaptLikesButton(like, dontLike, bar, marker);
                 }
-
             }
         });
 
@@ -415,7 +395,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
             }
         });
-
     }
 
     private void popupBuilder(Marker marker){
@@ -430,10 +409,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         PopupWindow popUp = new PopupWindow(popUpView, width, height, focusable);
 
         //show popup
-        popUp.showAtLocation(popUpView, Gravity.CENTER, POPUP_POSITION_X, POPUP_POSITION_Y); //
-
+        popUp.showAtLocation(popUpView, Gravity.CENTER, POPUP_POSITION_X, POPUP_POSITION_Y); 
         final Bar bar = (Bar) marker.getTag();
-
         TextView barName = popUpView.findViewById(R.id.barTitlePopup);
         ImageView phone = popUpView.findViewById(R.id.phoneButton);
         ImageView web = popUpView.findViewById(R.id.webButton);
@@ -441,7 +418,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         ImageView photoBar = popUpView.findViewById(R.id.photoBar);
         ImageView like = popUpView.findViewById(R.id.likeButton);
         ImageView dontLike = popUpView.findViewById(R.id.dontLikeButton);
-
         adaptLikesButton(like, dontLike, bar, marker);
         setUserOpinion(like, dontLike, bar, marker);
         navigate.setImageResource(R.mipmap.navigate);
@@ -568,7 +544,4 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         }
     }
-
 }
-
-
