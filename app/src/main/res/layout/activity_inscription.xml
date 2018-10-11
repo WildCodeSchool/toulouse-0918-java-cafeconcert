@@ -8,16 +8,18 @@
     android:background="@drawable/blueee"
     tools:context=".InscriptionActivity">
 
-    <EditText style="@style/etRemplir"
+    <EditText
+        android:id="@+id/etMdp"
+        style="@style/etRemplir"
         android:layout_marginBottom="316dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="30dp"
         android:ems="10"
-        app:fontFamily="@font/aref_ruqaa"
         android:hint="@string/saisissez_votre_mot_de_passe"
         android:inputType="textPassword"
+        app:fontFamily="@font/aref_ruqaa"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.549"
