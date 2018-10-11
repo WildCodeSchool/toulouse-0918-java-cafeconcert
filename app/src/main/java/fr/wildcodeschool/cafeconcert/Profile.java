@@ -76,29 +76,13 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
         editPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if (ContextCompat.checkSelfPermission(Profile.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        == PackageManager.PERMISSION_DENIED) {
-                    ActivityCompat.requestPermissions(Profile.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-
-                }
-
-                if (ContextCompat.checkSelfPermission(Profile.this, Manifest.permission.CAMERA)
-                        == PackageManager.PERMISSION_DENIED) {
-                    ActivityCompat.requestPermissions(Profile.this, new String[]{Manifest.permission.CAMERA}, requestCode);
-
-                }
-
-                 else {
-                    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                        dispatchTakePictureIntent();
-                    }
-                }
-
+                checkUserCameraStoragePermission();
             }
         });
     }
+
+
+
 
     @Override
     public void onResume() {
@@ -109,6 +93,42 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
             File imgFile = new File(mCurrentPhotoPath);
             Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
             profilePic.setImageBitmap(myBitmap);
+        }
+    }
+
+    private void checkUserCameraStoragePermission() {
+        //Méthode qui teste si le GPS est bien activé
+        // vérification de l'autorisation d'accéder à la camera et au stockage
+        if (ContextCompat.checkSelfPermission(Profile.this,
+                Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(Profile.this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+            // l'autorisation n'est pas acceptée
+            if (ActivityCompat.shouldShowRequestPermissionRationale(Profile.this,
+                    Manifest.permission.CAMERA) || ActivityCompat.shouldShowRequestPermissionRationale(Profile.this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                Toast toast = Toast.makeText(getApplicationContext(),
+                        R.string.camera_has_been_refused,
+                        Toast.LENGTH_LONG);
+                toast.show();
+            } else {
+                // L'autorisation n'a jamais été réclamée, on la demande à l'utilisateur
+                ActivityCompat.requestPermissions(Profile.this,
+                        new String[]{Manifest.permission.CAMERA},
+                        1);
+                ActivityCompat.requestPermissions(Profile.this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        requestCode);
+                checkUserCameraStoragePermission();
+
+            }
+        } else {
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                dispatchTakePictureIntent();
+            }
         }
     }
 
@@ -134,14 +154,6 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
         }
     }
 
-    private void galleryAddPic() {
-        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        File f = new File(mCurrentPhotoPath);
-        Uri contentUri = Uri.fromFile(f);
-        mediaScanIntent.setData(contentUri);
-        this.sendBroadcast(mediaScanIntent);
-    }
-
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -158,7 +170,6 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("mPhotoPath", mCurrentPhotoPath);
         editor.commit();
-
         return image;
     }
 
