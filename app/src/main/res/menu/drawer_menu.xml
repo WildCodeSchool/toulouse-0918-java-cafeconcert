@@ -26,9 +26,6 @@
                     android:title="@string/like"
                     android:checkable="true"
                     app:actionLayout="@layout/switch_item"/>
-                <item
-                    android:id="@+id/filterOk"
-                    android:title="@string/valider"/>
             </menu>
         </item>
 

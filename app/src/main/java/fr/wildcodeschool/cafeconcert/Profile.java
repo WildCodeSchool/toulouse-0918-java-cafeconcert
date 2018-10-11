@@ -24,6 +24,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -187,13 +188,6 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
             case R.id.nav_bar_list:
                 startActivity(new Intent(this, BarListActivity.class));
                 break;
-            case R.id.filterOk:
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putBoolean("filter", checkboxFilter.isChecked());
-                editor.commit();
-                filter = checkboxFilter.isChecked();
-                break;
             case R.id.nav_share:
                 Toast.makeText(this, "Shared", Toast.LENGTH_SHORT).show();
                 break;
@@ -212,12 +206,23 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
         }
     }
 
-    public void checkMenuCreated(DrawerLayout drawer) {
+    public void checkMenuCreated(final DrawerLayout drawer) {
         drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
-                CheckBox checkboxFilter = findViewById(R.id.checkBoxFilter);
+                final CheckBox checkboxFilter = findViewById(R.id.checkBoxFilter);
                 checkboxFilter.setChecked(filter);
+
+                checkboxFilter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Profile.this);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putBoolean("filter", checkboxFilter.isChecked());
+                        editor.commit();
+                        filter = checkboxFilter.isChecked();
+                    }
+                });
             }
 
             @Override

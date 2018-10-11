@@ -34,6 +34,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListPopupWindow;
 import android.widget.PopupWindow;
@@ -119,8 +120,27 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
-                CheckBox checkboxFilter = findViewById(R.id.checkBoxFilter);
+                final CheckBox checkboxFilter = findViewById(R.id.checkBoxFilter);
                 checkboxFilter.setChecked(filter);
+
+                checkboxFilter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                        if (checkboxFilter.isChecked()) {
+                            mMap.clear();
+                            CreateMarkers(arrayFilter(bars));
+                        } else {
+                            mMap.clear();
+                            CreateMarkers(bars);
+                        }
+                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MapsActivity.this);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putBoolean("filter", checkboxFilter.isChecked());
+                        editor.commit();
+                        filter = checkboxFilter.isChecked();
+                    }
+                });
             }
 
             @Override
@@ -167,8 +187,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     //#BurgerMenu links
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        CheckBox checkboxFilter = findViewById(R.id.checkBoxFilter);
-        //filterSwitch();
         switch (item.getItemId()) {
             case R.id.nav_profile:
                 startActivity(new Intent(this, Profile.class));
@@ -177,21 +195,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 break;
             case R.id.nav_bar_list:
                 startActivity(new Intent(this, BarListActivity.class));
-                break;
-            case R.id.filterOk:
-
-                if (checkboxFilter.isChecked()) {
-                    mMap.clear();
-                    CreateMarkers(arrayFilter(bars));
-                } else {
-                    mMap.clear();
-                    CreateMarkers(bars);
-                }
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putBoolean("filter", checkboxFilter.isChecked());
-                editor.commit();
-                filter = checkboxFilter.isChecked();
                 break;
             case R.id.nav_share:
                 Toast.makeText(this, "Shared", Toast.LENGTH_SHORT).show();
