@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -25,6 +26,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -32,7 +34,9 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.ListPopupWindow;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,8 +65,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     final static double TOULOUSE_LONGITUDE_BORDURES_BOT = 1.411854;
     final static double TOULOUSE_LATITUDE_BORDURES_TOP = 43.642094;
     final static double TOULOUSE_LONGITUDE_BORDURES_TOP = 1.480995;
-    final static int POPUP_WIDTH = 700;
-    final static int POPUP_HEIGHT = 1100;
+
     final static int POPUP_POSITION_X = 0;
     final static int POPUP_POSITION_Y = 0;
     final static int MARKER_HEIGHT = 72;
@@ -92,11 +95,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        //onTouch du Drawable à droite (fleche), go sur l'activity list bar
-        //Setting button to go to BarListActivity
-        final ImageView goList = findViewById(R.id.goList);
-        transitionBetweenActivity(goList, MapsActivity.this, BarListActivity.class);
-
         //#BurgerMenu Here I take the new toolbar to set it in my activity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -111,14 +109,38 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         toggle.syncState();
         navigationView.setCheckedItem(R.id.nav_map);
         checkMenuCreated(drawer);
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        filter = sharedPreferences.getBoolean("filter", false);
     }
+
+    //#BurgerMenu
 
     public void checkMenuCreated(DrawerLayout drawer) {
         drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
-                CheckBox checkboxFilter = findViewById(R.id.checkBoxFilter);
+                final CheckBox checkboxFilter = findViewById(R.id.checkBoxFilter);
                 checkboxFilter.setChecked(filter);
+
+                checkboxFilter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                        if (checkboxFilter.isChecked()) {
+                            mMap.clear();
+                            CreateMarkers(arrayFilter(bars));
+                        } else {
+                            mMap.clear();
+                            CreateMarkers(bars);
+                        }
+                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MapsActivity.this);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putBoolean("filter", checkboxFilter.isChecked());
+                        editor.commit();
+                        filter = checkboxFilter.isChecked();
+                    }
+                });
             }
 
             @Override
@@ -153,7 +175,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                 sharingIntent.setType("text/plain");
                 String shareBodyText = getString(R.string.share_text);
-                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,"Subject here");
+                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject here");
                 sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBodyText);
                 startActivity(Intent.createChooser(sharingIntent, "Shearing Option"));
                 return true;
@@ -172,27 +194,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 startActivity(new Intent(this, Profile.class));
                 break;
             case R.id.nav_map:
+                startActivity(new Intent(this, MapsActivity.class));
                 break;
             case R.id.nav_bar_list:
                 startActivity(new Intent(this, BarListActivity.class));
                 break;
-            case R.id.filterOk:
-
-                if (checkboxFilter.isChecked()) {
-                    mMap.clear();
-                    CreateMarkers(arrayFilter(bars));
-                } else {
-                    mMap.clear();
-                    CreateMarkers(bars);
-                }
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putBoolean("filter", checkboxFilter.isChecked());
-                editor.commit();
-                filter = checkboxFilter.isChecked();
-                break;
             case R.id.nav_share:
                 Toast.makeText(this, "Shared", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.app_bar_switch:
+                checkboxFilter.setChecked(!checkboxFilter.isChecked());
                 break;
         }
         drawer.closeDrawer(GravityCompat.START);
@@ -219,34 +230,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-    /* Init a Listener on the ImageView triggerTransition. When touched, start the destination */
-    public static void transitionBetweenActivity(ImageView triggerTransition, final Context context, final Class destination) {
-        //onTouch du Drawable à droite (fleche), go sur l'activity list bar
-        triggerTransition.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    Intent intent = new Intent(context, destination);
-                    context.startActivity(intent);
-                    return true;
-                }
-                return false;
-            }
-        });
-    }
 
-
-    /**
-     * Manipulates the map once avalable.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
+
+        /**
+         * Manipulates the map once avalable.
+         * This callback is triggered when the map is ready to be used.
+         * This is where we can add markers or lines, add listeners or move the camera. In this case,
+         * we just add a marker near Sydney, Australia.
+         * If Google Play services is not installed on the device, the user will be prompted to install
+         * it inside the SupportMapFragment. This method will only be triggered once the user has
+         * installed Google Play services and returned to the app.
+         */
 
         mMap = googleMap;
         // Setting map borders
@@ -258,7 +254,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(toulouse, ZOOM_LVL_BY_DEFAULT));
         // Set user localisation and ask permission to get it
         checkUserLocationPermission();
-        //TODO placer également cet appel dans le OnCreate.
 
         //Configuration map
         UiSettings mMapConfig = mMap.getUiSettings();
@@ -410,14 +405,20 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private void popupBuilder(Marker marker) {
 
+        Display display = getWindowManager().getDefaultDisplay();
+
+        Point size = new Point();
+        display.getSize(size);
+       int width = (int) Math.round(size.x * 0.6);
+       // int height = (int) Math.round(size.y * 0.6);
+
+
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         View popUpView = inflater.inflate(R.layout.custom_info_adapter, null);
 
         //creation fenetre popup
-        int width = POPUP_WIDTH;
-        int height = POPUP_HEIGHT;
         boolean focusable = true;
-        PopupWindow popUp = new PopupWindow(popUpView, width, height, focusable);
+        PopupWindow popUp = new PopupWindow(popUpView, width, ListPopupWindow.WRAP_CONTENT, focusable);
 
         //show popup
         popUp.showAtLocation(popUpView, Gravity.CENTER, POPUP_POSITION_X, POPUP_POSITION_Y);

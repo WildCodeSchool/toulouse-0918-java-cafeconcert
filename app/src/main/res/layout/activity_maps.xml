@@ -43,30 +43,6 @@
             app:layout_constraintBottom_toBottomOf="@+id/fragment_container"
             app:layout_constraintTop_toTopOf="@+id/fragment_container" />
 
-        <ImageView
-            android:id="@+id/goList"
-            android:layout_width="40dp"
-            android:layout_height="0dp"
-            android:layout_gravity="end"
-            android:clickable="true"
-            android:src="@drawable/swipe_map"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/arrowGoToList"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp"
-            android:rotation="270"
-            android:src="@android:drawable/arrow_down_float"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/goList"
-            app:layout_constraintStart_toStartOf="@+id/goList"
-            app:layout_constraintTop_toTopOf="@+id/goList" />
-
 
     </android.support.constraint.ConstraintLayout>
 

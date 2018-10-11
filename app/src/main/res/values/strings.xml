@@ -30,6 +30,7 @@
     <string name="title_activity_login">Sign in</string>
     <!-- Strings related to login -->
     <string name="prompt_Username">Username</string>
+    <string name="camera_has_been_refused">Vous devriez autoriser cette application a accéder à votre caméra depuis les paramètres pour mettre a jour votre photo de profil </string>
     <string name="prompt_email">E-mail</string>
     <string name="prompt_password">Password </string>
     <string name="action_sign_in">Sign in or register</string>

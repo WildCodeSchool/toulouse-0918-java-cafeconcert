@@ -14,13 +14,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.GestureDetector;
 import android.view.Menu;
-
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -33,6 +32,7 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
     private DrawerLayout drawer;
     private ArrayList<Bar> bars;
     private boolean filter = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +51,6 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
             BarAdapter adapter = new BarAdapter(this, bars);
             listBar.setAdapter(adapter);
         }
-        //Setting button to go to MapsActivity
-        final ImageView goToMap = findViewById(R.id.goToMap);
-        MapsActivity.transitionBetweenActivity(goToMap, BarListActivity.this, MapsActivity.class);
 
         //#BurgerMenu Here I take the new toolbar to set it in my activity
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -70,12 +67,31 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
         checkMenuCreated(drawer);
     }
 
+
     public void checkMenuCreated(DrawerLayout drawer) {
         drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
-                CheckBox checkboxFilter = findViewById(R.id.checkBoxFilter);
+                final CheckBox checkboxFilter = findViewById(R.id.checkBoxFilter);
                 checkboxFilter.setChecked(filter);
+                final ListView listBar = findViewById(R.id.list_bar);
+                checkboxFilter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        if (checkboxFilter.isChecked()) {
+                            BarAdapter adapter = new BarAdapter(BarListActivity.this, arrayFilter(bars));
+                            listBar.setAdapter(adapter);
+                        } else {
+                            BarAdapter adapter = new BarAdapter(BarListActivity.this, bars);
+                            listBar.setAdapter(adapter);
+                        }
+                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(BarListActivity.this);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putBoolean("filter", checkboxFilter.isChecked());
+                        editor.commit();
+                        filter = checkboxFilter.isChecked();
+                    }
+                });
             }
 
             @Override
@@ -95,6 +111,7 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
         });
     }
 
+    //#BurgerMenu
     //#ShareMenu : Inflate the share menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -111,7 +128,7 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
                 Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                 sharingIntent.setType("text/plain");
                 String shareBodyText = getString(R.string.share_text);
-                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,"Subject here");
+                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject here");
                 sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBodyText);
                 startActivity(Intent.createChooser(sharingIntent, "Shearing Option"));
                 return true;
@@ -124,37 +141,25 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
     //#BurgerMenu put links between activities
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        ListView listBar = findViewById(R.id.list_bar);
         CheckBox checkboxFilter = findViewById(R.id.checkBoxFilter);
+        //filterSwitch();
         switch (item.getItemId()) {
             case R.id.nav_profile:
                 startActivity(new Intent(this, Profile.class));
                 break;
             case R.id.nav_map:
-                Intent intentMap = new Intent(this, MapsActivity.class);
-                startActivity(intentMap);
+                startActivity(new Intent(this, MapsActivity.class));
                 break;
             case R.id.nav_bar_list:
-                Intent intentList = new Intent(this, BarListActivity.class);
-                startActivity(intentList);
-                break;
-            case R.id.filterOk:
-                if (checkboxFilter.isChecked()) {
-                    BarAdapter adapter = new BarAdapter(this, arrayFilter(bars));
-                    listBar.setAdapter(adapter);
-                } else {
-                    BarAdapter adapter = new BarAdapter(this, bars);
-                    listBar.setAdapter(adapter);
-                }
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putBoolean("filter", checkboxFilter.isChecked());
-                editor.commit();
-                filter = checkboxFilter.isChecked();
+                startActivity(new Intent(this, BarListActivity.class));
                 break;
             case R.id.nav_share:
                 Toast.makeText(this, "Shared", Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.app_bar_switch:
+                checkboxFilter.setChecked(!checkboxFilter.isChecked());
+                break;
+
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -169,7 +174,6 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
         }
         return arrayFilter;
     }
-
     //#BurgerMenu For not leaving the activity immediately
     @Override
     public void onBackPressed() {
@@ -179,4 +183,5 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
             super.onBackPressed();
         }
     }
+
 }
