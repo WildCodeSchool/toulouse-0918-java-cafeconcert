@@ -20,7 +20,6 @@ public class BarAdapter extends ArrayAdapter<Bar> {
 
     final static int MARKER_HEIGHT = 72;
     final static int MARKER_WIDTH = 72;
-
     final static int ICON_HEIGHT = 100;
     final static int ICON_WIDTH = 100;
 
