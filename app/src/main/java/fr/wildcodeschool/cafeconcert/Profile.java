@@ -123,7 +123,6 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         requestCode);
                 checkUserCameraStoragePermission();
-
             }
         } else {
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);

@@ -205,7 +205,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             case R.id.app_bar_switch:
                 checkboxFilter.setChecked(!checkboxFilter.isChecked());
                 break;
-
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;

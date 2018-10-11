@@ -90,7 +90,6 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
                         editor.putBoolean("filter", checkboxFilter.isChecked());
                         editor.commit();
                         filter = checkboxFilter.isChecked();
-
                     }
                 });
             }
