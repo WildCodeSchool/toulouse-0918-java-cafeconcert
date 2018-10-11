@@ -100,11 +100,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        //onTouch du Drawable à droite (fleche), go sur l'activity list bar
-        //Setting button to go to BarListActivity
-        final ImageView goList = findViewById(R.id.goList);
-        transitionBetweenActivity(goList, MapsActivity.this, BarListActivity.class);
-
         //#BurgerMenu Here I take the new toolbar to set it in my activity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -229,34 +224,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-    /* Init a Listener on the ImageView triggerTransition. When touched, start the destination */
-    public static void transitionBetweenActivity(ImageView triggerTransition, final Context context, final Class destination) {
-        //onTouch du Drawable à droite (fleche), go sur l'activity list bar
-        triggerTransition.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-
-                    Intent intent = new Intent(context, destination);
-                    context.startActivity(intent);
-                    return true;
-                }
-                return false;
-            }
-        });
-    }
-
-    /**
-     * Manipulates the map once avalable.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
+
+        /**
+         * Manipulates the map once avalable.
+         * This callback is triggered when the map is ready to be used.
+         * This is where we can add markers or lines, add listeners or move the camera. In this case,
+         * we just add a marker near Sydney, Australia.
+         * If Google Play services is not installed on the device, the user will be prompted to install
+         * it inside the SupportMapFragment. This method will only be triggered once the user has
+         * installed Google Play services and returned to the app.
+         */
 
         mMap = googleMap;
         // Setting map borders
