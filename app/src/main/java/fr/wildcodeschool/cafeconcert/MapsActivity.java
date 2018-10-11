@@ -35,6 +35,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.ListPopupWindow;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,10 +65,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     final static double TOULOUSE_LATITUDE_BORDURES_TOP = 43.642094;
     final static double TOULOUSE_LONGITUDE_BORDURES_TOP = 1.480995;
 
-
-
-    final static int POPUP_WIDTH = ;
-    final static int POPUP_HEIGHT = 1100;
     final static int POPUP_POSITION_X = 0;
     final static int POPUP_POSITION_Y = 0;
     final static int MARKER_HEIGHT = 72;
@@ -400,17 +397,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private void popupBuilder(Marker marker) {
 
         Display display = getWindowManager().getDefaultDisplay();
+
         Point size = new Point();
         display.getSize(size);
-        int width = (int) Math.round(size.x * 0.5);
-        int height = (int) Math.round(size.y * 0.5);
+       int width = (int) Math.round(size.x * 0.6);
+       // int height = (int) Math.round(size.y * 0.6);
+
 
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         View popUpView = inflater.inflate(R.layout.custom_info_adapter, null);
 
         //creation fenetre popup
         boolean focusable = true;
-        PopupWindow popUp = new PopupWindow(popUpView, width, height, focusable);
+        PopupWindow popUp = new PopupWindow(popUpView, width, ListPopupWindow.WRAP_CONTENT, focusable);
 
         //show popup
         popUp.showAtLocation(popUpView, Gravity.CENTER, POPUP_POSITION_X, POPUP_POSITION_Y);
