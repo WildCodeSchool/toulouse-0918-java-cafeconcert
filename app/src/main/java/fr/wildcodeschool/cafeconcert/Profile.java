@@ -191,6 +191,10 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
             case R.id.nav_share:
                 Toast.makeText(this, "Shared", Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.app_bar_switch:
+                checkboxFilter.setChecked(!checkboxFilter.isChecked());
+                break;
+
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;

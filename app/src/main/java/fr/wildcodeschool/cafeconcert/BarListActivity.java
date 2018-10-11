@@ -142,22 +142,25 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
     //#BurgerMenu put links between activities
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
+        CheckBox checkboxFilter = findViewById(R.id.checkBoxFilter);
+        //filterSwitch();
         switch (item.getItemId()) {
             case R.id.nav_profile:
                 startActivity(new Intent(this, Profile.class));
                 break;
             case R.id.nav_map:
-                Intent intentMap = new Intent(this, MapsActivity.class);
-                startActivity(intentMap);
+                startActivity(new Intent(this, MapsActivity.class));
                 break;
             case R.id.nav_bar_list:
-                Intent intentList = new Intent(this, BarListActivity.class);
-                startActivity(intentList);
+                startActivity(new Intent(this, BarListActivity.class));
                 break;
             case R.id.nav_share:
                 Toast.makeText(this, "Shared", Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.app_bar_switch:
+                checkboxFilter.setChecked(!checkboxFilter.isChecked());
+                break;
+
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;

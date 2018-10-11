@@ -187,11 +187,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     //#BurgerMenu links
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        CheckBox checkboxFilter = findViewById(R.id.checkBoxFilter);
+        //filterSwitch();
         switch (item.getItemId()) {
             case R.id.nav_profile:
                 startActivity(new Intent(this, Profile.class));
                 break;
             case R.id.nav_map:
+                startActivity(new Intent(this, MapsActivity.class));
                 break;
             case R.id.nav_bar_list:
                 startActivity(new Intent(this, BarListActivity.class));
@@ -199,6 +202,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             case R.id.nav_share:
                 Toast.makeText(this, "Shared", Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.app_bar_switch:
+                checkboxFilter.setChecked(!checkboxFilter.isChecked());
+                break;
+
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
