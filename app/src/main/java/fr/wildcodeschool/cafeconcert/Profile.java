@@ -82,11 +82,14 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
                     ActivityCompat.requestPermissions(Profile.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
 
                 }
+
                 if (ContextCompat.checkSelfPermission(Profile.this, Manifest.permission.CAMERA)
                         == PackageManager.PERMISSION_DENIED) {
                     ActivityCompat.requestPermissions(Profile.this, new String[]{Manifest.permission.CAMERA}, requestCode);
 
-                } else {
+                }
+
+                 else {
                     Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
                         dispatchTakePictureIntent();
