@@ -401,6 +401,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
     }
 
+
     private void popupBuilder(Marker marker) {
 
         Display display = getWindowManager().getDefaultDisplay();

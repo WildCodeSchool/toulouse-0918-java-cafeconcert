@@ -2,6 +2,8 @@ package fr.wildcodeschool.cafeconcert;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.constraint.ConstraintLayout;
 import android.view.LayoutInflater;
@@ -82,4 +84,71 @@ public class BarAdapter extends ArrayAdapter<Bar> {
         // Return the completed view to render on screen
         return convertView;
     }
+
+    public void adaptLikesButton(ImageView like, ImageView dontLike, Bar bar) {
+
+        Bitmap initialLikeMarker = BitmapFactory.decodeResource(this.getResources(),
+                R.drawable.love_ping);
+        Bitmap likeMarker = Bitmap.createScaledBitmap(initialLikeMarker, MARKER_WIDTH, MARKER_HEIGHT, false);
+
+        Bitmap initialDislikeMarker = BitmapFactory.decodeResource(this.getResources(),
+                R.drawable.love_break_ping);
+        Bitmap dislikeMarker = Bitmap.createScaledBitmap(initialDislikeMarker, MARKER_WIDTH, MARKER_HEIGHT, false);
+
+        Bitmap nDislikeMarker = BitmapFactory.decodeResource(this.getResources(),
+                R.drawable.neutral_dislike_icon);
+        Bitmap neutralDislikeMarker = Bitmap.createScaledBitmap(nDislikeMarker, MARKER_WIDTH, MARKER_HEIGHT, false);
+
+        Bitmap nLikeMarker = BitmapFactory.decodeResource(this.getResources(),
+                R.drawable.neutral_like_icon);
+        Bitmap neutralLikeMarker = Bitmap.createScaledBitmap(nLikeMarker, MARKER_WIDTH, MARKER_HEIGHT, false);
+
+        /*Bitmap initialNeutralMarker = BitmapFactory.decodeResource(this.getResources(),
+                R.drawable.neutral_ping);
+        Bitmap neutralMarker = Bitmap.createScaledBitmap(initialNeutralMarker, MARKER_WIDTH, MARKER_HEIGHT, false);*/
+
+        like.setImageBitmap(neutralLikeMarker);
+        dontLike.setImageBitmap(neutralDislikeMarker);
+
+        //0 dislike, 1 like, 2 neutral
+        if (bar.getIsLiked() == 1) {
+            like.setImageBitmap(likeMarker);
+            dontLike.setImageBitmap(neutralDislikeMarker);
+        } else if (bar.getIsLiked() == 0) {
+            dontLike.setImageBitmap(dislikeMarker);
+            like.setImageBitmap(neutralLikeMarker);
+        }
+    }
+
+    public void setUserOpinion(final ImageView like, final ImageView dontLike, final Bar bar) {
+
+        like.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (bar.getIsLiked() != 1) {
+                    bar.setIsLiked(1);
+                    adaptLikesButton(like, dontLike, bar);
+                } else {
+                    bar.setIsLiked(2);
+                    adaptLikesButton(like, dontLike, bar);
+                }
+            }
+        });
+
+
+        dontLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (bar.getIsLiked() != 0) {
+                    bar.setIsLiked(0);
+                    adaptLikesButton(like, dontLike, bar);
+                } else {
+                    bar.setIsLiked(2);
+                    adaptLikesButton(like, dontLike, bar);
+                }
+            }
+        });
+    }
+
+
 }
