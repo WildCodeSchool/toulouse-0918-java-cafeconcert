@@ -23,6 +23,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -40,6 +41,7 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
     String mCurrentPhotoPath;
     private DrawerLayout drawer;
     private ImageView profilePic;
+    private boolean filter = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,8 +161,11 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        CheckBox checkboxFilter = findViewById(R.id.checkBoxFilter);
+        //filterSwitch();
         switch (item.getItemId()) {
             case R.id.nav_profile:
+                startActivity(new Intent(this, Profile.class));
                 break;
             case R.id.nav_map:
                 startActivity(new Intent(this, MapsActivity.class));
@@ -168,8 +173,16 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
             case R.id.nav_bar_list:
                 startActivity(new Intent(this, BarListActivity.class));
                 break;
+            case R.id.filterOk:
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean("filter", checkboxFilter.isChecked());
+                editor.commit();
+                filter = checkboxFilter.isChecked();
+                break;
             case R.id.nav_share:
                 Toast.makeText(this, "Shared", Toast.LENGTH_SHORT).show();
+                break;
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -183,5 +196,29 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
         } else {
             super.onBackPressed();
         }
+    }
+
+    public void checkMenuCreated(DrawerLayout drawer) {
+        drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+                CheckBox checkboxFilter = findViewById(R.id.checkBoxFilter);
+                checkboxFilter.setChecked(filter);
+            }
+
+            @Override
+            public void onDrawerOpened(@NonNull View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerClosed(@NonNull View drawerView) {
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
     }
 }

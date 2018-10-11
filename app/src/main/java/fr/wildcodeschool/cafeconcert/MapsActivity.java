@@ -106,6 +106,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         toggle.syncState();
         navigationView.setCheckedItem(R.id.nav_map);
         checkMenuCreated(drawer);
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        filter = sharedPreferences.getBoolean("filter", false);
     }
 
     //#BurgerMenu
