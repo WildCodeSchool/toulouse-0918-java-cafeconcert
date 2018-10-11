@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -25,6 +26,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -61,7 +63,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     final static double TOULOUSE_LONGITUDE_BORDURES_BOT = 1.411854;
     final static double TOULOUSE_LATITUDE_BORDURES_TOP = 43.642094;
     final static double TOULOUSE_LONGITUDE_BORDURES_TOP = 1.480995;
-    final static int POPUP_WIDTH = 700;
+
+
+
+    final static int POPUP_WIDTH = ;
     final static int POPUP_HEIGHT = 1100;
     final static int POPUP_POSITION_X = 0;
     final static int POPUP_POSITION_Y = 0;
@@ -394,12 +399,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private void popupBuilder(Marker marker) {
 
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = (int) Math.round(size.x * 0.5);
+        int height = (int) Math.round(size.y * 0.5);
+
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         View popUpView = inflater.inflate(R.layout.custom_info_adapter, null);
 
         //creation fenetre popup
-        int width = POPUP_WIDTH;
-        int height = POPUP_HEIGHT;
         boolean focusable = true;
         PopupWindow popUp = new PopupWindow(popUpView, width, height, focusable);
 
