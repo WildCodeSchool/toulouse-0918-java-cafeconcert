@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -80,8 +81,11 @@ public class BarAdapter extends ArrayAdapter<Bar> {
         TextView textPhone = convertView.findViewById(R.id.phone_text);
         TextView textWebSite = convertView.findViewById(R.id.web_text);
         textPhone.setText(bar.getPhoneNumber());
-        textWebSite.setText(bar.getWebUrl());
-
+        if (bar.getWebUrl().isEmpty()) {
+            textWebSite.setText(R.string.no_website);
+        } else {
+            textWebSite.setText(bar.getWebUrl());
+        }
         //Phone button
         phone.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,12 +102,16 @@ public class BarAdapter extends ArrayAdapter<Bar> {
             @Override
             public void onClick(View v) {
                 String url = bar.getWebUrl();
-                if (url.charAt(0) == 'w') {
-                    url = "http://" + url;
+                if (bar.getWebUrl().isEmpty()) {
+                    Toast.makeText(getContext(), R.string.no_website, Toast.LENGTH_LONG);
+                } else {
+                    if (url.charAt(0) == 'w') {
+                        url = "http://" + url;
+                    }
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(url));
+                    getContext().startActivity(i);
                 }
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(url));
-                getContext().startActivity(i);
             }
         });
 
