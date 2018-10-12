@@ -25,7 +25,7 @@ public class BarAdapter extends ArrayAdapter<Bar> {
     final static int ICON_HEIGHT = 100;
     final static int ICON_WIDTH = 100;
     private static ArrayList<Bar> filterBars;
-    private ArrayList<Bar> bars = MainActivity.creatingBars(getContext());
+    private ArrayList<Bar> bars;
     private boolean filter = false;
 
     public BarAdapter(Context context, ArrayList<Bar> bars) {
@@ -157,7 +157,7 @@ public class BarAdapter extends ArrayAdapter<Bar> {
                 }
                 if (filter) {
                     Intent intent = new Intent(getContext(), BarListActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    ((BarListActivity) getContext()).startActivityForResult(intent, 1);
+                    (getContext()).startActivity(intent);
                 }
             }
         });
@@ -174,7 +174,7 @@ public class BarAdapter extends ArrayAdapter<Bar> {
                 }
                 if (filter) {
                     Intent intent = new Intent(getContext(), BarListActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    ((BarListActivity) getContext()).startActivityForResult(intent, 1);
+                    (getContext()).startActivity(intent);
                 }
             }
         });
