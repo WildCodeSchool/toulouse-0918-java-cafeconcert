@@ -176,7 +176,6 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         CheckBox checkboxFilter = findViewById(R.id.checkBoxFilter);
-        //filterSwitch();
         switch (item.getItemId()) {
             case R.id.nav_profile:
                 startActivity(new Intent(this, Profile.class));
@@ -186,9 +185,6 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
                 break;
             case R.id.nav_bar_list:
                 startActivity(new Intent(this, BarListActivity.class));
-                break;
-            case R.id.nav_share:
-                Toast.makeText(this, "Shared", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.app_bar_switch:
                 checkboxFilter.setChecked(!checkboxFilter.isChecked());

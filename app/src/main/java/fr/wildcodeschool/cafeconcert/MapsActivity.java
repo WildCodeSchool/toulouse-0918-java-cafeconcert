@@ -228,9 +228,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             case R.id.nav_bar_list:
                 startActivity(new Intent(this, BarListActivity.class));
                 break;
-            case R.id.nav_share:
-                Toast.makeText(this, "Shared", Toast.LENGTH_SHORT).show();
-                break;
             case R.id.app_bar_switch:
                 checkboxFilter.setChecked(!checkboxFilter.isChecked());
                 break;

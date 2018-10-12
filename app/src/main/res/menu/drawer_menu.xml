@@ -28,15 +28,4 @@
                     app:actionLayout="@layout/switch_item"/>
             </menu>
         </item>
-
-
-    <item android:title="@string/be_social">
-        <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_share"
-                android:title="@string/share" />
-        </menu>
-    </item>
-
 </menu>
