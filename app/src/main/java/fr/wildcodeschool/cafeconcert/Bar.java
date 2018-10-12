@@ -35,9 +35,7 @@ public class Bar {
             this.isLiked = isLiked;
         } else {
             this.isLiked = sharedPreferences.getInt(this.barName, 2);
-
         }
-
     }
 
     public Bar() {}
@@ -119,7 +117,6 @@ public class Bar {
             this.isLiked = isLiked;
         } else {
             this.isLiked = sharedPreferences.getInt(this.barName, 2);
-
         }
     }
 
