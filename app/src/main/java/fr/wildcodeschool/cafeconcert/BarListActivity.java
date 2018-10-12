@@ -4,6 +4,8 @@ package fr.wildcodeschool.cafeconcert;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -24,6 +26,9 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Marker;
+
 import java.util.ArrayList;
 
 public class BarListActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -32,6 +37,9 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
     private DrawerLayout drawer;
     private ArrayList<Bar> bars;
     private boolean filter = false;
+
+    final static int MARKER_HEIGHT = 72;
+    final static int MARKER_WIDTH = 72;
 
 
     @Override
@@ -66,7 +74,6 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
         navigationView.setCheckedItem(R.id.nav_bar_list);
         checkMenuCreated(drawer);
     }
-
 
     public void checkMenuCreated(DrawerLayout drawer) {
         drawer.addDrawerListener(new DrawerLayout.DrawerListener() {

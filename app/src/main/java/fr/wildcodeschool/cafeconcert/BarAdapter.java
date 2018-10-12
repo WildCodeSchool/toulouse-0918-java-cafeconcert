@@ -2,6 +2,8 @@ package fr.wildcodeschool.cafeconcert;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.constraint.ConstraintLayout;
 import android.view.LayoutInflater;
@@ -15,6 +17,11 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class BarAdapter extends ArrayAdapter<Bar> {
+
+    final static int MARKER_HEIGHT = 72;
+    final static int MARKER_WIDTH = 72;
+    final static int ICON_HEIGHT = 100;
+    final static int ICON_WIDTH = 100;
 
     public BarAdapter(Context context, ArrayList<Bar> bars) {
         super(context, 0, bars);
@@ -35,11 +42,19 @@ public class BarAdapter extends ArrayAdapter<Bar> {
         ImageView phone = convertView.findViewById(R.id.ib_phone);
         ImageButton ibWeb = convertView.findViewById(R.id.ib_web);
         navigate.setImageResource(R.mipmap.navigate);
+        ImageView likeButton = convertView.findViewById(R.id.like_button);
+        ImageView dontLikeButton = convertView.findViewById(R.id.dont_like_button);
+        ImageView icon = convertView.findViewById(R.id.status_icon);
 
         // Populate the data into the template view using the data object
         tvBarName.setText(bar.getBarName());
         ibBar.setBackgroundResource(bar.getPicture());
         MainActivity.setNavigation(navigate, bar, getContext());
+
+        //Adding efficient likes/dislikes buttons
+        setLikeIcon(icon, bar.getIsLiked());
+        adaptLikesButton(likeButton, dontLikeButton, icon, bar);
+        setUserOpinion(likeButton, dontLikeButton, icon, bar);
 
         // Drawer hide/shown
         final ConstraintLayout drawerBar = convertView.findViewById(R.id.drawer_bar);
@@ -82,4 +97,96 @@ public class BarAdapter extends ArrayAdapter<Bar> {
         // Return the completed view to render on screen
         return convertView;
     }
+
+    private void adaptLikesButton(ImageView like, ImageView dontLike, final ImageView icon, Bar bar) {
+
+        Bitmap initialLikeMarker = BitmapFactory.decodeResource(getContext().getResources(),
+                R.drawable.love_ping);
+        Bitmap likeMarker = Bitmap.createScaledBitmap(initialLikeMarker, MARKER_WIDTH, MARKER_HEIGHT, false);
+
+        Bitmap initialDislikeMarker = BitmapFactory.decodeResource(getContext().getResources(),
+                R.drawable.love_break_ping);
+        Bitmap dislikeMarker = Bitmap.createScaledBitmap(initialDislikeMarker, MARKER_WIDTH, MARKER_HEIGHT, false);
+
+        Bitmap nDislikeMarker = BitmapFactory.decodeResource(getContext().getResources(),
+                R.drawable.neutral_dislike_icon);
+        Bitmap neutralDislikeMarker = Bitmap.createScaledBitmap(nDislikeMarker, MARKER_WIDTH, MARKER_HEIGHT, false);
+
+        Bitmap nLikeMarker = BitmapFactory.decodeResource(getContext().getResources(),
+                R.drawable.neutral_like_icon);
+        Bitmap neutralLikeMarker = Bitmap.createScaledBitmap(nLikeMarker, MARKER_WIDTH, MARKER_HEIGHT, false);
+
+        like.setImageBitmap(neutralLikeMarker);
+        dontLike.setImageBitmap(neutralDislikeMarker);
+
+        //0 dislike, 1 like, 2 neutral
+        if (bar.getIsLiked() == 1) {
+            like.setImageBitmap(likeMarker);
+            dontLike.setImageBitmap(neutralDislikeMarker);
+        } else if (bar.getIsLiked() == 0) {
+            dontLike.setImageBitmap(dislikeMarker);
+            like.setImageBitmap(neutralLikeMarker);
+        }
+
+        setLikeIcon(icon, bar.getIsLiked());
+    }
+
+    private void setUserOpinion(final ImageView like, final ImageView dontLike, final ImageView icon, final Bar bar) {
+
+        like.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (bar.getIsLiked() != 1) {
+                    bar.setIsLiked(1);
+                    adaptLikesButton(like, dontLike, icon, bar);
+                } else {
+                    bar.setIsLiked(2);
+                    adaptLikesButton(like, dontLike, icon,  bar);
+                }
+            }
+        });
+
+
+        dontLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (bar.getIsLiked() != 0) {
+                    bar.setIsLiked(0);
+                    adaptLikesButton(like, dontLike, icon, bar);
+                } else {
+                    bar.setIsLiked(2);
+                    adaptLikesButton(like, dontLike, icon, bar);
+                }
+            }
+        });
+    }
+
+    private void setLikeIcon(final ImageView icon, int likeStatus) {
+
+        Bitmap nLikeMarker = BitmapFactory.decodeResource(getContext().getResources(),
+                R.drawable.neutral_like_icon);
+        Bitmap neutralLikeMarker = Bitmap.createScaledBitmap(nLikeMarker, ICON_WIDTH, ICON_HEIGHT, false);
+
+        Bitmap initialLikeMarker = BitmapFactory.decodeResource(getContext().getResources(),
+                R.drawable.love_ping);
+        Bitmap likeMarker = Bitmap.createScaledBitmap(initialLikeMarker, ICON_WIDTH, ICON_HEIGHT, false);
+
+        Bitmap initialDislikeMarker = BitmapFactory.decodeResource(getContext().getResources(),
+                R.drawable.love_break_ping);
+        Bitmap dislikeMarker = Bitmap.createScaledBitmap(initialDislikeMarker, ICON_WIDTH, ICON_HEIGHT, false);
+
+        switch (likeStatus) {
+            case 0:
+                icon.setImageBitmap(dislikeMarker);
+                break;
+            case 1:
+                icon.setImageBitmap(likeMarker);
+                break;
+            case 2:
+                icon.setImageBitmap(neutralLikeMarker);
+                break;
+        }
+
+    }
+
 }
