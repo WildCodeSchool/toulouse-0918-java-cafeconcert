@@ -3,7 +3,6 @@ package fr.wildcodeschool.cafeconcert;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -40,6 +39,7 @@ import android.widget.ListPopupWindow;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -72,6 +72,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     final static int ZOOM_LVL_BY_DEFAULT = 13;
     final static float ZOOM_LVL_ON_USER = 15.76f;
 
+
+    private PopupWindow popUp;
     private GoogleMap mMap;
     private ArrayList<Bar> bars;
     private ArrayList<Bar> filterBars;
@@ -226,6 +228,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+            startActivity(new Intent(this, MainActivity.class));
         }
     }
 
@@ -334,6 +337,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public void adaptLikesButton(ImageView like, ImageView dontLike, Bar bar, Marker marker) {
 
+
         Bitmap initialLikeMarker = BitmapFactory.decodeResource(this.getResources(),
                 R.drawable.love_ping);
         Bitmap likeMarker = Bitmap.createScaledBitmap(initialLikeMarker, MARKER_WIDTH, MARKER_HEIGHT, false);
@@ -383,7 +387,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     bar.setIsLiked(2);
                     adaptLikesButton(like, dontLike, bar, marker);
                 }
+                if (filter) {
+                    mMap.clear();
+                    CreateMarkers(arrayFilter(bars));
+                }
             }
+
         });
 
 
@@ -397,8 +406,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     bar.setIsLiked(2);
                     adaptLikesButton(like, dontLike, bar, marker);
                 }
+                if (filter) {
+                    mMap.clear();
+                    CreateMarkers(arrayFilter(bars));
+                    popUp.dismiss();
+                }
             }
         });
+
+
     }
 
 
@@ -408,8 +424,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         Point size = new Point();
         display.getSize(size);
-       int width = (int) Math.round(size.x * 0.6);
-       // int height = (int) Math.round(size.y * 0.6);
+        int width = (int) Math.round(size.x * 0.6);
+        // int height = (int) Math.round(size.y * 0.6);
 
 
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -417,7 +433,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         //creation fenetre popup
         boolean focusable = true;
-        PopupWindow popUp = new PopupWindow(popUpView, width, ListPopupWindow.WRAP_CONTENT, focusable);
+        popUp = new PopupWindow(popUpView, width, ListPopupWindow.WRAP_CONTENT, focusable);
 
         //show popup
         popUp.showAtLocation(popUpView, Gravity.CENTER, POPUP_POSITION_X, POPUP_POSITION_Y);
@@ -466,6 +482,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
     }
+
     /* If all required permissions are granted, set a marker on User Position*/
     private void initLocation() {
         // Get the last known position of the user

@@ -37,6 +37,7 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
     private DrawerLayout drawer;
     private ArrayList<Bar> bars;
     private boolean filter = false;
+    private BarAdapter adapter;
 
     final static int MARKER_HEIGHT = 72;
     final static int MARKER_WIDTH = 72;
@@ -52,11 +53,12 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         filter = sharedPreferences.getBoolean("filter", false);
+
         if (filter) {
-            BarAdapter adapter = new BarAdapter(this, arrayFilter(bars));
+            adapter = new BarAdapter(this, arrayFilter(bars));
             listBar.setAdapter(adapter);
         } else {
-            BarAdapter adapter = new BarAdapter(this, bars);
+            adapter = new BarAdapter(this, bars);
             listBar.setAdapter(adapter);
         }
 
@@ -74,6 +76,7 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
         navigationView.setCheckedItem(R.id.nav_bar_list);
         checkMenuCreated(drawer);
     }
+
 
     public void checkMenuCreated(DrawerLayout drawer) {
         drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
@@ -172,7 +175,7 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
         return true;
     }
 
-    public ArrayList<Bar> arrayFilter(ArrayList<Bar> bars) {
+    public static ArrayList<Bar> arrayFilter(ArrayList<Bar> bars) {
         ArrayList<Bar> arrayFilter = new ArrayList<>();
         for (Bar monBar : bars) {
             if (monBar.getIsLiked() == 1) {
@@ -188,6 +191,7 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+            startActivity(new Intent(this, MapsActivity.class));
         }
     }
 
