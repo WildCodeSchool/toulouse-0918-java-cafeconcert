@@ -1,27 +1,39 @@
 package fr.wildcodeschool.cafeconcert;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.constraint.ConstraintLayout;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
+
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.Marker;
 
 import java.util.ArrayList;
 
-public class BarAdapter extends ArrayAdapter<Bar> {
+public class BarAdapter extends ArrayAdapter<Bar>{
 
     final static int MARKER_HEIGHT = 72;
     final static int MARKER_WIDTH = 72;
     final static int ICON_HEIGHT = 100;
     final static int ICON_WIDTH = 100;
+    private ArrayList<Bar> bars = MainActivity.creatingBars(getContext());
+    private static ArrayList<Bar> filterBars;
+    private boolean filter = false;
 
     public BarAdapter(Context context, ArrayList<Bar> bars) {
         super(context, 0, bars);
@@ -29,6 +41,9 @@ public class BarAdapter extends ArrayAdapter<Bar> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        filter = sharedPreferences.getBoolean("filter", false);
         // Get the data item for this position
         final Bar bar = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
@@ -129,6 +144,7 @@ public class BarAdapter extends ArrayAdapter<Bar> {
         }
 
         setLikeIcon(icon, bar.getIsLiked());
+
     }
 
     private void setUserOpinion(final ImageView like, final ImageView dontLike, final ImageView icon, final Bar bar) {
@@ -143,6 +159,12 @@ public class BarAdapter extends ArrayAdapter<Bar> {
                     bar.setIsLiked(2);
                     adaptLikesButton(like, dontLike, icon,  bar);
                 }
+                if(filter){
+                    Intent intent = new Intent(getContext(), BarListActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    ((BarListActivity)getContext()).startActivityForResult(intent, 1);
+                }
+
+
             }
         });
 
@@ -157,8 +179,15 @@ public class BarAdapter extends ArrayAdapter<Bar> {
                     bar.setIsLiked(2);
                     adaptLikesButton(like, dontLike, icon, bar);
                 }
+                if (filter){
+                    Intent intent = new Intent(getContext(), BarListActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    ((BarListActivity)getContext()).startActivityForResult(intent, 1);
+
+                }
+
             }
         });
+
     }
 
     private void setLikeIcon(final ImageView icon, int likeStatus) {

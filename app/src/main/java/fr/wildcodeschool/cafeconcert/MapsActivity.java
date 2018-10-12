@@ -226,6 +226,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+            startActivity(new Intent(this, MainActivity.class));
         }
     }
 
@@ -334,6 +335,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public void adaptLikesButton(ImageView like, ImageView dontLike, Bar bar, Marker marker) {
 
+
         Bitmap initialLikeMarker = BitmapFactory.decodeResource(this.getResources(),
                 R.drawable.love_ping);
         Bitmap likeMarker = Bitmap.createScaledBitmap(initialLikeMarker, MARKER_WIDTH, MARKER_HEIGHT, false);
@@ -383,7 +385,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     bar.setIsLiked(2);
                     adaptLikesButton(like, dontLike, bar, marker);
                 }
+                if (filter) {
+                    mMap.clear();
+                    CreateMarkers(arrayFilter(bars));
+                }
             }
+
         });
 
 
@@ -397,8 +404,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     bar.setIsLiked(2);
                     adaptLikesButton(like, dontLike, bar, marker);
                 }
+                if (filter) {
+                    mMap.clear();
+                    CreateMarkers(arrayFilter(bars));
+                }
             }
         });
+
+
     }
 
 
