@@ -72,6 +72,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     final static int ZOOM_LVL_BY_DEFAULT = 13;
     final static float ZOOM_LVL_ON_USER = 15.76f;
 
+
+    private PopupWindow popUp;
     private GoogleMap mMap;
     private ArrayList<Bar> bars;
     private ArrayList<Bar> filterBars;
@@ -407,6 +409,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 if (filter) {
                     mMap.clear();
                     CreateMarkers(arrayFilter(bars));
+                    popUp.dismiss();
                 }
             }
         });
@@ -430,7 +433,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         //creation fenetre popup
         boolean focusable = true;
-        PopupWindow popUp = new PopupWindow(popUpView, width, ListPopupWindow.WRAP_CONTENT, focusable);
+        popUp = new PopupWindow(popUpView, width, ListPopupWindow.WRAP_CONTENT, focusable);
 
         //show popup
         popUp.showAtLocation(popUpView, Gravity.CENTER, POPUP_POSITION_X, POPUP_POSITION_Y);
