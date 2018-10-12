@@ -84,6 +84,11 @@ public class BarAdapter extends ArrayAdapter<Bar>{
             }
         });
 
+        TextView textPhone = convertView.findViewById(R.id.phone_text);
+        TextView textWebSite = convertView.findViewById(R.id.web_text);
+        textPhone.setText(bar.getPhoneNumber());
+        textWebSite.setText(bar.getWebUrl());
+
         //Phone button
         phone.setOnClickListener(new View.OnClickListener() {
             @Override
