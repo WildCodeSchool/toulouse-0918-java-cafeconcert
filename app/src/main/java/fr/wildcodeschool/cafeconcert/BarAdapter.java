@@ -2,9 +2,11 @@ package fr.wildcodeschool.cafeconcert;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.constraint.ConstraintLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +24,9 @@ public class BarAdapter extends ArrayAdapter<Bar> {
     final static int MARKER_WIDTH = 72;
     final static int ICON_HEIGHT = 100;
     final static int ICON_WIDTH = 100;
+    private static ArrayList<Bar> filterBars;
+    private ArrayList<Bar> bars;
+    private boolean filter = false;
 
     public BarAdapter(Context context, ArrayList<Bar> bars) {
         super(context, 0, bars);
@@ -29,6 +34,9 @@ public class BarAdapter extends ArrayAdapter<Bar> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        filter = sharedPreferences.getBoolean("filter", false);
         // Get the data item for this position
         final Bar bar = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
@@ -61,13 +69,18 @@ public class BarAdapter extends ArrayAdapter<Bar> {
         ibBar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(drawerBar.getVisibility() == View.GONE) {
+                if (drawerBar.getVisibility() == View.GONE) {
                     drawerBar.setVisibility(View.VISIBLE);
                 } else {
                     drawerBar.setVisibility(View.GONE);
                 }
             }
         });
+
+        TextView textPhone = convertView.findViewById(R.id.phone_text);
+        TextView textWebSite = convertView.findViewById(R.id.web_text);
+        textPhone.setText(bar.getPhoneNumber());
+        textWebSite.setText(bar.getWebUrl());
 
         //Phone button
         phone.setOnClickListener(new View.OnClickListener() {
@@ -93,7 +106,7 @@ public class BarAdapter extends ArrayAdapter<Bar> {
                 getContext().startActivity(i);
             }
         });
-        
+
         // Return the completed view to render on screen
         return convertView;
     }
@@ -127,7 +140,6 @@ public class BarAdapter extends ArrayAdapter<Bar> {
             dontLike.setImageBitmap(dislikeMarker);
             like.setImageBitmap(neutralLikeMarker);
         }
-
         setLikeIcon(icon, bar.getIsLiked());
     }
 
@@ -141,11 +153,14 @@ public class BarAdapter extends ArrayAdapter<Bar> {
                     adaptLikesButton(like, dontLike, icon, bar);
                 } else {
                     bar.setIsLiked(2);
-                    adaptLikesButton(like, dontLike, icon,  bar);
+                    adaptLikesButton(like, dontLike, icon, bar);
+                }
+                if (filter) {
+                    Intent intent = new Intent(getContext(), BarListActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    (getContext()).startActivity(intent);
                 }
             }
         });
-
 
         dontLike.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,6 +171,10 @@ public class BarAdapter extends ArrayAdapter<Bar> {
                 } else {
                     bar.setIsLiked(2);
                     adaptLikesButton(like, dontLike, icon, bar);
+                }
+                if (filter) {
+                    Intent intent = new Intent(getContext(), BarListActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    (getContext()).startActivity(intent);
                 }
             }
         });

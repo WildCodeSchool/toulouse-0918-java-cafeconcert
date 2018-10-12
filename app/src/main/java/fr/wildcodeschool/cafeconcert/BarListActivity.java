@@ -47,7 +47,6 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
     private ListView listBar;
 
 
-
     final static int MARKER_HEIGHT = 72;
     final static int MARKER_WIDTH = 72;
 
@@ -60,8 +59,6 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
         listBar= findViewById(R.id.list_bar);
 
         initBar();
-
-        //Take the bars's info already created in MainActivity
 
         //#BurgerMenu Here I take the new toolbar to set it in my activity
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -77,6 +74,7 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
         navigationView.setCheckedItem(R.id.nav_bar_list);
         checkMenuCreated(drawer);
     }
+
 
     public void initBarVisualisation() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -219,7 +217,7 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
         return true;
     }
 
-    public ArrayList<Bar> arrayFilter(ArrayList<Bar> bars) {
+    public static ArrayList<Bar> arrayFilter(ArrayList<Bar> bars) {
         ArrayList<Bar> arrayFilter = new ArrayList<>();
         for (Bar monBar : bars) {
             if (monBar.getIsLiked() == 1) {
@@ -235,6 +233,7 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+            startActivity(new Intent(this, MapsActivity.class));
         }
     }
 

@@ -15,6 +15,7 @@ public class Bar {
     private int isLiked; // 1 if liked, 0 if disliked, 2 if neutral
     private int picture; // Pour un drawable le type est 'int'
     private Context context;
+    private String address;
 
     /*Constructor*/
     public Bar(String barName, String phoneNumber, double geoPoint, double geoShape, String webUrl, int isLiked, int picture, Context context) {
@@ -120,6 +121,14 @@ public class Bar {
             this.isLiked = sharedPreferences.getInt(this.barName, 2);
 
         }
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
 }
