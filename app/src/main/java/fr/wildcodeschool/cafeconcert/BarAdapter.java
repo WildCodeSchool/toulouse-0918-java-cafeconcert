@@ -48,8 +48,11 @@ public class BarAdapter extends ArrayAdapter<Bar> {
         TextView tvBarName = convertView.findViewById(R.id.text_bar_name);
         ImageButton ibBar = convertView.findViewById(R.id.image_bar);
         ImageView navigate = convertView.findViewById(R.id.navigationButton);
+        navigate.setBackgroundResource(R.mipmap.navigate);
         ImageView phone = convertView.findViewById(R.id.ib_phone);
+        phone.setBackgroundResource(R.mipmap.phonelogo);
         ImageButton ibWeb = convertView.findViewById(R.id.ib_web);
+        ibWeb.setBackgroundResource(R.mipmap.globeicon);
         navigate.setImageResource(R.mipmap.navigate);
         ImageView likeButton = convertView.findViewById(R.id.like_button);
         ImageView dontLikeButton = convertView.findViewById(R.id.dont_like_button);
