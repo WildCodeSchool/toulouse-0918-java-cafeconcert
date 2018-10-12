@@ -39,6 +39,8 @@ public class Bar {
 
     }
 
+    public Bar() {}
+
     /*Getters and setters*/
     public String getBarName() {
         return barName;
@@ -96,4 +98,28 @@ public class Bar {
     public int getPicture() { return picture; }
 
     public void setPicture(int picture) { this.picture = picture; }
+
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
+    /*Special methods*/
+
+    public void setInitIsLiked(int isLiked, Context context) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        if (!sharedPreferences.contains(this.barName)) {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt(this.barName, isLiked);
+            editor.commit();
+            this.isLiked = isLiked;
+        } else {
+            this.isLiked = sharedPreferences.getInt(this.barName, 2);
+
+        }
+    }
+
 }

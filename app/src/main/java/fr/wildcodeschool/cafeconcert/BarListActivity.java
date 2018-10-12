@@ -28,6 +28,11 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Marker;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -37,6 +42,11 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
     private DrawerLayout drawer;
     private ArrayList<Bar> bars;
     private boolean filter = false;
+    BarAdapter filterAdapter;
+    BarAdapter adapter;
+    private ListView listBar;
+
+
 
     final static int MARKER_HEIGHT = 72;
     final static int MARKER_WIDTH = 72;
@@ -46,19 +56,12 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bar_list);
-        //Take the bars's info already created in MainActivity
-        ListView listBar = findViewById(R.id.list_bar);
-        bars = MainActivity.creatingBars(BarListActivity.this);
+        bars = new ArrayList<>();
+        listBar= findViewById(R.id.list_bar);
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        filter = sharedPreferences.getBoolean("filter", false);
-        if (filter) {
-            BarAdapter adapter = new BarAdapter(this, arrayFilter(bars));
-            listBar.setAdapter(adapter);
-        } else {
-            BarAdapter adapter = new BarAdapter(this, bars);
-            listBar.setAdapter(adapter);
-        }
+        initBar();
+
+        //Take the bars's info already created in MainActivity
 
         //#BurgerMenu Here I take the new toolbar to set it in my activity
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -73,6 +76,50 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
         toggle.syncState();
         navigationView.setCheckedItem(R.id.nav_bar_list);
         checkMenuCreated(drawer);
+    }
+
+    public void initBarVisualisation() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        filter = sharedPreferences.getBoolean("filter", false);
+        filterAdapter = new BarAdapter(getApplicationContext(), arrayFilter(bars));
+        adapter = new BarAdapter(getApplicationContext(), bars);
+
+        if (filter) {
+            listBar.setAdapter(filterAdapter);
+        } else {
+            listBar.setAdapter(adapter);
+        }
+
+    }
+
+
+    public void initBar() {
+
+        FirebaseDatabase baseEnFeu = FirebaseDatabase.getInstance();
+        DatabaseReference refBar = baseEnFeu.getReference("cafeconcert");
+
+        refBar.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                bars.clear();
+
+                for (DataSnapshot barSnapshot : dataSnapshot.getChildren()){
+                    Bar bar = barSnapshot.getValue(Bar.class);
+                    bar.setInitIsLiked(2, BarListActivity.this);
+                    bar.setContext(BarListActivity.this);
+                    bar.setPicture(R.drawable.photodecafe);
+                    bars.add(bar);
+                }
+                initBarVisualisation();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void checkMenuCreated(DrawerLayout drawer) {

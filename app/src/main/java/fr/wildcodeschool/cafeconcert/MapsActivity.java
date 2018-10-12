@@ -3,7 +3,6 @@ package fr.wildcodeschool.cafeconcert;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -53,6 +52,11 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -73,7 +77,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     final static float ZOOM_LVL_ON_USER = 15.76f;
 
     private GoogleMap mMap;
-    private ArrayList<Bar> bars;
+    private ArrayList<Bar> bars = new ArrayList<>();
     private ArrayList<Bar> filterBars;
     private ArrayList<Marker> mMarkers = new ArrayList<>();
     private GestureDetectorCompat mGestureObject;
@@ -113,6 +117,34 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         filter = sharedPreferences.getBoolean("filter", false);
     }
 
+    public void initBar() {
+
+        FirebaseDatabase baseEnFeu = FirebaseDatabase.getInstance();
+        DatabaseReference refBar = baseEnFeu.getReference("cafeconcert");
+
+        refBar.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                bars.clear();
+
+                for(DataSnapshot barSnapshot : dataSnapshot.getChildren()){
+                    Bar bar = barSnapshot.getValue(Bar.class);
+                    bar.setInitIsLiked(2, MapsActivity.this);
+                    bar.setContext(MapsActivity.this);
+                    bar.setPicture(R.drawable.photodecafe);
+                    bars.add(bar);
+                }
+                initMarkers();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     //#BurgerMenu
 
     public void checkMenuCreated(DrawerLayout drawer) {
@@ -128,10 +160,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                         if (checkboxFilter.isChecked()) {
                             mMap.clear();
-                            CreateMarkers(arrayFilter(bars));
+                            createMarkers(arrayFilter(bars));
                         } else {
                             mMap.clear();
-                            CreateMarkers(bars);
+                            createMarkers(bars);
                         }
                         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MapsActivity.this);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -261,12 +293,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         filter = sharedPreferences.getBoolean("filter", false);
         //Instantiation of an arrayList of café-concert objects
-        bars = (MainActivity.creatingBars(this));
+        //bars = (MainActivity.creatingBars(this));
+        initBar();
+    }
+
+    public void initMarkers() {
         if (filter) {
-            CreateMarkers(arrayFilter(bars));
+            createMarkers(arrayFilter(bars));
         } else {
-            bars = MainActivity.creatingBars(this);
-            CreateMarkers(bars);
+            createMarkers(bars);
         }
     }
 
@@ -309,7 +344,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     /* Creating bars markers on the map with a list of bars set as arguments
      */
-    public void CreateMarkers(ArrayList<Bar> bars) {
+    public void createMarkers(ArrayList<Bar> bars) {
 
         for (final Bar monBar : bars) {
             LatLng barposition = new LatLng(monBar.getGeoPoint(), monBar.getGeoShape());
@@ -467,6 +502,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
     }
     /* If all required permissions are granted, set a marker on User Position*/
+
+    @SuppressWarnings("MissingPermission")
     private void initLocation() {
         // Get the last known position of the user
         mMap.setMyLocationEnabled(true);
