@@ -1,11 +1,9 @@
 package fr.wildcodeschool.cafeconcert;
 
 
-import android.content.Context;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -18,16 +16,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.Marker;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -99,9 +93,7 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
         refBar.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
                 bars.clear();
-
                 for (DataSnapshot barSnapshot : dataSnapshot.getChildren()){
                     Bar bar = barSnapshot.getValue(Bar.class);
                     bar.setInitIsLiked(2, BarListActivity.this);
@@ -110,12 +102,10 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
                     bars.add(bar);
                 }
                 initBarVisualisation();
-
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
     }
@@ -148,17 +138,14 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
 
             @Override
             public void onDrawerOpened(@NonNull View drawerView) {
-
             }
 
             @Override
             public void onDrawerClosed(@NonNull View drawerView) {
-
             }
 
             @Override
             public void onDrawerStateChanged(int newState) {
-
             }
         });
     }
@@ -184,7 +171,6 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
                 sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBodyText);
                 startActivity(Intent.createChooser(sharingIntent, "Shearing Option"));
                 return true;
-
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -236,5 +222,4 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
             startActivity(new Intent(this, MapsActivity.class));
         }
     }
-
 }
