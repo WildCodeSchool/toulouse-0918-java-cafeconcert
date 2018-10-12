@@ -1,73 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/blueee"
     tools:context=".MainActivity">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="234dp"
+        android:layout_height="198dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/edit_mail"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logoccround" />
 
     <EditText
         android:id="@+id/edit_mail"
         style="@style/etConnexion"
-        android:layout_marginTop="72dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
         android:drawableLeft="@drawable/ic_action_person"
-        android:hint="mail"
-        app:fontFamily="@font/aref_ruqaa"
+        android:hint="Mail"
+        android:textColorLink="@color/colorAccent"
+        app:layout_constraintBottom_toTopOf="@+id/edit_password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <EditText
         android:id="@+id/edit_password"
         style="@style/etConnexion"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="8dp"
         android:drawableLeft="@drawable/ic_action_pass"
         android:hint="@string/password"
         android:inputType="textPassword"
+        android:textColorLink="@color/colorAccent"
+        app:layout_constraintBottom_toTopOf="@+id/button_connexion"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_mail"
-        app:fontFamily="@font/aref_ruqaa"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/edit_mail" />
 
-    <Button style="@style/buttonOval"
+    <Button
         android:id="@+id/button_inscription"
+        android:layout_width="200dp"
+        android:layout_height="20dp"
         android:layout_alignParentBottom="false"
-        android:layout_marginBottom="130dp"
+        android:layout_marginBottom="32dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_toStartOf="@+id/button_inscription"
+        android:background="@android:color/transparent"
         android:elevation="10dp"
         android:includeFontPadding="false"
-        android:text="@string/s_inscrire"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="Pas encore inscrit?"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/button_visiteur"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:fontFamily="@font/aref_ruqaa"/>
+        app:layout_constraintTop_toBottomOf="@+id/button_connexion" />
 
-    <Button style="@style/buttonOval"
+    <Button
         android:id="@+id/button_connexion"
-        android:layout_marginBottom="40dp"
+        style="@style/Widget.AppCompat.Button"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:elevation="10dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/oval"
         android:text="@string/se_connecter"
         app:layout_constraintBottom_toTopOf="@+id/button_inscription"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:fontFamily="@font/aref_ruqaa"/>
+        app:layout_constraintTop_toBottomOf="@+id/edit_password" />
 
     <Button
         android:id="@+id/button_visiteur"
@@ -77,14 +97,14 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="16dp"
         android:elevation="10dp"
         android:text="@string/continuer_en_tant_que_visiteur"
+        android:textColor="@android:color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_inscription"
-        app:fontFamily="@font/aref_ruqaa"/>
+        app:layout_constraintTop_toBottomOf="@+id/button_inscription" />
 
 
 </android.support.constraint.ConstraintLayout>

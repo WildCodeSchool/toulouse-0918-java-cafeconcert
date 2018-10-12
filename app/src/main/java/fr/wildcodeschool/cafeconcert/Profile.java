@@ -35,7 +35,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
-public class Profile extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class Profile extends AppCompatActivity {
 
     static final int REQUEST_TAKE_PHOTO = 1;
     private final int requestCode = 20;
@@ -48,19 +48,6 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-
-        //#BurgerMenu Here I take the new toolbar to set it in my activity
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-        navigationView.setCheckedItem(R.id.nav_profile);
 
         ImageButton editPhoto = findViewById(R.id.image_take_pic);
         profilePic = findViewById(R.id.image_pic_profile);
@@ -171,76 +158,5 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
         editor.putString("mPhotoPath", mCurrentPhotoPath);
         editor.commit();
         return image;
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        CheckBox checkboxFilter = findViewById(R.id.checkBoxFilter);
-        //filterSwitch();
-        switch (item.getItemId()) {
-            case R.id.nav_profile:
-                startActivity(new Intent(this, Profile.class));
-                break;
-            case R.id.nav_map:
-                startActivity(new Intent(this, MapsActivity.class));
-                break;
-            case R.id.nav_bar_list:
-                startActivity(new Intent(this, BarListActivity.class));
-                break;
-            case R.id.nav_share:
-                Toast.makeText(this, "Shared", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.app_bar_switch:
-                checkboxFilter.setChecked(!checkboxFilter.isChecked());
-                break;
-
-        }
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
-    //#BurgerMenu For not leaving the activity immediately
-    @Override
-    public void onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    public void checkMenuCreated(final DrawerLayout drawer) {
-        drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
-            @Override
-            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
-                final CheckBox checkboxFilter = findViewById(R.id.checkBoxFilter);
-                checkboxFilter.setChecked(filter);
-
-                checkboxFilter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Profile.this);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putBoolean("filter", checkboxFilter.isChecked());
-                        editor.commit();
-                        filter = checkboxFilter.isChecked();
-                    }
-                });
-            }
-
-            @Override
-            public void onDrawerOpened(@NonNull View drawerView) {
-
-            }
-
-            @Override
-            public void onDrawerClosed(@NonNull View drawerView) {
-            }
-
-            @Override
-            public void onDrawerStateChanged(int newState) {
-
-            }
-        });
     }
 }

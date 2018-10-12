@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -40,6 +41,8 @@ public class InscriptionActivity extends AppCompatActivity {
                 }
             }
         });
+        ImageView ivlogo = findViewById(R.id.iv_logo);
+        ivlogo.setAlpha(40); //value: [0-255]. Where 0 is fully transparent and 255 is fully opaque.
     }
 
     private void signInUser(String email, String password) {

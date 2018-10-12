@@ -21,7 +21,7 @@
             android:layout_width="145dp"
             android:layout_height="145dp"
             android:layout_gravity="top"
-            android:src="@drawable/cafe_concert"
+            android:src="@drawable/logoccround"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
