@@ -7,7 +7,7 @@
     tools:context=".MainActivity">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/iv_logoapp"
         android:layout_width="234dp"
         android:layout_height="198dp"
         android:layout_marginBottom="8dp"
@@ -29,7 +29,7 @@
         app:layout_constraintBottom_toTopOf="@+id/edit_password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/iv_logoapp" />
 
     <EditText
         android:id="@+id/edit_password"
