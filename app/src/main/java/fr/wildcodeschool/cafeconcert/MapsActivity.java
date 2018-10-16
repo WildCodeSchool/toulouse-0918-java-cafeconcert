@@ -77,7 +77,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     final static int ZOOM_LVL_BY_DEFAULT = 13;
     final static float ZOOM_LVL_ON_USER = 15.76f;
 
-
     private PopupWindow popUp;
     private GoogleMap mMap;
     private ArrayList<Bar> bars = new ArrayList<>();
@@ -452,7 +451,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
     }
-
 
     private void popupBuilder(Marker marker) {
 
