@@ -29,14 +29,4 @@
             </menu>
         </item>
 
-            <!--<item
-                android:id="@+id/nav_en"
-                android:title="English"
-                android:visible="true"/>
-            <item
-                android:id="@+id/nav_fr"
-                android:title="Français"
-                android:visible="true" />
-                -->
-
 </menu>

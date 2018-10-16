@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Café Concert</string>
     <string name="title_activity_maps">Café Concert</string>
@@ -20,15 +21,12 @@
     <string name="be_social">Être sociable</string>
     <string name="share">Partager</string>
     <string name="navigation_drawer_open">Ouvrir le menu</string>
-    //#BurgerMenu String need for onBackPressed method
     <string name="navigation_drawer_close">Fermer le menu</string>
-    //#BurgerMenu String need for onBackPressed method
     <string name="cafe_concert">Café Concert</string>
     <string name="nom_du_bar">Nom du bar</string>
     <string name="mes_coup_coeur">Mes coup de coeur :</string>
     <string name="profil">Profil</string>
     <string name="title_activity_login">Connexion</string>
-    <!-- Strings related to login -->
     <string name="prompt_Username">Nom d\'utilisateur</string>
     <string name="camera_has_been_refused">Veuillez autoriser cette application à accéder à votre caméra si vous souhaitez prendre une nouvelle photo de profil !</string>
     <string name="prompt_email">E-mail</string>
@@ -39,9 +37,7 @@
     <string name="error_invalid_password">Ce mot de passe est trop court</string>
     <string name="error_incorrect_password">Ce mot de passe est incorrect</string>
     <string name="error_field_required">Veuillez remplir ce champs</string>
-    <string name="permission_rationale">"Vous devez autoriser l'accès à vos contacts pour permettre le remplissage automatique du champs "email"</string>
+    <string name="permission_rationale">Vous devez autoriser l\'accès à vos contacts pour permettre le remplissage automatique du champs email</string>
     <string name="no_website">Aucun site web disponible</string>
     <string name="share_text">Va vite tester l\'appli Café-Concert pour découvrir les meilleurs spots où écouter du son à Toulouse ! C\'est gratuit sur le Google Play Store!</string>
-    <string name="english">English</string>
-    <string name="français">Français</string>
 </resources>

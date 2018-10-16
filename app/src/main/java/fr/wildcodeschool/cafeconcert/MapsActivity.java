@@ -3,9 +3,11 @@ package fr.wildcodeschool.cafeconcert;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
@@ -60,6 +62,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, NavigationView.OnNavigationItemSelectedListener {
 
@@ -87,7 +90,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private LocationManager mLocationManager = null;
     private FusedLocationProviderClient mFusedLocationClient;
     private boolean filter = false;
-    private String mLanguageCode = "en";
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -117,28 +119,59 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         filter = sharedPreferences.getBoolean("filter", false);
 
-        //Langues
-        TextView tvLangues = findViewById(R.id.tv_langues);
+        final SharedPreferences languePreferences = PreferenceManager.getDefaultSharedPreferences(MapsActivity.this);
+        final SharedPreferences tvLanguage = PreferenceManager.getDefaultSharedPreferences(MapsActivity.this);
+        final TextView tvLangues = findViewById(R.id.tv_langues);
+
+        String tv_langue = tvLanguage.getString("Fav_tv","English");
+        String language = languePreferences.getString("Fav_langue", null);
+        tvLangues.setText(tv_langue);
+
+        Locale locale = new Locale(language);
+        Locale.setDefault(locale);
+        Configuration config = getBaseContext().getResources().getConfiguration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+
+
+        //Langue ENGLISH
+
         tvLangues.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
-                LocaleHelper.setLocale(MapsActivity.this, mLanguageCode);
-                recreate();
+                if (tvLangues.getText().equals("English")) {
+                    Locale locale = new Locale("en");
+                    Locale.setDefault(locale);
+                    Configuration config = getBaseContext().getResources().getConfiguration();
+                    config.locale = locale;
+                    getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+                    recreate();
+                    drawer.closeDrawer(GravityCompat.START);
+                    SharedPreferences.Editor editor = languePreferences.edit();
+                    editor.putString("Fav_langue", "en");
+                    editor.commit();
+                    SharedPreferences.Editor languageEditor = tvLanguage.edit();
+                    languageEditor.putString("Fav_tv", "Français");
+                    languageEditor.commit();
+                } else {
+                    Locale locale = new Locale("fr");
+                    Locale.setDefault(locale);
+                    Configuration config = getBaseContext().getResources().getConfiguration();
+                    config.locale = locale;
+                    getBaseContext().getResources().updateConfiguration(config,getBaseContext().getResources().getDisplayMetrics());
+                    recreate();
+                    drawer.closeDrawer(GravityCompat.START);
+                    SharedPreferences.Editor editor = languePreferences.edit();
+                    editor.putString("Fav_langue", "fr");
+                    editor.commit();
+                    SharedPreferences.Editor languageEditor = tvLanguage.edit();
+                    languageEditor.putString("Fav_tv", "English");
+                    languageEditor.commit();
+
+                }
             }
         });
-
-        /*TextView tvfr = findViewById(R.id.tv_fr);
-        tvfr.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                LocaleHelper.setLocale(MapsActivity.this, mLanguageCodeFR);
-                recreate();
-                drawer.closeDrawer(GravityCompat.START);
-            }
-        });*/
-
     }
 
     public void initBar() {
@@ -501,7 +534,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         photoBar.setImageResource(R.mipmap.fonddecran);
         phone.setImageResource(R.mipmap.phonelogo);
         web.setImageResource(R.mipmap.globeicon);
-        popUpView.setBackground(getDrawable(R.drawable.fondpopup));
+        popUpView.setBackgroundResource(R.drawable.fondpopup);
+        //popUpView.setBackground(getDrawable(R.drawable.fondpopup));
         barName.setText(bar.getBarName());
 
         //Navigation button
