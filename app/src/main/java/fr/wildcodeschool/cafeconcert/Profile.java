@@ -35,7 +35,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
-public class Profile extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class Profile extends AppCompatActivity {
 
     static final int REQUEST_TAKE_PHOTO = 1;
     private final int requestCode = 20;
@@ -48,19 +48,6 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-
-        //#BurgerMenu Here I take the new toolbar to set it in my activity
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-        navigationView.setCheckedItem(R.id.nav_profile);
 
         ImageButton editPhoto = findViewById(R.id.image_take_pic);
         profilePic = findViewById(R.id.image_pic_profile);
@@ -173,7 +160,7 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
         return image;
     }
 
-    @Override
+
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         CheckBox checkboxFilter = findViewById(R.id.checkBoxFilter);
         switch (item.getItemId()) {
