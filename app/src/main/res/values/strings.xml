@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">Cafe Concert</string>
-    <string name="title_activity_maps">Map</string>
+    <string name="app_name">Café Concert</string>
+    <string name="title_activity_maps">Café Concert</string>
     <string name="continuer_en_tant_que_visiteur">Continuer en tant que visiteur</string>
-    <string name="se_connecter">se connecter</string>
+    <string name="se_connecter">Se connecter</string>
     <string name="s_inscrire">S\'inscrire</string>
     <string name="saisissez_votre_mot_de_passe">Saisissez votre mot de passe</string>
     <string name="valider">Valider !</string>
@@ -11,12 +11,12 @@
     <string name="nom_du_cafe">Nom du Café</string>
     <string name="renseignez_une_adresse_e_mail">Renseignez une adresse e-mail</string>
     <string name="pseudo">Pseudo</string>
-    <string name="password">Password</string>
-    <string name="profile">Profile</string>
-    <string name="map">Map</string>
-    <string name="bar_list">Bar list</string>
+    <string name="password">Mot de passe</string>
+    <string name="profile">Profil</string>
+    <string name="map">Café Concert</string>
+    <string name="bar_list">Café Concert</string>
     <string name="favorite">Filtre</string>
-    <string name="like">Like</string>
+    <string name="like">J\'aime</string>
     <string name="be_social">Be Social</string>
     <string name="share">Share</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
