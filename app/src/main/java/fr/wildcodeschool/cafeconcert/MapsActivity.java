@@ -59,7 +59,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.security.acl.Group;
 import java.util.ArrayList;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, NavigationView.OnNavigationItemSelectedListener {
@@ -88,7 +87,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private LocationManager mLocationManager = null;
     private FusedLocationProviderClient mFusedLocationClient;
     private boolean filter = false;
-    private String mLanguageCode = "fr";
+    private String mLanguageCode = "en";
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -117,6 +116,29 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         filter = sharedPreferences.getBoolean("filter", false);
+
+        //Langues
+        TextView tvLangues = findViewById(R.id.tv_langues);
+        tvLangues.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                LocaleHelper.setLocale(MapsActivity.this, mLanguageCode);
+                recreate();
+            }
+        });
+
+        /*TextView tvfr = findViewById(R.id.tv_fr);
+        tvfr.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                LocaleHelper.setLocale(MapsActivity.this, mLanguageCodeFR);
+                recreate();
+                drawer.closeDrawer(GravityCompat.START);
+            }
+        });*/
+
     }
 
     public void initBar() {
@@ -224,7 +246,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 startActivity(new Intent(this, Profile.class));
                 break;
             case R.id.nav_map:
-                drawer.closeDrawer(GravityCompat.START);
                 break;
             case R.id.nav_bar_list:
                 startActivity(new Intent(this, BarListActivity.class));
@@ -233,13 +254,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 checkboxFilter.setChecked(!checkboxFilter.isChecked());
                 drawer.closeDrawer(GravityCompat.START);
                 break;
-            case R.id.nav_fr:
-                LocaleHelper.setLocale(MapsActivity.this, mLanguageCode);
-                break;
-
-
         }
-
+        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 

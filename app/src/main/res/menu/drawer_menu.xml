@@ -29,9 +29,7 @@
             </menu>
         </item>
 
-    <item android:title = "Languages">
-        <menu>
-            <item
+            <!--<item
                 android:id="@+id/nav_en"
                 android:title="English"
                 android:visible="true"/>
@@ -39,8 +37,6 @@
                 android:id="@+id/nav_fr"
                 android:title="Français"
                 android:visible="true" />
-        </menu>
-
-    </item>
+                -->
 
 </menu>
