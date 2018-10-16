@@ -59,6 +59,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.security.acl.Group;
 import java.util.ArrayList;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, NavigationView.OnNavigationItemSelectedListener {
@@ -88,6 +89,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private LocationManager mLocationManager = null;
     private FusedLocationProviderClient mFusedLocationClient;
     private boolean filter = false;
+    private String mLanguageCode = "fr";
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -223,16 +225,22 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 startActivity(new Intent(this, Profile.class));
                 break;
             case R.id.nav_map:
-                startActivity(new Intent(this, MapsActivity.class));
+                drawer.closeDrawer(GravityCompat.START);
                 break;
             case R.id.nav_bar_list:
                 startActivity(new Intent(this, BarListActivity.class));
                 break;
             case R.id.app_bar_switch:
                 checkboxFilter.setChecked(!checkboxFilter.isChecked());
+                drawer.closeDrawer(GravityCompat.START);
                 break;
+            case R.id.nav_fr:
+                LocaleHelper.setLocale(MapsActivity.this, mLanguageCode);
+                break;
+
+
         }
-        drawer.closeDrawer(GravityCompat.START);
+
         return true;
     }
 
