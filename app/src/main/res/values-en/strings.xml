@@ -40,12 +40,7 @@
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
     <string name="no_website">No Website Available</string>
-
     <string name="share_text"> You should test the app Café-Concert to discover the best spots to listen good concerts in Toulouse ! It\'s free on Google Play Store ! </string>
-
-
 </resources>

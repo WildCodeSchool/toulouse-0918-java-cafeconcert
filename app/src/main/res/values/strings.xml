@@ -41,7 +41,5 @@
     <string name="error_field_required">Veuillez remplir ce champs</string>
     <string name="permission_rationale">"Vous devez autoriser l'accès à vos contacts pour permettre le remplissage automatique du champs "email"</string>
     <string name="no_website">Aucun site web disponible</string>
-
     <string name="share_text">Va vite tester l\'appli Café-Concert pour découvrir les meilleurs spots où écouter du son à Toulouse ! C\'est gratuit sur le Google Play Store!</string>
-
 </resources>
