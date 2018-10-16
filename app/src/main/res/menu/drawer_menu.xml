@@ -26,20 +26,6 @@
                     android:title="@string/like"
                     android:checkable="true"
                     app:actionLayout="@layout/switch_item"/>
-                <item
-                    android:id="@+id/filterOk"
-                    android:title="@string/valider"/>
             </menu>
         </item>
-
-
-    <item android:title="@string/be_social">
-        <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_share"
-                android:title="@string/share" />
-        </menu>
-    </item>
-
 </menu>
