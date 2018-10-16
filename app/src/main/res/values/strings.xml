@@ -13,10 +13,10 @@
     <string name="pseudo">Pseudo</string>
     <string name="password">Mot de passe</string>
     <string name="profile">Profil</string>
-    <string name="map">Café Concert</string>
-    <string name="bar_list">Café Concert</string>
+    <string name="map">La Carte</string>
+    <string name="bar_list">La Liste</string>
     <string name="favorite">Filtre</string>
-    <string name="like">J\'aime</string>
+    <string name="like">Mes favoris</string>
     <string name="be_social">Être sociable</string>
     <string name="share">Partager</string>
     <string name="navigation_drawer_open">Ouvrir le menu</string>
