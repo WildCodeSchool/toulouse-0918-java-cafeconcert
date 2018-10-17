@@ -118,11 +118,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         filter = sharedPreferences.getBoolean("filter", false);
 
-
+        //#Language
         final TextView tvLangues = findViewById(R.id.tv_langues);
 
-
-        //#Language
         tvLangues.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
