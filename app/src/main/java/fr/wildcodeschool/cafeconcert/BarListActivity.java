@@ -55,8 +55,6 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
         bars = new ArrayList<>();
         listBar= findViewById(R.id.list_bar);
 
-
-
         //#BurgerMenu Here I take the new toolbar to set it in my activity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

@@ -123,7 +123,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public void initBar() {
-
         FirebaseDatabase baseEnFeu = FirebaseDatabase.getInstance();
         DatabaseReference refBar = baseEnFeu.getReference("cafeconcert");
 
@@ -177,7 +176,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             mMap.clear();
                             createMarkers(bars);
                         }
-
                         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MapsActivity.this);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putBoolean("filter", checkboxFilter.isChecked());
@@ -203,7 +201,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             mMap.clear();
                             createMarkers(bars);
                         }
-
                         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MapsActivity.this);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putBoolean("distanceFilter", distanceCheckboxfilter.isChecked());
