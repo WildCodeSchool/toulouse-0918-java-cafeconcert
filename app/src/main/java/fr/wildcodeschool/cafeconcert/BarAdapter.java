@@ -59,9 +59,9 @@ public class BarAdapter extends ArrayAdapter<Bar> {
         ImageView icon = convertView.findViewById(R.id.status_icon);
 
         // Populate the data into the template view using the data object
-        tvBarName.setText(bar.getBarName());
-        ibBar.setBackgroundResource(bar.getPicture());
-        MainActivity.setNavigation(navigate, bar, getContext());
+       // tvBarName.setText(bar.getBarName());
+       // ibBar.setBackgroundResource(bar.getPicture());
+       // MainActivity.setNavigation(navigate, bar, getContext());
 
         //Adding efficient likes/dislikes buttons
         setLikeIcon(icon, bar.getIsLiked());
@@ -70,7 +70,7 @@ public class BarAdapter extends ArrayAdapter<Bar> {
 
         // Drawer hide/shown
         final ConstraintLayout drawerBar = convertView.findViewById(R.id.drawer_bar);
-        ibBar.setOnClickListener(new View.OnClickListener() {
+        /*ibBar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (drawerBar.getVisibility() == View.GONE) {
@@ -79,7 +79,7 @@ public class BarAdapter extends ArrayAdapter<Bar> {
                     drawerBar.setVisibility(View.GONE);
                 }
             }
-        });
+        });*/
 
         TextView textPhone = convertView.findViewById(R.id.phone_text);
         TextView textWebSite = convertView.findViewById(R.id.web_text);
