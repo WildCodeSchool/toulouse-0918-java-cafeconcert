@@ -78,6 +78,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     final static int MARKER_WIDTH = 72;
     final static int ZOOM_LVL_BY_DEFAULT = 13;
     final static float ZOOM_LVL_ON_USER = 13.5f;
+    final static float ZOOM_LVL_ON_BAR = 15.5f;
     final static int CLOSEST_BAR_NUMBERS = 5;
 
     private PopupWindow popUp;
@@ -99,6 +100,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
         // Setting map
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -172,6 +174,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     bars.add(bar);
                 }
                 initMarkers();
+                // Set user localisation and ask permission to get it
+                checkUserLocationPermission(); //TODO A laisser ou à supprimer ?
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -364,7 +368,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         LatLng toulouse = new LatLng(TOULOUSE_LATITUDE, TOULOUSE_LONGITUDE);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(toulouse, ZOOM_LVL_BY_DEFAULT));
         // Set user localisation and ask permission to get it
-        checkUserLocationPermission();
+        //checkUserLocationPermission(); //TODO A remettre ou à supprimer ?
 
         //Configuration map
         UiSettings mMapConfig = mMap.getUiSettings();
@@ -645,8 +649,25 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     /* Center the camera on the User Location*/
     private void moveCamera(Location userLocation) {
-        LatLng latLong = new LatLng(userLocation.getLatitude(), userLocation.getLongitude());
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLong, ZOOM_LVL_ON_USER));
+
+        Intent intent = getIntent();
+        Bundle extras = getIntent().getExtras();
+        Location destination = userLocation;
+        float zoomLevel = ZOOM_LVL_ON_USER;
+
+        if (intent.hasExtra("BAR_NAME")) {
+            String barName = extras.getString("BAR_NAME");
+
+            for (Bar bar : bars) {
+                if(bar.getBarName().equals(barName)) {
+                    Toast.makeText(getApplicationContext(), bar.getBarName(), Toast.LENGTH_SHORT).show(); //TODO A enlever ou pas ?
+                    destination = bar.getBarLocation();
+                    zoomLevel = ZOOM_LVL_ON_BAR;
+                }
+            }
+        }
+            LatLng latLong = new LatLng(destination.getLatitude(), destination.getLongitude());
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLong, zoomLevel));
     }
 
     /* Check if User has accepted GPS location. If not, trigger "onRequestPermissionsresult".

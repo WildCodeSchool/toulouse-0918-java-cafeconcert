@@ -97,6 +97,7 @@ public class BarAdapter extends ArrayAdapter<Bar> {
             public void onClick(View v) {
                 String name = bar.getBarName();
                 Intent intent = new Intent(getContext(), MapsActivity.class);
+                intent.putExtra("BAR_NAME", name);
                 getContext().startActivity(intent);
             }
         });
