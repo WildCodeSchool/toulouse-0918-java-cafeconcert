@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
         Configuration config = getBaseContext().getResources().getConfiguration();
         config.locale = locale;
         getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
-        //Toast.makeText(this, config.locale.getLanguage() + " " + lang, Toast.LENGTH_SHORT).show();
+
         recreate();
     }
 

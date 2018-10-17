@@ -507,7 +507,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         phone.setImageResource(R.mipmap.phonelogo);
         web.setImageResource(R.mipmap.globeicon);
         popUpView.setBackgroundResource(R.drawable.fondpopup);
-        //popUpView.setBackground(getDrawable(R.drawable.fondpopup));
         barName.setText(bar.getBarName());
 
         //Navigation button
