@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
                 String email = etLogin.getText().toString();
                 String password = etPassword.getText().toString();
                 if (email.isEmpty() || password.isEmpty()) {
-                    Toast.makeText(MainActivity.this, "BONSOIR", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "BONSOIR", Toast.LENGTH_SHORT).show(); // TODO WUT ?
                 } else {
                     signInUser(email, password);
                 }
