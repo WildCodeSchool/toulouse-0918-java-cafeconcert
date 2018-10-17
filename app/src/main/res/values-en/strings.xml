@@ -44,4 +44,6 @@
     <string name="no_website">No Website Available</string>
     <string name="share_text"> You should test the app Café-Concert to discover the best spots to listen good concerts in Toulouse ! It\'s free on Google Play Store ! </string>
     <string name="language">Français</string>
+    <string name="les_5_caf_s_les_plus_proches">5 closest places</string>
+    <string name="les_5_bars_les_plus_proches">5 closest places</string>
 </resources>
