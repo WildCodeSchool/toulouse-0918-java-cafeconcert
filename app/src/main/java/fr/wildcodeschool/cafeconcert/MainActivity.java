@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        mAuth.signOut(); // forcer la deconnexion de l'utilisateur
+        //mAuth.signOut(); // forcer la deconnexion de l'utilisateur
         updateUI(currentUser);
     }
 
