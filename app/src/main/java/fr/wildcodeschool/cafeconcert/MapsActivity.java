@@ -71,8 +71,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     final static double TOULOUSE_LONGITUDE_BORDURES_BOT = 1.411854;
     final static double TOULOUSE_LATITUDE_BORDURES_TOP = 43.642094;
     final static double TOULOUSE_LONGITUDE_BORDURES_TOP = 1.480995;
-    final static int POPUP_POSITION_X = 0;
-    final static int POPUP_POSITION_Y = 0;
     final static int MARKER_HEIGHT = 72;
     final static int MARKER_WIDTH = 72;
     final static int ZOOM_LVL_BY_DEFAULT = 13;
@@ -163,7 +161,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     Bar bar = barSnapshot.getValue(Bar.class);
                     bar.setInitIsLiked(2, MapsActivity.this);
                     bar.setContext(MapsActivity.this);
-                 //   bar.setPicture(R.drawable.photodecafe);
+                    //bar.setPicture(R.drawable.photodecafe);
                     bars.add(bar);
                 }
                 initMarkers();
@@ -427,7 +425,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public void setUserOpinion(final ImageView like, final ImageView dontLike, final Bar bar, final Marker marker) {
 
-        //0=j'aime pas; 2=neutre; 1=j'aime
         like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -448,27 +445,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
 
         });
-
-
-        /*dontLike.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (bar.getIsLiked() != 0) {
-                    bar.setIsLiked(0);
-                    adaptLikesButton(like, dontLike, bar, marker);
-                } else {
-                    bar.setIsLiked(2);
-                    adaptLikesButton(like, dontLike, bar, marker);
-                }
-                if (filter) {
-                    mMap.clear();
-                    createMarkers(arrayFilter(bars));
-                    popUp.dismiss();
-                }
-            }
-        });*/
-
-
     }
 
     private void popupBuilder(Marker marker) {
