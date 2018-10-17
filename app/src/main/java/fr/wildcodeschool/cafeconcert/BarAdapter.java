@@ -3,15 +3,12 @@ package fr.wildcodeschool.cafeconcert;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
-import android.support.v4.content.res.ResourcesCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,25 +77,21 @@ public class BarAdapter extends ArrayAdapter<Bar> {
         fondIcon.setBackgroundResource(R.drawable.fond_icone_like);
         fondName.setBackgroundResource(R.drawable.fond_txt);
         ImageView iconAdress = convertView.findViewById(R.id.icon_adress);
-
         iconAdress.setBackgroundResource(R.drawable.ic_my_location_black_24dp);
         ConstraintLayout constraintLayout = convertView.findViewById(R.id.drawer_bar);
         constraintLayout.setBackgroundResource(R.drawable.fondpopup);
-
         fondAdress.setBackgroundResource(R.drawable.fond_txt);
-
         String[] parts = bar.getAddress().split(" ");
         String adressTerm = "";
-        for(int i=0; i<parts.length-2;i++){
-            adressTerm+=parts[i] + " ";
+        for (int i = 0; i < parts.length - 2; i++) {
+            adressTerm += parts[i] + " ";
         }
         adressTerm.trim();
         barAdress.setText(adressTerm);
 
-
         // Populate the data into the template view using the data object
         tvBarName.setText(bar.getBarName());
-        //ibBar.setBackgroundResource(bar.getPicture());
+        //ibBar.setBackgroundResource(bar.getPicture()); //TODO corriger ça
         MainActivity.setNavigation(navigate, bar, getContext());
 
         //Adding efficient likes/dislikes buttons

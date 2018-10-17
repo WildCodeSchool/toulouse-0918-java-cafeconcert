@@ -1,15 +1,16 @@
 package fr.wildcodeschool.cafeconcert;
 
 
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -22,7 +23,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -32,35 +32,41 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Locale;
 
 public class BarListActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private GestureDetectorCompat mGestureObject;
+    final static int CLOSEST_BAR_NUMBERS = 5;
+    BarAdapter adapter;
     private DrawerLayout drawer;
     private ArrayList<Bar> bars;
+    private Location mUserLocation = new Location("User");
+    private LocationManager mLocationManager = null;
     private boolean filter = false;
-    BarAdapter filterAdapter;
-    BarAdapter adapter;
+    private boolean mFilterDistance = false;
     private ListView listBar;
     private String uId;
     private FirebaseAuth mAuth;
 
-
-    final static int MARKER_HEIGHT = 72;
-    final static int MARKER_WIDTH = 72;
-
+    public static ArrayList<Bar> arrayFilter(ArrayList<Bar> bars) {
+        ArrayList<Bar> arrayFilter = new ArrayList<>();
+        for (Bar monBar : bars) {
+            if (monBar.getIsLiked() == 1) {
+                arrayFilter.add(monBar);
+            }
+        }
+        return arrayFilter;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bar_list);
         bars = new ArrayList<>();
-        listBar= findViewById(R.id.list_bar);
+        listBar = findViewById(R.id.list_bar);
         mAuth = FirebaseAuth.getInstance();
         uId = mAuth.getCurrentUser().getUid();
-
-        initBar();
 
         //#BurgerMenu Here I take the new toolbar to set it in my activity
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -75,6 +81,61 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
         toggle.syncState();
         navigationView.setCheckedItem(R.id.nav_bar_list);
         checkMenuCreated(drawer);
+
+        getUserLocation();
+    }
+
+    public ArrayList<Bar> pickClosestBars(ArrayList<Bar> myBars, int range) {
+        ArrayList<Bar> closestBars = new ArrayList<>();
+        range = Math.min(range, myBars.size());
+
+        for (int i = 0; i < range; i++) {
+            closestBars.add(arrayFilterByDistance(myBars).get(i));
+        }
+        return closestBars;
+    }
+
+    public ArrayList<Bar> arrayFilterByDistance(ArrayList<Bar> myBars) {
+
+        for (Bar bar : myBars) {
+            bar.setDistanceFromUser(mUserLocation.distanceTo(bar.getBarLocation()));
+        }
+
+        for (int i = 0; i <= myBars.size() - 1; i++) {
+            for (int j = i; j <= myBars.size() - 1; j++) {
+                if (myBars.get(j).getDistanceFromUser() < myBars.get(i).getDistanceFromUser()) {
+                    Collections.swap(myBars, i, j);
+                }
+            }
+        }
+        return myBars;
+    }
+
+    @SuppressWarnings("MissingPermission")
+    public void getUserLocation() {
+
+        mLocationManager = (LocationManager) this.getSystemService(this.LOCATION_SERVICE);
+        mUserLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        mUserLocation = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        initBarList();
+
+        LocationListener locationListener = new LocationListener() {
+            public void onLocationChanged(Location location) {
+                mUserLocation = location;
+            }
+
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+            }
+
+            public void onProviderEnabled(String provider) {
+            }
+
+            public void onProviderDisabled(String provider) {
+            }
+        };
+        // initialisation de la vérification du déplacement par GPS et par réseau WIFI
+        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+        mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
 
         //#Language
         final TextView tvLangues = findViewById(R.id.tv_langues);
@@ -109,19 +170,24 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
     public void initBarVisualisation() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         filter = sharedPreferences.getBoolean("filter", false);
-        filterAdapter = new BarAdapter(getApplicationContext(), arrayFilter(bars));
-        adapter = new BarAdapter(getApplicationContext(), bars);
+        mFilterDistance = sharedPreferences.getBoolean("distanceFilter", false);
 
-        if (filter) {
-            listBar.setAdapter(filterAdapter);
+        if (mFilterDistance && !filter) {
+            adapter = new BarAdapter(BarListActivity.this,
+                    pickClosestBars(bars, CLOSEST_BAR_NUMBERS));
+        } else if (mFilterDistance && filter) {
+            adapter = new BarAdapter(BarListActivity.this,
+                    pickClosestBars(MainActivity.arrayFilter(bars), CLOSEST_BAR_NUMBERS));
+        } else if (!mFilterDistance && filter) {
+            adapter = new BarAdapter(BarListActivity.this,
+                    arrayFilterByDistance(MainActivity.arrayFilter(bars)));
         } else {
-            listBar.setAdapter(adapter);
+            adapter = new BarAdapter(BarListActivity.this, arrayFilterByDistance(bars));
         }
-
+        listBar.setAdapter(adapter);
     }
 
-
-    public void initBar() {
+    public void initBarList() {
 
         final FirebaseDatabase baseEnFeu = FirebaseDatabase.getInstance();
         DatabaseReference refBar = baseEnFeu.getReference("cafeconcert");
@@ -130,12 +196,12 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
         currentUser.child("bars").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
                 bars.clear();
-                for(DataSnapshot barSnapshot : dataSnapshot.getChildren()){
+                for (DataSnapshot barSnapshot : dataSnapshot.getChildren()) {
                     final Bar bar = barSnapshot.getValue(Bar.class);
                     String barId = barSnapshot.getKey();
                     bar.setContext(BarListActivity.this);
+                    bar.setBarLocation();
                     //bar.setPicture(R.drawable.photodecafe);
                     bars.add(bar);
                 }
@@ -154,22 +220,58 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
             public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
                 final CheckBox checkboxFilter = findViewById(R.id.checkBoxFilter);
                 checkboxFilter.setChecked(filter);
-                final ListView listBar = findViewById(R.id.list_bar);
+                final CheckBox distanceCheckboxfilter = findViewById(R.id.checkbox_distance);
+                distanceCheckboxfilter.setChecked(mFilterDistance);
+
                 checkboxFilter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        if (checkboxFilter.isChecked()) {
-                            BarAdapter adapter = new BarAdapter(BarListActivity.this, arrayFilter(bars));
-                            listBar.setAdapter(adapter);
+
+                        if (checkboxFilter.isChecked() && !mFilterDistance) {
+                            adapter = new BarAdapter(BarListActivity.this,
+                                    arrayFilterByDistance(MainActivity.arrayFilter(bars)));
+                        } else if (checkboxFilter.isChecked() && mFilterDistance) {
+                            adapter = new BarAdapter(BarListActivity.this,
+                                    pickClosestBars(MainActivity.arrayFilter(bars), CLOSEST_BAR_NUMBERS));
+                        } else if (!checkboxFilter.isChecked() && mFilterDistance) {
+                            adapter = new BarAdapter(BarListActivity.this,
+                                    pickClosestBars(bars, CLOSEST_BAR_NUMBERS));
                         } else {
-                            BarAdapter adapter = new BarAdapter(BarListActivity.this, bars);
-                            listBar.setAdapter(adapter);
+                            adapter = new BarAdapter(BarListActivity.this, arrayFilterByDistance(bars));
                         }
+                        listBar.setAdapter(adapter);
+
                         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(BarListActivity.this);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putBoolean("filter", checkboxFilter.isChecked());
                         editor.commit();
                         filter = checkboxFilter.isChecked();
+                    }
+                });
+
+                distanceCheckboxfilter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                        if (distanceCheckboxfilter.isChecked() && !filter) {
+                            adapter = new BarAdapter(BarListActivity.this,
+                                    pickClosestBars(bars, CLOSEST_BAR_NUMBERS));
+                        } else if (distanceCheckboxfilter.isChecked() && filter) {
+                            adapter = new BarAdapter(BarListActivity.this,
+                                    pickClosestBars(MainActivity.arrayFilter(bars), CLOSEST_BAR_NUMBERS));
+                        } else if (!distanceCheckboxfilter.isChecked() && filter) {
+                            adapter = new BarAdapter(BarListActivity.this,
+                                    MainActivity.arrayFilter(arrayFilterByDistance(bars)));
+                        } else {
+                            adapter = new BarAdapter(BarListActivity.this, arrayFilterByDistance(bars));
+                        }
+                        listBar.setAdapter(adapter);
+
+                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(BarListActivity.this);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putBoolean("distanceFilter", distanceCheckboxfilter.isChecked());
+                        editor.commit();
+                        mFilterDistance = distanceCheckboxfilter.isChecked();
                     }
                 });
             }
@@ -218,7 +320,7 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         CheckBox checkboxFilter = findViewById(R.id.checkBoxFilter);
-        //filterSwitch();
+        CheckBox checkboxDistance = findViewById(R.id.checkbox_distance);
         switch (item.getItemId()) {
             case R.id.nav_profile:
                 startActivity(new Intent(this, Profile.class));
@@ -232,6 +334,9 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
             case R.id.app_bar_switch:
                 checkboxFilter.setChecked(!checkboxFilter.isChecked());
                 break;
+            case R.id.app_bar_distance:
+                checkboxDistance.setChecked(!checkboxDistance.isChecked());
+                break;
             case R.id.deconnexion:
                 mAuth.signOut();
                 startActivity(new Intent(this, MainActivity.class));
@@ -241,15 +346,6 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
         return true;
     }
 
-    public static ArrayList<Bar> arrayFilter(ArrayList<Bar> bars) {
-        ArrayList<Bar> arrayFilter = new ArrayList<>();
-        for (Bar monBar : bars) {
-            if (monBar.getIsLiked() == 1) {
-                arrayFilter.add(monBar);
-            }
-        }
-        return arrayFilter;
-    }
     //#BurgerMenu For not leaving the activity immediately
     @Override
     public void onBackPressed() {
