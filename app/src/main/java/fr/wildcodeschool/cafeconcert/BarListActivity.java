@@ -191,8 +191,6 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
                     bar.setInitIsLiked(2, BarListActivity.this);
                     bar.setContext(BarListActivity.this);
                     bar.setBarLocation();
-
-
                     bars.add(bar);
                 }
                 initBarVisualisation();
