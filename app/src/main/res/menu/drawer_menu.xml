@@ -34,4 +34,5 @@
                     app:actionLayout="@layout/switch_item_by_distance"/>
             </menu>
         </item>
+
 </menu>

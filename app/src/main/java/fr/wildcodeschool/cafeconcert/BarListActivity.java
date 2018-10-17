@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -23,6 +24,7 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -30,9 +32,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Locale;
+
 
 public class BarListActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -124,6 +127,34 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
         mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
 
+        //#Language
+        final TextView tvLangues = findViewById(R.id.tv_langues);
+
+        tvLangues.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences languePreferences = getSharedPreferences("CAFE_CONCERT", MODE_PRIVATE);
+                String lang = languePreferences.getString("Fav_langue", "");
+                Configuration config = getBaseContext().getResources().getConfiguration();
+                setLanguage(lang.equals("fr") ? "en" : "fr");
+            }
+        });
+    }
+
+    //#Language
+    public void setLanguage(String lang) {
+        final SharedPreferences languePreferences = getSharedPreferences("CAFE_CONCERT", MODE_PRIVATE);
+        SharedPreferences.Editor editor = languePreferences.edit();
+        editor.putString("Fav_langue", lang);
+        editor.commit();
+
+        Locale locale = new Locale(lang);
+        Locale.setDefault(locale);
+        Configuration config = getBaseContext().getResources().getConfiguration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+        drawer.closeDrawer(GravityCompat.START);
+        recreate();
     }
 
     public void initBarVisualisation() {
