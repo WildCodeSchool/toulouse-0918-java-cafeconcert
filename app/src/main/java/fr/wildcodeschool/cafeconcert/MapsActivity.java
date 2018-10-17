@@ -161,9 +161,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public void initBar() {
 
-        final FirebaseDatabase baseEnFeu = FirebaseDatabase.getInstance();
-        DatabaseReference refBar = baseEnFeu.getReference("cafeconcert");
-        DatabaseReference refUser = baseEnFeu.getReference("users");
+        final FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference refBar = firebaseDatabase.getReference("cafeconcert");
+        DatabaseReference refUser = firebaseDatabase.getReference("users");
         final DatabaseReference currentUser = refUser.child(uId);
         currentUser.child("bars").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -509,10 +509,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public void setUserOpinion(final ImageView like, final ImageView dontLike, final Bar bar, final Marker marker) {
-        final FirebaseDatabase baseEnFeu = FirebaseDatabase.getInstance();
-        DatabaseReference refBar = baseEnFeu.getReference("cafeconcert");
+        final FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference refBar = firebaseDatabase.getReference("cafeconcert");
         final String[] barKey = new String[1];
-        DatabaseReference refUser = baseEnFeu.getReference("users");
+        DatabaseReference refUser = firebaseDatabase.getReference("users");
         final DatabaseReference currentUser = refUser.child(uId).child("bars");
 
         refBar.orderByChild("barName").equalTo(bar.getBarName()).limitToFirst(1).addListenerForSingleValueEvent(new ValueEventListener() {

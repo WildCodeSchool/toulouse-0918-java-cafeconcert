@@ -189,9 +189,9 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
 
     public void initBarList() {
 
-        final FirebaseDatabase baseEnFeu = FirebaseDatabase.getInstance();
-        DatabaseReference refBar = baseEnFeu.getReference("cafeconcert");
-        DatabaseReference refUser = baseEnFeu.getReference("users");
+        final FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference refBar = firebaseDatabase.getReference("cafeconcert");
+        DatabaseReference refUser = firebaseDatabase.getReference("users");
         final DatabaseReference currentUser = refUser.child(uId);
         currentUser.child("bars").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
