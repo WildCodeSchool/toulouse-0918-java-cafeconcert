@@ -40,6 +40,8 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -132,7 +134,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     Bar bar = barSnapshot.getValue(Bar.class);
                     bar.setInitIsLiked(2, MapsActivity.this);
                     bar.setContext(MapsActivity.this);
-                    bar.setPicture(R.drawable.photodecafe);
                     bars.add(bar);
                 }
                 initMarkers();
@@ -479,6 +480,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         web.setImageResource(R.mipmap.globeicon);
         popUpView.setBackground(getDrawable(R.drawable.fondpopup));
         barName.setText(bar.getBarName());
+
+
+        Glide.with(MapsActivity.this).load(bar.getPicture()).into(photoBar);
 
         //Navigation button
         MainActivity.setNavigation(navigate, bar, MapsActivity.this);

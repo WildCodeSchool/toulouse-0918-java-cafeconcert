@@ -98,7 +98,6 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
                     Bar bar = barSnapshot.getValue(Bar.class);
                     bar.setInitIsLiked(2, BarListActivity.this);
                     bar.setContext(BarListActivity.this);
-                    bar.setPicture(R.drawable.photodecafe);
                     bars.add(bar);
                 }
                 initBarVisualisation();

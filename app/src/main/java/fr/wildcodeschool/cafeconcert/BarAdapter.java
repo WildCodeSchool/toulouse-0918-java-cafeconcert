@@ -17,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 
 public class BarAdapter extends ArrayAdapter<Bar> {
@@ -60,7 +62,7 @@ public class BarAdapter extends ArrayAdapter<Bar> {
 
         // Populate the data into the template view using the data object
         tvBarName.setText(bar.getBarName());
-        ibBar.setBackgroundResource(bar.getPicture());
+        Glide.with(getContext()).load(bar.getPicture()) .into(ibBar);
         MainActivity.setNavigation(navigate, bar, getContext());
 
         //Adding efficient likes/dislikes buttons
