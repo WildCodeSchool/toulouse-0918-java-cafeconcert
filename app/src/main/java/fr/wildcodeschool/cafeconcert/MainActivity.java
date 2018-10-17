@@ -25,21 +25,6 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
-    private ArrayList<Bar> bars = new ArrayList<>();
-
-    /*Launch Googlemaps on Navigation mode.
-     * User position as departure, bar coordonates as destination */
-    public static void setNavigation(ImageView navigate, final Bar bar, final Context context) {
-
-        navigate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
-                        Uri.parse("http://maps.google.com/maps?.34&daddr=" + bar.getGeoPoint() + "," + bar.getGeoShape()));
-                context.startActivity(intent);
-            }
-        });
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
                 String email = etLogin.getText().toString();
                 String password = etPassword.getText().toString();
                 if (email.isEmpty() || password.isEmpty()) {
-                    Toast.makeText(MainActivity.this, "BONSOIR", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "BONSOIR", Toast.LENGTH_SHORT).show(); // TODO WUT ?
                 } else {
                     signInUser(email, password);
                 }
@@ -139,4 +124,29 @@ public class MainActivity extends AppCompatActivity {
         mAuth.signOut(); // forcer la deconnexion de l'utilisateur
         updateUI(currentUser);
     }
+
+    /*Launch Googlemaps on Navigation mode.
+     * User position as departure, bar coordonates as destination */
+    public static void setNavigation(ImageView navigate, final Bar bar, final Context context) {
+
+        navigate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                        Uri.parse("http://maps.google.com/maps?.34&daddr=" + bar.getGeoPoint()+ "," + bar.getGeoShape()));
+                context.startActivity(intent);
+            }
+        });
+    }
+
+    public static ArrayList<Bar> arrayFilter(ArrayList<Bar> bars) {
+        ArrayList<Bar> arrayFilter = new ArrayList<>();
+        for (Bar monBar : bars) {
+            if (monBar.getIsLiked() == 1) {
+                arrayFilter.add(monBar);
+            }
+        }
+        return arrayFilter;
+    }
+
 }

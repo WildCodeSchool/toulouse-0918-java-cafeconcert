@@ -2,7 +2,9 @@ package fr.wildcodeschool.cafeconcert;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.preference.PreferenceManager;
+import java.util.Date;
 
 public class Bar {
 
@@ -13,12 +15,14 @@ public class Bar {
     private double geoShape;
     private String webUrl;
     private int isLiked; // 1 if liked, 0 if disliked, 2 if neutral
-    private int picture; // Pour un drawable le type est 'int'
+    private String picture; // Pour un drawable le type est 'int'
     private Context context;
     private String address;
-
+    private Location barLocation = new Location("Bar");
+    private float distanceFromUser;
+    
     /*Constructor*/
-    public Bar(String barName, String phoneNumber, double geoPoint, double geoShape, String webUrl, int isLiked, int picture, Context context) {
+    public Bar(String barName, String phoneNumber, double geoPoint, double geoShape, String webUrl, int isLiked, String picture, Context context) {
         this.barName = barName;
         this.phoneNumber = phoneNumber;
         this.geoShape = geoShape;
@@ -94,9 +98,9 @@ public class Bar {
 
     }
 
-    public int getPicture() { return picture; }
+    public String getPicture() { return picture; }
 
-    public void setPicture(int picture) { this.picture = picture; }
+    public void setPicture(String picture) { this.picture = picture; }
 
     public Context getContext() {
         return context;
@@ -127,5 +131,28 @@ public class Bar {
     public void setAddress(String address) {
         this.address = address;
     }
+
+    public Location getBarLocation() {
+        return barLocation;
+    }
+
+    public void setBarLocation(Location barLocation) {
+        this.barLocation = barLocation;
+    }
+
+    public void setBarLocation() {
+        this.barLocation.setLatitude(this.getGeoPoint());
+        this.barLocation.setLongitude(this.getGeoShape());
+        this.barLocation.setTime(new Date().getTime()); //Set time as current Date
+    }
+
+    public float getDistanceFromUser() {
+        return distanceFromUser;
+    }
+
+    public void setDistanceFromUser(float distanceFromUser) {
+        this.distanceFromUser = distanceFromUser;
+    }
+
 
 }
