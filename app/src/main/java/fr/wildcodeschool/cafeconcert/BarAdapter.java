@@ -3,12 +3,15 @@ package fr.wildcodeschool.cafeconcert;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.content.res.ResourcesCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,7 +74,25 @@ public class BarAdapter extends ArrayAdapter<Bar> {
         ImageView dontLikeButton = convertView.findViewById(R.id.dont_like_button);
         ImageView icon = convertView.findViewById(R.id.status_icon);
         ImageView fondIcon = convertView.findViewById(R.id.fond_icon);
+        ImageView fondAdress = convertView.findViewById(R.id.fond_bar_adress);
+        ImageView fondName = convertView.findViewById(R.id.fond_bar_name);
+        TextView barAdress = convertView.findViewById(R.id.adress_bar);
         fondIcon.setBackgroundResource(R.drawable.fond_icone_like);
+        fondName.setBackgroundResource(R.drawable.fond_txt);
+        ImageView iconAdress = convertView.findViewById(R.id.icon_adress);
+
+        iconAdress.setBackgroundResource(R.drawable.ic_my_location_black_24dp);
+
+        fondAdress.setBackgroundResource(R.drawable.fond_txt);
+
+        String[] parts = bar.getAddress().split(" ");
+        String adressTerm = "";
+        for(int i=0; i<parts.length-2;i++){
+            adressTerm+=parts[i] + " ";
+        }
+        adressTerm.trim();
+        barAdress.setText(adressTerm);
+
 
         // Populate the data into the template view using the data object
         tvBarName.setText(bar.getBarName());

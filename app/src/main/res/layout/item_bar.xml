@@ -18,6 +18,28 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/fond_bar_name"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/text_bar_name"
+        app:layout_constraintEnd_toEndOf="@+id/text_bar_name"
+        app:layout_constraintStart_toStartOf="@+id/text_bar_name"
+        app:layout_constraintTop_toTopOf="@+id/text_bar_name"
+        app:srcCompat="@drawable/fond_txt" />
+
+    <ImageView
+        android:id="@+id/fond_bar_adress"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/fond_txt"
+        android:padding="0dp"
+        android:scaleType="fitStart"
+        app:layout_constraintBottom_toBottomOf="@+id/adress_bar"
+        app:layout_constraintEnd_toEndOf="@+id/adress_bar"
+        app:layout_constraintStart_toStartOf="@+id/space"
+        app:layout_constraintTop_toTopOf="@+id/adress_bar" />
+
     <TextView
         android:id="@+id/text_bar_name"
         android:layout_width="wrap_content"
@@ -25,10 +47,44 @@
         android:layout_marginLeft="24dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
+        android:padding="5dp"
         android:text="@string/nom_du_cafe"
+        android:textColor="@android:color/white"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/adress_bar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="3dp"
+        android:layout_marginStart="3dp"
+        android:paddingBottom="1dp"
+        android:paddingLeft="1dp"
+        android:paddingRight="5dp"
+        android:paddingTop="1dp"
+        android:text="@string/nom_du_cafe"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/image_bar"
+        app:layout_constraintStart_toEndOf="@+id/icon_adress" />
+
+    <ImageView
+        android:id="@+id/icon_adress"
+        android:layout_width="20dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="2dp"
+        android:layout_marginTop="2dp"
+        android:cropToPadding="false"
+        android:padding="3dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="@+id/fond_bar_adress"
+        app:layout_constraintStart_toStartOf="@+id/text_bar_name"
+        app:layout_constraintTop_toTopOf="@+id/fond_bar_adress"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/ic_my_location_black_24dp" />
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/drawer_bar"
@@ -200,6 +256,14 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_begin="70dp" />
+
+    <Space
+        android:id="@+id/space"
+        android:layout_width="4dp"
+        android:layout_height="4dp"
+        app:layout_constraintBottom_toBottomOf="@+id/icon_adress"
+        app:layout_constraintEnd_toStartOf="@+id/icon_adress"
+        app:layout_constraintTop_toTopOf="@+id/icon_adress" />
 
 
 </android.support.constraint.ConstraintLayout>

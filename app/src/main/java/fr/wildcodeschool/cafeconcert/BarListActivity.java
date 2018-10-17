@@ -96,8 +96,6 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
         DatabaseReference refBar = baseEnFeu.getReference("cafeconcert");
         DatabaseReference refUser = baseEnFeu.getReference("users");
         final DatabaseReference currentUser = refUser.child(uId);
-
-
         currentUser.child("bars").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
