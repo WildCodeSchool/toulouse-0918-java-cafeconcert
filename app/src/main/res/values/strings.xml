@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">Cafe Concert</string>
-    <string name="title_activity_maps">Map</string>
+    <string name="app_name">Café Concert</string>
+    <string name="title_activity_maps">Café Concert</string>
     <string name="continuer_en_tant_que_visiteur">Continuer en tant que visiteur</string>
-    <string name="se_connecter">se connecter</string>
+    <string name="se_connecter">Se connecter</string>
     <string name="s_inscrire">S\'inscrire</string>
     <string name="saisissez_votre_mot_de_passe">Saisissez votre mot de passe</string>
     <string name="valider">Valider !</string>
@@ -11,26 +11,26 @@
     <string name="nom_du_cafe">Nom du Café</string>
     <string name="renseignez_une_adresse_e_mail">Renseignez une adresse e-mail</string>
     <string name="pseudo">Pseudo</string>
-    <string name="password">Password</string>
-    <string name="profile">Profile</string>
-    <string name="map">Map</string>
-    <string name="bar_list">Bar list</string>
+    <string name="password">Mot de passe</string>
+    <string name="profile">Profil</string>
+    <string name="map">La Carte</string>
+    <string name="bar_list">La Liste</string>
     <string name="favorite">Filtre</string>
-    <string name="like">Like</string>
-    <string name="be_social">Be Social</string>
-    <string name="share">Share</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="like">Mes favoris</string>
+    <string name="be_social">Être sociable</string>
+    <string name="share">Partager</string>
+    <string name="navigation_drawer_open">Ouvrir le menu</string>
     //#BurgerMenu String need for onBackPressed method
-    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="navigation_drawer_close">Fermer le menu</string>
     //#BurgerMenu String need for onBackPressed method
-    <string name="cafe_concert">Cafe Concert</string>
+    <string name="cafe_concert">Café Concert</string>
     <string name="nom_du_bar">Nom du bar</string>
     <string name="mes_coup_coeur">Mes coup de coeur :</string>
     <string name="profil">Profil</string>
-    <string name="title_activity_login">Sign in</string>
+    <string name="title_activity_login">Connexion</string>
     <!-- Strings related to login -->
-    <string name="prompt_Username">Username</string>
-    <string name="camera_has_been_refused">Vous devriez autoriser cette application a accéder à votre caméra depuis les paramètres pour mettre a jour votre photo de profil </string>
+    <string name="prompt_Username">Nom d\'utilisateur</string>
+    <string name="camera_has_been_refused">Veuillez autoriser cette application à accéder à votre caméra si vous souhaitez prendre une nouvelle photo de profil !</string>
     <string name="prompt_email">E-mail</string>
     <string name="prompt_password">Password </string>
     <string name="action_sign_in">Sign in or register</string>
