@@ -4,6 +4,7 @@ package fr.wildcodeschool.cafeconcert;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -20,6 +21,7 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -29,6 +31,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class BarListActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -67,8 +70,36 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
         toggle.syncState();
         navigationView.setCheckedItem(R.id.nav_bar_list);
         checkMenuCreated(drawer);
+
+        //#Language
+        final TextView tvLangues = findViewById(R.id.tv_langues);
+
+        tvLangues.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences languePreferences = getSharedPreferences("CAFE_CONCERT", MODE_PRIVATE);
+                String lang = languePreferences.getString("Fav_langue", "");
+                Configuration config = getBaseContext().getResources().getConfiguration();
+                setLanguage(lang.equals("fr") ? "en" : "fr");
+            }
+        });
     }
 
+    //#Language
+    public void setLanguage(String lang) {
+        final SharedPreferences languePreferences = getSharedPreferences("CAFE_CONCERT", MODE_PRIVATE);
+        SharedPreferences.Editor editor = languePreferences.edit();
+        editor.putString("Fav_langue", lang);
+        editor.commit();
+
+        Locale locale = new Locale(lang);
+        Locale.setDefault(locale);
+        Configuration config = getBaseContext().getResources().getConfiguration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+        drawer.closeDrawer(GravityCompat.START);
+        recreate();
+    }
 
     public void initBarVisualisation() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);

@@ -2,33 +2,44 @@ package fr.wildcodeschool.cafeconcert;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
-import android.net.Uri;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private ArrayList<Bar> bars = new ArrayList<>();
+
+    /*Launch Googlemaps on Navigation mode.
+     * User position as departure, bar coordonates as destination */
+    public static void setNavigation(ImageView navigate, final Bar bar, final Context context) {
+
+        navigate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                        Uri.parse("http://maps.google.com/maps?.34&daddr=" + bar.getGeoPoint() + "," + bar.getGeoShape()));
+                context.startActivity(intent);
+            }
+        });
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,17 +49,16 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this,MapsActivity.class));
+                startActivity(new Intent(MainActivity.this, MapsActivity.class));
             }
         });
         Button buttonScription = (Button) findViewById(R.id.button_inscription);
         buttonScription.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this,InscriptionActivity.class));
+                startActivity(new Intent(MainActivity.this, InscriptionActivity.class));
             }
         });
-
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
@@ -67,6 +77,32 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        //#Language
+        Configuration config = getBaseContext().getResources().getConfiguration();
+        SharedPreferences languePreferences = getSharedPreferences("CAFE_CONCERT", MODE_PRIVATE);
+        String lang = languePreferences.getString("Fav_langue", "");
+
+        if (!config.locale.getLanguage().equals(lang)) {
+            setLanguage(lang);
+        }
+
+    }
+
+    //#Language
+    public void setLanguage(String lang) {
+        SharedPreferences languePreferences = getSharedPreferences("CAFE_CONCERT", MODE_PRIVATE);
+        SharedPreferences.Editor editor = languePreferences.edit();
+        editor.putString("Fav_langue", lang);
+        editor.commit();
+
+        Locale locale = new Locale(lang);
+        Locale.setDefault(locale);
+        Configuration config = getBaseContext().getResources().getConfiguration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+
+        recreate();
     }
 
     private void signInUser(String email, String password) {
@@ -102,19 +138,5 @@ public class MainActivity extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         mAuth.signOut(); // forcer la deconnexion de l'utilisateur
         updateUI(currentUser);
-    }
-
-    /*Launch Googlemaps on Navigation mode.
-     * User position as departure, bar coordonates as destination */
-    public static void setNavigation(ImageView navigate, final Bar bar, final Context context) {
-
-        navigate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
-                        Uri.parse("http://maps.google.com/maps?.34&daddr=" + bar.getGeoPoint()+ "," + bar.getGeoShape()));
-                context.startActivity(intent);
-            }
-        });
     }
 }

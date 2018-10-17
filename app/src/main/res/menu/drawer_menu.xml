@@ -28,4 +28,5 @@
                     app:actionLayout="@layout/switch_item"/>
             </menu>
         </item>
+
 </menu>
