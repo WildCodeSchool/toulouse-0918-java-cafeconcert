@@ -116,4 +116,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    public static ArrayList<Bar> arrayFilter(ArrayList<Bar> bars) {
+        ArrayList<Bar> arrayFilter = new ArrayList<>();
+        for (Bar monBar : bars) {
+            if (monBar.getIsLiked() == 1) {
+                arrayFilter.add(monBar);
+            }
+        }
+        return arrayFilter;
+    }
+
 }

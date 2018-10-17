@@ -60,7 +60,7 @@ public class BarAdapter extends ArrayAdapter<Bar> {
 
         // Populate the data into the template view using the data object
         tvBarName.setText(bar.getBarName());
-        ibBar.setBackgroundResource(bar.getPicture());
+        //ibBar.setBackgroundResource(bar.getPicture()); //TODO corriger ça
         MainActivity.setNavigation(navigate, bar, getContext());
 
         //Adding efficient likes/dislikes buttons

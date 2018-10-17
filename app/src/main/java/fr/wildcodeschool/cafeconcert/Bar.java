@@ -16,7 +16,7 @@ public class Bar {
     private double geoShape;
     private String webUrl;
     private int isLiked; // 1 if liked, 0 if disliked, 2 if neutral
-    private int picture; // Pour un drawable le type est 'int'
+    private String picture; // Pour un drawable le type est 'int'
     private Context context;
     private String address;
     private Location barLocation = new Location("Bar");
@@ -24,7 +24,7 @@ public class Bar {
 
     
     /*Constructor*/
-    public Bar(String barName, String phoneNumber, double geoPoint, double geoShape, String webUrl, int isLiked, int picture, Context context) {
+    public Bar(String barName, String phoneNumber, double geoPoint, double geoShape, String webUrl, int isLiked, String picture, Context context) {
         this.barName = barName;
         this.phoneNumber = phoneNumber;
         this.geoShape = geoShape;
@@ -100,9 +100,9 @@ public class Bar {
 
     }
 
-    public int getPicture() { return picture; }
+    public String getPicture() { return picture; }
 
-    public void setPicture(int picture) { this.picture = picture; }
+    public void setPicture(String picture) { this.picture = picture; }
 
     public Context getContext() {
         return context;

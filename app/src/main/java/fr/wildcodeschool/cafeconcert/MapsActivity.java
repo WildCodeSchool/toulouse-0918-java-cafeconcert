@@ -75,7 +75,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     final static int MARKER_HEIGHT = 72;
     final static int MARKER_WIDTH = 72;
     final static int ZOOM_LVL_BY_DEFAULT = 13;
-    final static float ZOOM_LVL_ON_USER = 15.76f;
+    final static float ZOOM_LVL_ON_USER = 13.5f;
     final static int CLOSEST_BAR_NUMBERS = 5;
 
     private PopupWindow popUp;
@@ -137,7 +137,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     Bar bar = barSnapshot.getValue(Bar.class);
                     bar.setInitIsLiked(2, MapsActivity.this);
                     bar.setContext(MapsActivity.this);
-                    bar.setPicture(R.drawable.photodecafe);
+                    //bar.setPicture(R.drawable.photodecafe); //TODO to delete
                     bar.setBarLocation();
                     bars.add(bar);
                 }
@@ -151,7 +151,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     //#BurgerMenu
-
     public void checkMenuCreated(DrawerLayout drawer) {
         drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
@@ -167,10 +166,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                         if (checkboxFilter.isChecked() && !mFilterDistance) {
                             mMap.clear();
-                            createMarkers(arrayFilter(bars));
+                            createMarkers(MainActivity.arrayFilter(bars));
                         } else if (checkboxFilter.isChecked() && mFilterDistance) {
                             mMap.clear();
-                            createMarkers(pickClosestBars(arrayFilter(bars), CLOSEST_BAR_NUMBERS));
+                            createMarkers(pickClosestBars(MainActivity.arrayFilter(bars), CLOSEST_BAR_NUMBERS));
                         } else if (!checkboxFilter.isChecked() && mFilterDistance) {
                             mMap.clear();
                             createMarkers(pickClosestBars(bars, CLOSEST_BAR_NUMBERS));
@@ -178,6 +177,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             mMap.clear();
                             createMarkers(bars);
                         }
+
                         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MapsActivity.this);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putBoolean("filter", checkboxFilter.isChecked());
@@ -195,13 +195,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             createMarkers(pickClosestBars(bars, CLOSEST_BAR_NUMBERS));
                         } else if (distanceCheckboxfilter.isChecked() && filter) {
                             mMap.clear();
-                            createMarkers(pickClosestBars(arrayFilter(bars), CLOSEST_BAR_NUMBERS));
+                            createMarkers(pickClosestBars(MainActivity.arrayFilter(bars), CLOSEST_BAR_NUMBERS));
                         } else if (!distanceCheckboxfilter.isChecked() && filter) {
                             mMap.clear();
-                            createMarkers(arrayFilter(bars));
+                            createMarkers(MainActivity.arrayFilter(bars));
                         } else {
                             mMap.clear();
-                            createMarkers(pickClosestBars(arrayFilter(bars), CLOSEST_BAR_NUMBERS));
+                            createMarkers(bars);
                         }
 
                         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MapsActivity.this);
@@ -256,7 +256,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         CheckBox checkboxFilter = findViewById(R.id.checkBoxFilter);
-        CheckBox checkboxDistance = findViewById(R.id.checkbox_distance); //TODO : !!
+        CheckBox checkboxDistance = findViewById(R.id.checkbox_distance);
         switch (item.getItemId()) {
             case R.id.nav_profile:
                 startActivity(new Intent(this, Profile.class));
@@ -272,20 +272,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 break;
             case R.id.app_bar_distance:
                 checkboxDistance.setChecked(!checkboxDistance.isChecked());
-                break; //TODO : !!
+                break;
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    public ArrayList<Bar> arrayFilter(ArrayList<Bar> bars) {
-        ArrayList<Bar> arrayFilter = new ArrayList<>();
-        for (Bar monBar : bars) {
-            if (monBar.getIsLiked() == 1) {
-                arrayFilter.add(monBar);
-            }
-        }
-        return arrayFilter;
     }
 
     public ArrayList<Bar> pickClosestBars(ArrayList<Bar> myBars, int range) {
@@ -300,15 +290,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public ArrayList<Bar> arrayFilterByDistance(ArrayList<Bar> myBars) {
 
-        for(Bar bar : myBars) {
+        for (Bar bar : myBars) {
             bar.setDistanceFromUser(mUserLocation.distanceTo(bar.getBarLocation()));
         }
 
-        for(int i = 0 ; i <= myBars.size()-1 ; i ++ ) {
-            for(int j = i ; j <= myBars.size()-1 ; j ++) {
-                if(myBars.get(j).getDistanceFromUser() < myBars.get(i).getDistanceFromUser() ) {
+        for (int i = 0 ; i <= myBars.size()-1 ; i ++ ) {
+            for (int j = i ; j <= myBars.size()-1 ; j ++) {
+                if (myBars.get(j).getDistanceFromUser() < myBars.get(i).getDistanceFromUser() ) {
                     Collections.swap(myBars, i, j);
-                    //biggestDistance = bars.get(i).getDistanceFromUser();
                 }
             }
         }
@@ -368,13 +357,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             createMarkers(pickClosestBars(bars, CLOSEST_BAR_NUMBERS));
         }  else if (mFilterDistance && filter) {
             mMap.clear();
-            createMarkers(pickClosestBars(arrayFilter(bars), CLOSEST_BAR_NUMBERS));
+            createMarkers(pickClosestBars(MainActivity.arrayFilter(bars), CLOSEST_BAR_NUMBERS));
         } else if (!mFilterDistance && filter) {
             mMap.clear();
-            createMarkers(arrayFilter(bars));
+            createMarkers(MainActivity.arrayFilter(bars));
         } else {
             mMap.clear();
-            createMarkers(pickClosestBars(arrayFilter(bars), CLOSEST_BAR_NUMBERS));
+            createMarkers(bars);
         }
     }
 
@@ -494,7 +483,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
                 if (filter) {
                     mMap.clear();
-                    createMarkers(arrayFilter(bars));
+                    createMarkers(MainActivity.arrayFilter(bars));
                 }
             }
 
@@ -513,7 +502,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
                 if (filter) {
                     mMap.clear();
-                    createMarkers(arrayFilter(bars));
+                    createMarkers(MainActivity.arrayFilter(bars));
                     popUp.dismiss();
                 }
             }
@@ -591,7 +580,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     /* If all required permissions are granted, set a marker on User Position*/
-
     @SuppressWarnings("MissingPermission")
     private void initLocation() {
         // Get the last known position of the user
