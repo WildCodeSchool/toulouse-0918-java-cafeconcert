@@ -2,7 +2,10 @@ package fr.wildcodeschool.cafeconcert;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.preference.PreferenceManager;
+
+import java.util.Date;
 
 public class Bar {
 
@@ -16,7 +19,10 @@ public class Bar {
     private int picture; // Pour un drawable le type est 'int'
     private Context context;
     private String address;
+    private Location barLocation = new Location("Bar");
+    private float distanceFromUser;
 
+    
     /*Constructor*/
     public Bar(String barName, String phoneNumber, double geoPoint, double geoShape, String webUrl, int isLiked, int picture, Context context) {
         this.barName = barName;
@@ -127,5 +133,28 @@ public class Bar {
     public void setAddress(String address) {
         this.address = address;
     }
+
+    public Location getBarLocation() {
+        return barLocation;
+    }
+
+    public void setBarLocation(Location barLocation) {
+        this.barLocation = barLocation;
+    }
+
+    public void setBarLocation() {
+        this.barLocation.setLatitude(this.getGeoPoint());
+        this.barLocation.setLongitude(this.getGeoShape());
+        this.barLocation.setTime(new Date().getTime()); //Set time as current Date
+    }
+
+    public float getDistanceFromUser() {
+        return distanceFromUser;
+    }
+
+    public void setDistanceFromUser(float distanceFromUser) {
+        this.distanceFromUser = distanceFromUser;
+    }
+
 
 }

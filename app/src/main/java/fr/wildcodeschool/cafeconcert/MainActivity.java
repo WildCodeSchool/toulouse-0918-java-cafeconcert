@@ -28,7 +28,6 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
-    private ArrayList<Bar> bars = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
