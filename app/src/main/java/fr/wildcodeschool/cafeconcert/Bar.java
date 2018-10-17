@@ -85,7 +85,6 @@ public class Bar {
         this.webUrl = webUrl;
     }
 
-
     public String getPicture() { return picture; }
 
     public void setPicture(String picture) { this.picture = picture; }
@@ -101,8 +100,6 @@ public class Bar {
         editor.commit();
 
     }
-
-
     public Context getContext() {
         return context;
     }

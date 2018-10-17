@@ -193,7 +193,6 @@ public class BarAdapter extends ArrayAdapter<Bar> {
             }
         });
     }
-
     private void setLikeIcon(final ImageView icon, int likeStatus) {
 
         Bitmap nLikeMarker = BitmapFactory.decodeResource(getContext().getResources(),
@@ -219,7 +218,6 @@ public class BarAdapter extends ArrayAdapter<Bar> {
                 icon.setImageBitmap(neutralLikeMarker);
                 break;
         }
-
     }
 
 }

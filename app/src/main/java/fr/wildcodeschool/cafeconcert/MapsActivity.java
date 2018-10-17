@@ -262,7 +262,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         getMenuInflater().inflate(R.menu.share_menu, menu);
         return true;
     }
-
     //#ShareMenu : Send a text
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -280,7 +279,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 return super.onOptionsItemSelected(item);
         }
     }
-
     //#BurgerMenu links
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -316,7 +314,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
         return closestBars;
     }
-
     public ArrayList<Bar> arrayFilterByDistance(ArrayList<Bar> myBars) {
 
         for (Bar bar : myBars) {
@@ -346,7 +343,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-
         /**
          * Manipulates the map once avalable.
          * This callback is triggered when the map is ready to be used.
@@ -356,7 +352,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
          * it inside the SupportMapFragment. This method will only be triggered once the user has
          * installed Google Play services and returned to the app.
          */
-
         mMap = googleMap;
         // Setting map borders
         LatLngBounds toulouseBounds = new LatLngBounds(
@@ -518,7 +513,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         });
 
-
         dontLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -536,7 +530,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
             }
         });
-
 
     }
 
@@ -577,10 +570,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
         Glide.with(MapsActivity.this).load(bar.getPicture()).into(photoBar);
-
         //Navigation button
         MainActivity.setNavigation(navigate, bar, MapsActivity.this);
-
         //Phone button
         phone.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -591,7 +582,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 startActivity(intent);
             }
         });
-
         //Website button
         web.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -610,7 +600,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
     }
-
     /* If all required permissions are granted, set a marker on User Position*/
     @SuppressWarnings("MissingPermission")
     private void initLocation() {
@@ -647,7 +636,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
         mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
     }
-
     /* Center the camera on the User Location*/
     private void moveCamera(Location userLocation) {
         LatLng latLong = new LatLng(userLocation.getLatitude(), userLocation.getLongitude());

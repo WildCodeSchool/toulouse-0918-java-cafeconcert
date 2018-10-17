@@ -288,7 +288,6 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
         getMenuInflater().inflate(R.menu.share_menu, menu);
         return true;
     }
-
     //#ShareMenu : Send a text
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -328,12 +327,10 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
             case R.id.app_bar_distance:
                 checkboxDistance.setChecked(!checkboxDistance.isChecked());
                 break;
-
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
     //#BurgerMenu For not leaving the activity immediately
     @Override
     public void onBackPressed() {
