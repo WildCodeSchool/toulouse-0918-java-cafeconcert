@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
@@ -62,6 +63,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, NavigationView.OnNavigationItemSelectedListener {
 
@@ -120,6 +122,35 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         filter = sharedPreferences.getBoolean("filter", false);
+
+        //#Language
+        final TextView tvLangues = findViewById(R.id.tv_langues);
+
+        tvLangues.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences languePreferences = getSharedPreferences("CAFE_CONCERT", MODE_PRIVATE);
+                String lang = languePreferences.getString("Fav_langue", "");
+                Configuration config = getBaseContext().getResources().getConfiguration();
+                setLanguage(lang.equals("fr") ? "en" : "fr");
+            }
+        });
+    }
+
+    //#Language
+    public void setLanguage(String lang) {
+        final SharedPreferences languePreferences = getSharedPreferences("CAFE_CONCERT", MODE_PRIVATE);
+        SharedPreferences.Editor editor = languePreferences.edit();
+        editor.putString("Fav_langue", lang);
+        editor.commit();
+
+        Locale locale = new Locale(lang);
+        Locale.setDefault(locale);
+        Configuration config = getBaseContext().getResources().getConfiguration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+        drawer.closeDrawer(GravityCompat.START);
+        recreate();
     }
 
     public void initBar() {
@@ -150,7 +181,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     //#BurgerMenu
-
     public void checkMenuCreated(DrawerLayout drawer) {
         drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
@@ -227,13 +257,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 startActivity(new Intent(this, Profile.class));
                 break;
             case R.id.nav_map:
-                startActivity(new Intent(this, MapsActivity.class));
                 break;
             case R.id.nav_bar_list:
                 startActivity(new Intent(this, BarListActivity.class));
                 break;
             case R.id.app_bar_switch:
                 checkboxFilter.setChecked(!checkboxFilter.isChecked());
+                drawer.closeDrawer(GravityCompat.START);
                 break;
             case R.id.deconnexion:
                 mAuth.signOut();
@@ -434,7 +464,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
         like.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 if (bar.getIsLiked() != 1) {
@@ -509,7 +538,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         photoBar.setImageResource(R.mipmap.fonddecran);
         phone.setImageResource(R.mipmap.phonelogo);
         web.setImageResource(R.mipmap.globeicon);
-        popUpView.setBackground(getDrawable(R.drawable.fondpopup));
+        popUpView.setBackgroundResource(R.drawable.fondpopup);
         barName.setText(bar.getBarName());
 
         //Navigation button

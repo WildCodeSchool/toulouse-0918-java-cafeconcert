@@ -82,6 +82,8 @@ public class BarAdapter extends ArrayAdapter<Bar> {
         ImageView iconAdress = convertView.findViewById(R.id.icon_adress);
 
         iconAdress.setBackgroundResource(R.drawable.ic_my_location_black_24dp);
+        ConstraintLayout constraintLayout = convertView.findViewById(R.id.drawer_bar);
+        constraintLayout.setBackgroundResource(R.drawable.fondpopup);
 
         fondAdress.setBackgroundResource(R.drawable.fond_txt);
 
