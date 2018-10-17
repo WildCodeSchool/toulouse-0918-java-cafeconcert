@@ -92,7 +92,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private boolean filter = false;
     private boolean mFilterDistance = false;
 
-
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {

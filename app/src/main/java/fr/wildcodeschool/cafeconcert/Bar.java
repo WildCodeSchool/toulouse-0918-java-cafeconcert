@@ -20,7 +20,6 @@ public class Bar {
     private String address;
     private Location barLocation = new Location("Bar");
     private float distanceFromUser;
-
     
     /*Constructor*/
     public Bar(String barName, String phoneNumber, double geoPoint, double geoShape, String webUrl, int isLiked, String picture, Context context) {
