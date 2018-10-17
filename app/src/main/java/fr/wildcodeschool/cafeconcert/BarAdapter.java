@@ -57,6 +57,7 @@ public class BarAdapter extends ArrayAdapter<Bar> {
         ImageView likeButton = convertView.findViewById(R.id.like_button);
         ImageView dontLikeButton = convertView.findViewById(R.id.dont_like_button);
         ImageView icon = convertView.findViewById(R.id.status_icon);
+        ImageView buttonToMap = convertView.findViewById(R.id.button_to_map);
 
         // Populate the data into the template view using the data object
         tvBarName.setText(bar.getBarName());
@@ -89,6 +90,18 @@ public class BarAdapter extends ArrayAdapter<Bar> {
         } else {
             textWebSite.setText(bar.getWebUrl());
         }
+
+        //"To Map" button
+        buttonToMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String name = bar.getBarName();
+                Intent intent = new Intent(getContext(), MapsActivity.class);
+                getContext().startActivity(intent);
+            }
+        });
+
+
         //Phone button
         phone.setOnClickListener(new View.OnClickListener() {
             @Override
