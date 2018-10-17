@@ -91,11 +91,6 @@ public class Bar {
 
     public void setIsLiked(int isLiked) {
         this.isLiked = isLiked;
-        /*SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(this.barName, isLiked);
-        editor.commit();*/
-
     }
 
     public String getPicture() { return picture; }
@@ -109,21 +104,6 @@ public class Bar {
     public void setContext(Context context) {
         this.context = context;
     }
-
-    /*Special methods*/
-    /* Potentiellement à dégager dès que firebase est fonctionnel
-    public void setInitIsLiked(int isLiked, Context context) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        if (!sharedPreferences.contains(this.barName)) {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putInt(this.barName, isLiked);
-            editor.commit();
-            this.isLiked = isLiked;
-        } else {
-            this.isLiked = sharedPreferences.getInt(this.barName, 2);
-        }
-    }
-    */
 
     public String getAddress() {
         return address;

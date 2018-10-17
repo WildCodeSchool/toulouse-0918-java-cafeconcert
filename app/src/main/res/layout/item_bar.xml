@@ -30,7 +30,7 @@
         app:srcCompat="@drawable/fond_txt" />
 
     <ImageView
-        android:id="@+id/fond_bar_adress"
+        android:id="@+id/fond_bar_address"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/fond_txt"
@@ -70,7 +70,7 @@
         android:textColor="@android:color/white"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/image_bar"
-        app:layout_constraintStart_toEndOf="@+id/icon_adress" />
+        app:layout_constraintStart_toEndOf="@+id/icon_address" />
 
     <ImageView
         android:id="@+id/icon_adress"
@@ -81,9 +81,9 @@
         android:cropToPadding="false"
         android:padding="3dp"
         android:scaleType="fitCenter"
-        app:layout_constraintBottom_toBottomOf="@+id/fond_bar_adress"
+        app:layout_constraintBottom_toBottomOf="@+id/fond_bar_address"
         app:layout_constraintStart_toStartOf="@+id/text_bar_name"
-        app:layout_constraintTop_toTopOf="@+id/fond_bar_adress"
+        app:layout_constraintTop_toTopOf="@+id/fond_bar_address"
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/ic_my_location_black_24dp" />
 
@@ -261,9 +261,9 @@
         android:id="@+id/space"
         android:layout_width="4dp"
         android:layout_height="4dp"
-        app:layout_constraintBottom_toBottomOf="@+id/icon_adress"
-        app:layout_constraintEnd_toStartOf="@+id/icon_adress"
-        app:layout_constraintTop_toTopOf="@+id/icon_adress" />
+        app:layout_constraintBottom_toBottomOf="@+id/icon_address"
+        app:layout_constraintEnd_toStartOf="@+id/icon_address"
+        app:layout_constraintTop_toTopOf="@+id/icon_address" />
 
 
 </android.support.constraint.ConstraintLayout>

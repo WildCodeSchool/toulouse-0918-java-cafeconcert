@@ -71,7 +71,7 @@ public class BarAdapter extends ArrayAdapter<Bar> {
         ImageView dontLikeButton = convertView.findViewById(R.id.dont_like_button);
         ImageView icon = convertView.findViewById(R.id.status_icon);
         ImageView fondIcon = convertView.findViewById(R.id.fond_icon);
-        ImageView fondAdress = convertView.findViewById(R.id.fond_bar_adress);
+        ImageView fondAddress = convertView.findViewById(R.id.fond_bar_address);
         ImageView fondName = convertView.findViewById(R.id.fond_bar_name);
         TextView barAdress = convertView.findViewById(R.id.adress_bar);
         fondIcon.setBackgroundResource(R.drawable.fond_icone_like);
@@ -80,7 +80,7 @@ public class BarAdapter extends ArrayAdapter<Bar> {
         iconAdress.setBackgroundResource(R.drawable.ic_my_location_black_24dp);
         ConstraintLayout constraintLayout = convertView.findViewById(R.id.drawer_bar);
         constraintLayout.setBackgroundResource(R.drawable.fondpopup);
-        fondAdress.setBackgroundResource(R.drawable.fond_txt);
+        fondAddress.setBackgroundResource(R.drawable.fond_txt);
         String[] parts = bar.getAddress().split(" ");
         String adressTerm = "";
         for (int i = 0; i < parts.length - 2; i++) {
@@ -91,7 +91,6 @@ public class BarAdapter extends ArrayAdapter<Bar> {
 
         // Populate the data into the template view using the data object
         tvBarName.setText(bar.getBarName());
-        //ibBar.setBackgroundResource(bar.getPicture()); //TODO corriger ça
         MainActivity.setNavigation(navigate, bar, getContext());
 
         //Adding efficient likes/dislikes buttons
@@ -187,10 +186,10 @@ public class BarAdapter extends ArrayAdapter<Bar> {
 
     private void setUserOpinion(final ImageView like, final ImageView dontLike, final ImageView icon, final Bar bar) {
 
-        final FirebaseDatabase baseEnFeu = FirebaseDatabase.getInstance();
-        DatabaseReference refBar = baseEnFeu.getReference("cafeconcert");
+        final FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference refBar = firebaseDatabase.getReference("cafeconcert");
         final String[] barKey = new String[1];
-        DatabaseReference refUser = baseEnFeu.getReference("users");
+        DatabaseReference refUser = firebaseDatabase.getReference("users");
         final DatabaseReference currentUser = refUser.child(uId).child("bars");
 
         refBar.orderByChild("barName").equalTo(bar.getBarName()).limitToFirst(1).addListenerForSingleValueEvent(new ValueEventListener() {
