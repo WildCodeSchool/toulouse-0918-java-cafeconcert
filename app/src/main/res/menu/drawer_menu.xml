@@ -28,4 +28,12 @@
                     app:actionLayout="@layout/switch_item"/>
             </menu>
         </item>
+
+    <item android:title = "@string/deconnexion">
+        <menu>
+            <item
+                android:id="@+id/deconnexion"
+                android:title="@string/deconnexion"/>
+        </menu>
+    </item>
 </menu>

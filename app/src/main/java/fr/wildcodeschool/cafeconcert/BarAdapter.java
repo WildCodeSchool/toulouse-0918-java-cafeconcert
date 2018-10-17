@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,13 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -28,6 +36,9 @@ public class BarAdapter extends ArrayAdapter<Bar> {
     private static ArrayList<Bar> filterBars;
     private ArrayList<Bar> bars;
     private boolean filter = false;
+    private String uId;
+    private FirebaseAuth mAuth;
+
 
     public BarAdapter(Context context, ArrayList<Bar> bars) {
         super(context, 0, bars);
@@ -44,6 +55,8 @@ public class BarAdapter extends ArrayAdapter<Bar> {
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_bar, parent, false);
         }
+        mAuth = FirebaseAuth.getInstance();
+        uId = mAuth.getCurrentUser().getUid();
         // Lookup view for data population
         TextView tvBarName = convertView.findViewById(R.id.text_bar_name);
         ImageButton ibBar = convertView.findViewById(R.id.image_bar);
@@ -57,10 +70,12 @@ public class BarAdapter extends ArrayAdapter<Bar> {
         ImageView likeButton = convertView.findViewById(R.id.like_button);
         ImageView dontLikeButton = convertView.findViewById(R.id.dont_like_button);
         ImageView icon = convertView.findViewById(R.id.status_icon);
+        ImageView fondIcon = convertView.findViewById(R.id.fond_icon);
+        fondIcon.setBackgroundResource(R.drawable.fond_icone_like);
 
         // Populate the data into the template view using the data object
         tvBarName.setText(bar.getBarName());
-        ibBar.setBackgroundResource(bar.getPicture());
+        //ibBar.setBackgroundResource(bar.getPicture());
         MainActivity.setNavigation(navigate, bar, getContext());
 
         //Adding efficient likes/dislikes buttons
@@ -156,6 +171,26 @@ public class BarAdapter extends ArrayAdapter<Bar> {
 
     private void setUserOpinion(final ImageView like, final ImageView dontLike, final ImageView icon, final Bar bar) {
 
+        final FirebaseDatabase baseEnFeu = FirebaseDatabase.getInstance();
+        DatabaseReference refBar = baseEnFeu.getReference("cafeconcert");
+        final String[] barKey = new String[1];
+        DatabaseReference refUser = baseEnFeu.getReference("users");
+        final DatabaseReference currentUser = refUser.child(uId).child("bars");
+
+        refBar.orderByChild("barName").equalTo(bar.getBarName()).limitToFirst(1).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                    barKey[0] = childSnapshot.getKey();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
         like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -170,6 +205,7 @@ public class BarAdapter extends ArrayAdapter<Bar> {
                     Intent intent = new Intent(getContext(), BarListActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     (getContext()).startActivity(intent);
                 }
+                currentUser.child(barKey[0]).child("isLiked").setValue(bar.getIsLiked());
             }
         });
 
@@ -187,6 +223,7 @@ public class BarAdapter extends ArrayAdapter<Bar> {
                     Intent intent = new Intent(getContext(), BarListActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     (getContext()).startActivity(intent);
                 }
+                currentUser.child(barKey[0]).child("isLiked").setValue(bar.getIsLiked());
             }
         });
     }

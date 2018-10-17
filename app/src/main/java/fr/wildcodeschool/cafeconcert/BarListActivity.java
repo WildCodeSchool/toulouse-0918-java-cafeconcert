@@ -22,6 +22,7 @@ import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -39,6 +40,8 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
     BarAdapter filterAdapter;
     BarAdapter adapter;
     private ListView listBar;
+    private String uId;
+    private FirebaseAuth mAuth;
 
 
     final static int MARKER_HEIGHT = 72;
@@ -51,6 +54,8 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
         setContentView(R.layout.activity_bar_list);
         bars = new ArrayList<>();
         listBar= findViewById(R.id.list_bar);
+        mAuth = FirebaseAuth.getInstance();
+        uId = mAuth.getCurrentUser().getUid();
 
         initBar();
 
@@ -87,18 +92,22 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
 
     public void initBar() {
 
-        FirebaseDatabase baseEnFeu = FirebaseDatabase.getInstance();
+        final FirebaseDatabase baseEnFeu = FirebaseDatabase.getInstance();
         DatabaseReference refBar = baseEnFeu.getReference("cafeconcert");
+        DatabaseReference refUser = baseEnFeu.getReference("users");
+        final DatabaseReference currentUser = refUser.child(uId);
 
-        refBar.addListenerForSingleValueEvent(new ValueEventListener() {
+
+        currentUser.child("bars").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
                 bars.clear();
-                for (DataSnapshot barSnapshot : dataSnapshot.getChildren()){
-                    Bar bar = barSnapshot.getValue(Bar.class);
-                    bar.setInitIsLiked(2, BarListActivity.this);
+                for(DataSnapshot barSnapshot : dataSnapshot.getChildren()){
+                    final Bar bar = barSnapshot.getValue(Bar.class);
+                    String barId = barSnapshot.getKey();
                     bar.setContext(BarListActivity.this);
-                    bar.setPicture(R.drawable.photodecafe);
+                    //bar.setPicture(R.drawable.photodecafe);
                     bars.add(bar);
                 }
                 initBarVisualisation();
@@ -194,6 +203,9 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
             case R.id.app_bar_switch:
                 checkboxFilter.setChecked(!checkboxFilter.isChecked());
                 break;
+            case R.id.deconnexion:
+                mAuth.signOut();
+                startActivity(new Intent(this, MainActivity.class));
 
         }
         drawer.closeDrawer(GravityCompat.START);

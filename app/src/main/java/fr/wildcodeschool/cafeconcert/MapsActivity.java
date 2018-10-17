@@ -25,6 +25,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -53,6 +54,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -84,10 +86,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private ArrayList<Marker> mMarkers = new ArrayList<>();
     private GestureDetectorCompat mGestureObject;
     private MotionEvent mMotionEvent;
+    private FirebaseAuth mAuth;
     private DrawerLayout drawer;
     private LocationManager mLocationManager = null;
     private FusedLocationProviderClient mFusedLocationClient;
     private boolean filter = false;
+    private String uId;
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -103,7 +107,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         //#BurgerMenu Here I take the new toolbar to set it in my activity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        mAuth = FirebaseAuth.getInstance();
+        uId = mAuth.getCurrentUser().getUid();
         //#BurgerMenu
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -120,20 +125,22 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public void initBar() {
 
-        FirebaseDatabase baseEnFeu = FirebaseDatabase.getInstance();
+        final FirebaseDatabase baseEnFeu = FirebaseDatabase.getInstance();
         DatabaseReference refBar = baseEnFeu.getReference("cafeconcert");
+        DatabaseReference refUser = baseEnFeu.getReference("users");
+        final DatabaseReference currentUser = refUser.child(uId);
 
-        refBar.addListenerForSingleValueEvent(new ValueEventListener() {
+
+        currentUser.child("bars").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 bars.clear();
-
                 for(DataSnapshot barSnapshot : dataSnapshot.getChildren()){
-                    Bar bar = barSnapshot.getValue(Bar.class);
-                    bar.setInitIsLiked(2, MapsActivity.this);
+                    final Bar bar = barSnapshot.getValue(Bar.class);
+                    String barId = barSnapshot.getKey();
                     bar.setContext(MapsActivity.this);
-                    bar.setPicture(R.drawable.photodecafe);
+                    //bar.setPicture(R.drawable.photodecafe);
                     bars.add(bar);
                 }
                 initMarkers();
@@ -231,6 +238,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             case R.id.app_bar_switch:
                 checkboxFilter.setChecked(!checkboxFilter.isChecked());
                 break;
+            case R.id.deconnexion:
+                mAuth.signOut();
+                startActivity(new Intent(this, MainActivity.class));
+
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -253,7 +264,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
-            startActivity(new Intent(this, MainActivity.class));
+            finish();
         }
     }
 
@@ -404,8 +415,29 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public void setUserOpinion(final ImageView like, final ImageView dontLike, final Bar bar, final Marker marker) {
+        final FirebaseDatabase baseEnFeu = FirebaseDatabase.getInstance();
+        DatabaseReference refBar = baseEnFeu.getReference("cafeconcert");
+        final String[] barKey = new String[1];
+        DatabaseReference refUser = baseEnFeu.getReference("users");
+        final DatabaseReference currentUser = refUser.child(uId).child("bars");
+
+        refBar.orderByChild("barName").equalTo(bar.getBarName()).limitToFirst(1).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                    barKey[0] = childSnapshot.getKey();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
 
         like.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 if (bar.getIsLiked() != 1) {
@@ -419,6 +451,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     mMap.clear();
                     createMarkers(arrayFilter(bars));
                 }
+                currentUser.child(barKey[0]).child("isLiked").setValue(bar.getIsLiked());
             }
 
         });
@@ -439,6 +472,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     createMarkers(arrayFilter(bars));
                     popUp.dismiss();
                 }
+                currentUser.child(barKey[0]).child("isLiked").setValue(bar.getIsLiked());
             }
         });
 

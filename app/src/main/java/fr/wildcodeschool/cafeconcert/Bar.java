@@ -13,12 +13,12 @@ public class Bar {
     private double geoShape;
     private String webUrl;
     private int isLiked; // 1 if liked, 0 if disliked, 2 if neutral
-    private int picture; // Pour un drawable le type est 'int'
+    private String picture; // Pour un drawable le type est 'int'
     private Context context;
     private String address;
 
     /*Constructor*/
-    public Bar(String barName, String phoneNumber, double geoPoint, double geoShape, String webUrl, int isLiked, int picture, Context context) {
+    public Bar(String barName, String phoneNumber, double geoPoint, double geoShape, String webUrl, int isLiked, String picture, Context context) {
         this.barName = barName;
         this.phoneNumber = phoneNumber;
         this.geoShape = geoShape;
@@ -87,16 +87,16 @@ public class Bar {
 
     public void setIsLiked(int isLiked) {
         this.isLiked = isLiked;
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        /*SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(this.barName, isLiked);
-        editor.commit();
+        editor.commit();*/
 
     }
 
-    public int getPicture() { return picture; }
+    public String getPicture() { return picture; }
 
-    public void setPicture(int picture) { this.picture = picture; }
+    public void setPicture(String picture) { this.picture = picture; }
 
     public Context getContext() {
         return context;
@@ -107,7 +107,7 @@ public class Bar {
     }
 
     /*Special methods*/
-
+    /* Potentiellement à dégager dès que firebase est fonctionnel
     public void setInitIsLiked(int isLiked, Context context) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         if (!sharedPreferences.contains(this.barName)) {
@@ -119,6 +119,7 @@ public class Bar {
             this.isLiked = sharedPreferences.getInt(this.barName, 2);
         }
     }
+    */
 
     public String getAddress() {
         return address;
