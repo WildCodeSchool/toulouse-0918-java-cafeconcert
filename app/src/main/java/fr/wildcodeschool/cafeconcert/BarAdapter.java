@@ -63,6 +63,7 @@ public class BarAdapter extends ArrayAdapter<Bar> {
         // Populate the data into the template view using the data object
         tvBarName.setText(bar.getBarName());
         Glide.with(getContext()).load(bar.getPicture()) .into(ibBar);
+
         MainActivity.setNavigation(navigate, bar, getContext());
 
         //Adding efficient likes/dislikes buttons
