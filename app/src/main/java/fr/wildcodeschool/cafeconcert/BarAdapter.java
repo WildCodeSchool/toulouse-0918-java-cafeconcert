@@ -70,17 +70,7 @@ public class BarAdapter extends ArrayAdapter<Bar> {
         ImageView likeButton = convertView.findViewById(R.id.like_button);
         ImageView dontLikeButton = convertView.findViewById(R.id.dont_like_button);
         ImageView icon = convertView.findViewById(R.id.status_icon);
-        ImageView fondIcon = convertView.findViewById(R.id.fond_icon);
-        ImageView fondAddress = convertView.findViewById(R.id.fond_bar_address);
-        ImageView fondName = convertView.findViewById(R.id.fond_bar_name);
         TextView barAdress = convertView.findViewById(R.id.adress_bar);
-        fondIcon.setBackgroundResource(R.drawable.fond_icone_like);
-        fondName.setBackgroundResource(R.drawable.fond_txt);
-        ImageView iconAdress = convertView.findViewById(R.id.icon_adress);
-        iconAdress.setBackgroundResource(R.drawable.ic_my_location_black_24dp);
-        ConstraintLayout constraintLayout = convertView.findViewById(R.id.drawer_bar);
-        constraintLayout.setBackgroundResource(R.drawable.fondpopup);
-        fondAddress.setBackgroundResource(R.drawable.fond_txt);
         String[] parts = bar.getAddress().split(" ");
         String adressTerm = "";
         for (int i = 0; i < parts.length - 2; i++) {
