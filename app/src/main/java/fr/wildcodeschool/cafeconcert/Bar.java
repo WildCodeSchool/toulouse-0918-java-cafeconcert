@@ -18,7 +18,6 @@ public class Bar {
     private String picture; // Pour un drawable le type est 'int'
     private Context context;
     private String address;
-    private Location barLocation = new Location("Bar");
     private float distanceFromUser;
     
     /*Constructor*/
@@ -91,11 +90,6 @@ public class Bar {
 
     public void setIsLiked(int isLiked) {
         this.isLiked = isLiked;
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(this.barName, isLiked);
-        editor.commit();
-
     }
 
     public String getPicture() { return picture; }
@@ -110,40 +104,12 @@ public class Bar {
         this.context = context;
     }
 
-    /*Special methods*/
-
-    public void setInitIsLiked(int isLiked, Context context) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        if (!sharedPreferences.contains(this.barName)) {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putInt(this.barName, isLiked);
-            editor.commit();
-            this.isLiked = isLiked;
-        } else {
-            this.isLiked = sharedPreferences.getInt(this.barName, 2);
-        }
-    }
-
     public String getAddress() {
         return address;
     }
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public Location getBarLocation() {
-        return barLocation;
-    }
-
-    public void setBarLocation(Location barLocation) {
-        this.barLocation = barLocation;
-    }
-
-    public void setBarLocation() {
-        this.barLocation.setLatitude(this.getGeoPoint());
-        this.barLocation.setLongitude(this.getGeoShape());
-        this.barLocation.setTime(new Date().getTime()); //Set time as current Date
     }
 
     public float getDistanceFromUser() {

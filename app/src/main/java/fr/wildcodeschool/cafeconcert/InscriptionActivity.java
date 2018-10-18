@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,16 +16,25 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class InscriptionActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
+    private FirebaseDatabase database;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inscription);
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
+
+        //reprendre la firebase du projet pour y installer un nouvel utilisateur sur le noeud utilisateur
+        database = FirebaseDatabase.getInstance();
+
 
         Button btLogin = findViewById(R.id.bValider);
         btLogin.setOnClickListener(new View.OnClickListener() {
@@ -35,9 +45,9 @@ public class InscriptionActivity extends AppCompatActivity {
                 String email = etLogin.getText().toString();
                 String password = etPassword.getText().toString();
                 if (email.isEmpty() || password.isEmpty()) {
-                    Toast.makeText(InscriptionActivity.this, "Renseignez un mot de passe", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(InscriptionActivity.this, R.string.please_password, Toast.LENGTH_SHORT).show();
                 } else {
-                    signInUser(email, password);
+                    signUpUser(email, password);
                 }
             }
         });
@@ -45,19 +55,45 @@ public class InscriptionActivity extends AppCompatActivity {
         ivlogo.setAlpha(40); //value: [0-255]. Where 0 is fully transparent and 255 is fully opaque.
     }
 
-    private void signInUser(String email, String password) {
+    private void signUpUser(String email, String password) {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(InscriptionActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            // TODO : faire une requête pour récupérer les données supplementaire de l'utilisateur
-                            String uId = user.getUid();
-                            updateUI(user);
+
+                            final FirebaseUser user = mAuth.getCurrentUser();
+                            final String uId = user.getUid();
+
+
+                            DatabaseReference refBar = database.getReference("cafeconcert");
+                            final DatabaseReference refUser = database.getReference("users");
+                            final DatabaseReference currentUser = refUser.child(uId).child("bars");
+
+                            refBar.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    for (DataSnapshot barSnapshot : dataSnapshot.getChildren()) {
+                                        Log.d("CAFECONCERT","je suis dans la boucle !"); // TODO to delete ?
+                                        String barId = barSnapshot.getKey();
+                                        Bar bar = barSnapshot.getValue(Bar.class);
+                                        bar.setIsLiked(2);
+                                        currentUser.child(barId).setValue(bar);
+
+                                    }
+                                    updateUI(user);
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                }
+                            });
+
+
+
                         } else {
                             // If sign in fails, display a message to the user.
-                            Toast.makeText(InscriptionActivity.this, "Authentication failed.",
+                            Toast.makeText(InscriptionActivity.this, R.string.authentification_fail,
                                     Toast.LENGTH_LONG).show();
                             updateUI(null);
                         }
@@ -79,4 +115,6 @@ public class InscriptionActivity extends AppCompatActivity {
         // mAuth.signOut(); // forcer la deconnexion de l'utilisateur
         updateUI(currentUser);
     }
+
+
 }

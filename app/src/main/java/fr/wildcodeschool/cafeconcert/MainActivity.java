@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
                 String email = etLogin.getText().toString();
                 String password = etPassword.getText().toString();
                 if (email.isEmpty() || password.isEmpty()) {
-                    Toast.makeText(MainActivity.this, "BONSOIR", Toast.LENGTH_SHORT).show(); // TODO WUT ?
+                    Toast.makeText(MainActivity.this, R.string.please_give_password, Toast.LENGTH_SHORT).show(); // TODO WUT ?
                 } else {
                     signInUser(email, password);
                 }
@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
-                            Toast.makeText(MainActivity.this, "Authentication failed.",
+                            Toast.makeText(MainActivity.this, R.string.authentification_fail,
                                     Toast.LENGTH_SHORT).show();
                             updateUI(null);
                         }
@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        mAuth.signOut(); // forcer la deconnexion de l'utilisateur
+        //mAuth.signOut(); // forcer la deconnexion de l'utilisateur
         updateUI(currentUser);
     }
 

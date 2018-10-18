@@ -1,18 +1,16 @@
 package fr.wildcodeschool.cafeconcert;
 
 
-
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -25,38 +23,41 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Locale;
-
 
 public class BarListActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private GestureDetectorCompat mGestureObject;
+    final static int CLOSEST_BAR_NUMBERS = 5;
+    BarAdapter adapter;
     private DrawerLayout drawer;
     private ArrayList<Bar> bars;
     private Location mUserLocation = new Location("User");
     private LocationManager mLocationManager = null;
     private boolean filter = false;
     private boolean mFilterDistance = false;
-    BarAdapter adapter;
     private ListView listBar;
-
-    final static int CLOSEST_BAR_NUMBERS = 5;
+    private String uId;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bar_list);
         bars = new ArrayList<>();
-        listBar= findViewById(R.id.list_bar);
+        listBar = findViewById(R.id.list_bar);
+        mAuth = FirebaseAuth.getInstance();
+        uId = mAuth.getCurrentUser().getUid();
 
         //#BurgerMenu Here I take the new toolbar to set it in my activity
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -79,7 +80,7 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
         ArrayList<Bar> closestBars = new ArrayList<>();
         range = Math.min(range, myBars.size());
 
-        for (int i = 0 ; i < range ; i ++) {
+        for (int i = 0; i < range; i++) {
             closestBars.add(arrayFilterByDistance(myBars).get(i));
         }
         return closestBars;
@@ -87,13 +88,18 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
 
     public ArrayList<Bar> arrayFilterByDistance(ArrayList<Bar> myBars) {
 
+        Location barLocation = new Location("Bar");
+        barLocation.setTime(new Date().getTime());
+
         for (Bar bar : myBars) {
-            bar.setDistanceFromUser(mUserLocation.distanceTo(bar.getBarLocation()));
+            barLocation.setLatitude(bar.getGeoPoint());
+            barLocation.setLongitude(bar.getGeoShape());
+            bar.setDistanceFromUser(mUserLocation.distanceTo(barLocation));
         }
 
-        for (int i = 0 ; i <= myBars.size()-1 ; i ++ ) {
-            for (int j = i ; j <= myBars.size()-1 ; j ++) {
-                if (myBars.get(j).getDistanceFromUser() < myBars.get(i).getDistanceFromUser() ) {
+        for (int i = 0; i <= myBars.size() - 1; i++) {
+            for (int j = i; j <= myBars.size() - 1; j++) {
+                if (myBars.get(j).getDistanceFromUser() < myBars.get(i).getDistanceFromUser()) {
                     Collections.swap(myBars, i, j);
                 }
             }
@@ -179,18 +185,18 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
 
     public void initBarList() {
 
-        FirebaseDatabase baseEnFeu = FirebaseDatabase.getInstance();
-        DatabaseReference refBar = baseEnFeu.getReference("cafeconcert");
-
-        refBar.addListenerForSingleValueEvent(new ValueEventListener() {
+        final FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference refBar = firebaseDatabase.getReference("cafeconcert");
+        DatabaseReference refUser = firebaseDatabase.getReference("users");
+        final DatabaseReference currentUser = refUser.child(uId);
+        currentUser.child("bars").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 bars.clear();
-                for (DataSnapshot barSnapshot : dataSnapshot.getChildren()){
-                    Bar bar = barSnapshot.getValue(Bar.class);
-                    bar.setInitIsLiked(2, BarListActivity.this);
+                for (DataSnapshot barSnapshot : dataSnapshot.getChildren()) {
+                    final Bar bar = barSnapshot.getValue(Bar.class);
+                    String barId = barSnapshot.getKey();
                     bar.setContext(BarListActivity.this);
-                    bar.setBarLocation();
                     //bar.setPicture(R.drawable.photodecafe);
                     bars.add(bar);
                 }
@@ -204,7 +210,6 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
     }
 
     public void checkMenuCreated(DrawerLayout drawer) {
-
         drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
@@ -327,6 +332,9 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
             case R.id.app_bar_distance:
                 checkboxDistance.setChecked(!checkboxDistance.isChecked());
                 break;
+            case R.id.deconnexion:
+                mAuth.signOut();
+                startActivity(new Intent(this, MainActivity.class));
 
         }
         drawer.closeDrawer(GravityCompat.START);
