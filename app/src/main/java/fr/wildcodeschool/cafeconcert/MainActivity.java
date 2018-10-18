@@ -29,6 +29,30 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
+    /*Launch Googlemaps on Navigation mode.
+     * User position as departure, bar coordonates as destination */
+    public static void setNavigation(ImageView navigate, final Bar bar, final Context context) {
+
+        navigate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                        Uri.parse("http://maps.google.com/maps?.34&daddr=" + bar.getGeoPoint() + "," + bar.getGeoShape()));
+                context.startActivity(intent);
+            }
+        });
+    }
+
+    public static ArrayList<Bar> arrayFilter(ArrayList<Bar> bars) {
+        ArrayList<Bar> arrayFilter = new ArrayList<>();
+        for (Bar monBar : bars) {
+            if (monBar.getIsLiked() == 1) {
+                arrayFilter.add(monBar);
+            }
+        }
+        return arrayFilter;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         final ImageView ivlogo = findViewById(R.id.iv_logoapp);
-        final RotateAnimation anim = new RotateAnimation(0f, 350f, Animation.RELATIVE_TO_SELF,0.5f, Animation.RELATIVE_TO_SELF,0.5f);
+        final RotateAnimation anim = new RotateAnimation(0f, 350f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         anim.setInterpolator(new LinearInterpolator());
         anim.setRepeatCount(Animation.INFINITE);
         anim.setDuration(700);
@@ -136,30 +160,6 @@ public class MainActivity extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         //mAuth.signOut(); // forcer la deconnexion de l'utilisateur
         updateUI(currentUser);
-    }
-
-    /*Launch Googlemaps on Navigation mode.
-     * User position as departure, bar coordonates as destination */
-    public static void setNavigation(ImageView navigate, final Bar bar, final Context context) {
-
-        navigate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
-                        Uri.parse("http://maps.google.com/maps?.34&daddr=" + bar.getGeoPoint()+ "," + bar.getGeoShape()));
-                context.startActivity(intent);
-            }
-        });
-    }
-
-    public static ArrayList<Bar> arrayFilter(ArrayList<Bar> bars) {
-        ArrayList<Bar> arrayFilter = new ArrayList<>();
-        for (Bar monBar : bars) {
-            if (monBar.getIsLiked() == 1) {
-                arrayFilter.add(monBar);
-            }
-        }
-        return arrayFilter;
     }
 
 }

@@ -1,13 +1,11 @@
 package fr.wildcodeschool.cafeconcert;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
@@ -38,18 +36,16 @@ public class InscriptionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_inscription);
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
-
         //reprendre la firebase du projet pour y installer un nouvel utilisateur sur le noeud utilisateur
         database = FirebaseDatabase.getInstance();
         final ImageView ivlogo = findViewById(R.id.iv_logo);
         ivlogo.setAlpha(40); //value: [0-255]. Where 0 is fully transparent and 255 is fully opaque.
-        final RotateAnimation anim = new RotateAnimation(0f, 350f, Animation.RELATIVE_TO_SELF,0.5f, Animation.RELATIVE_TO_SELF,0.5f);
+        final RotateAnimation anim = new RotateAnimation(0f, 350f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         anim.setInterpolator(new LinearInterpolator());
         anim.setRepeatCount(Animation.INFINITE);
         anim.setDuration(700);
         ivlogo.setAnimation(null);
         final Button btLogin = findViewById(R.id.bValider);
-
         btLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -59,9 +55,6 @@ public class InscriptionActivity extends AppCompatActivity {
                 String pseudo = etPseudo.getText().toString();
                 String email = etLogin.getText().toString();
                 String password = etPassword.getText().toString();
-
-
-
                 if (email.isEmpty() || password.isEmpty() || pseudo.isEmpty()) {
                     Toast.makeText(InscriptionActivity.this, "Renseignez un mot de passe ou un identifiant", Toast.LENGTH_SHORT).show();
                 } else {
@@ -106,7 +99,7 @@ public class InscriptionActivity extends AppCompatActivity {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     for (DataSnapshot barSnapshot : dataSnapshot.getChildren()) {
-                                        Log.d("CAFECONCERT","je suis dans la boucle !");
+                                        Log.d("CAFECONCERT", "je suis dans la boucle !");
                                         String barId = barSnapshot.getKey();
                                         Bar bar = barSnapshot.getValue(Bar.class);
                                         bar.setIsLiked(2);
@@ -120,7 +113,6 @@ public class InscriptionActivity extends AppCompatActivity {
                                 public void onCancelled(@NonNull DatabaseError databaseError) {
                                 }
                             });
-
 
 
                         } else {
@@ -147,8 +139,4 @@ public class InscriptionActivity extends AppCompatActivity {
         // mAuth.signOut(); // forcer la deconnexion de l'utilisateur
         updateUI(currentUser);
     }
-
-
-
-
 }

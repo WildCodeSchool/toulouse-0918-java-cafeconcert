@@ -380,14 +380,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         // By default, map zoom on Toulouse
         Intent intent1 = getIntent();
         double lat = intent1.getDoubleExtra("latitute", 0);
-        double lng  = intent1.getDoubleExtra("longitude",0);
+        double lng = intent1.getDoubleExtra("longitude", 0);
 
         LatLng toulouse;
-        if (lat==0 && lng ==0){
+        if (lat == 0 && lng == 0) {
             toulouse = new LatLng(TOULOUSE_LATITUDE, TOULOUSE_LONGITUDE);
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(toulouse, ZOOM_LVL_BY_DEFAULT));
-        }
-        else {
+        } else {
             toulouse = new LatLng(lat, lng);
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(toulouse, 128));
         }

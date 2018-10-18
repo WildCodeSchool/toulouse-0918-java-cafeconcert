@@ -109,7 +109,6 @@ public class Bar {
         this.context = context;
     }
 
-
     public String getAddress() {
         return address;
     }
@@ -125,6 +124,4 @@ public class Bar {
     public void setDistanceFromUser(float distanceFromUser) {
         this.distanceFromUser = distanceFromUser;
     }
-
-
 }
