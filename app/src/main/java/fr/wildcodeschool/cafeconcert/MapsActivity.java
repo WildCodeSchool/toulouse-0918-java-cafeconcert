@@ -63,6 +63,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Locale;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, NavigationView.OnNavigationItemSelectedListener {
@@ -172,7 +173,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     String barId = barSnapshot.getKey();
                     bar.setContext(MapsActivity.this);
                     //bar.setPicture(R.drawable.photodecafe); //TODO to delete
-                    bar.setBarLocation();
                     bars.add(bar);
                 }
                 initMarkers();
@@ -326,8 +326,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public ArrayList<Bar> arrayFilterByDistance(ArrayList<Bar> myBars) {
 
+        Location barLocation = new Location("Bar");
+        barLocation.setTime(new Date().getTime());
+
         for (Bar bar : myBars) {
-            bar.setDistanceFromUser(mUserLocation.distanceTo(bar.getBarLocation()));
+            barLocation.setLatitude(bar.getGeoPoint());
+            barLocation.setLongitude(bar.getGeoShape());
+            bar.setDistanceFromUser(mUserLocation.distanceTo(barLocation));
         }
 
         for (int i = 0; i <= myBars.size() - 1; i++) {
