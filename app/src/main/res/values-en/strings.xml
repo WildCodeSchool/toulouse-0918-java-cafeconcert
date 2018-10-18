@@ -51,4 +51,8 @@
     <string name="please_password">Please enter a login ID and a password</string>
     <string name="authentification_fail">Authentification failed</string>
     <string name="please_give_password">Please enter a login ID and a password</string>
+    <string name="itineraire">Itinerary</string>
+    <string name="appeler">Call</string>
+    <string name="site_web">Website</string>
+
 </resources>
