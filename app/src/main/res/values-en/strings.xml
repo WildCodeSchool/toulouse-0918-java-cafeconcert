@@ -50,4 +50,7 @@
     <string name="pas_encore_inscrit">Not yet registered ?</string>
     <string name="profil_pic_camera">Edit profile pic from camera</string>
     <string name="profil_pic_galery">Edit profile pic from galery</string>
+    <string name="itineraire">Itinerary</string>
+    <string name="appeler">Call</string>
+    <string name="site_web">Website</string>
 </resources>
