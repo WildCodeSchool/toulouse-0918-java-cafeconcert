@@ -47,4 +47,7 @@
     <string name="language">English</string>
     <string name="deconnexion">Déconnexion</string>
     <string name="pas_encore_inscrit">Pas encore inscrit?</string>
+    <string name="itineraire">Itinéraire</string>
+    <string name="appeler">Appeler</string>
+    <string name="site_web">Site web</string>
 </resources>
