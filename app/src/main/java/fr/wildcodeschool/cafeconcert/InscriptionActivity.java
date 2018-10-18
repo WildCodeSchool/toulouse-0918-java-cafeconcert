@@ -36,6 +36,7 @@ public class InscriptionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_inscription);
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
+
         //reprendre la firebase du projet pour y installer un nouvel utilisateur sur le noeud utilisateur
         database = FirebaseDatabase.getInstance();
         final ImageView ivlogo = findViewById(R.id.iv_logo);
@@ -56,7 +57,7 @@ public class InscriptionActivity extends AppCompatActivity {
                 String email = etLogin.getText().toString();
                 String password = etPassword.getText().toString();
                 if (email.isEmpty() || password.isEmpty() || pseudo.isEmpty()) {
-                    Toast.makeText(InscriptionActivity.this, "Renseignez un mot de passe ou un identifiant", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(InscriptionActivity.this, R.string.please_password, Toast.LENGTH_SHORT).show();
                 } else {
                     ivlogo.startAnimation(anim);
                     signUpUser(email, password, pseudo);
@@ -99,7 +100,6 @@ public class InscriptionActivity extends AppCompatActivity {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     for (DataSnapshot barSnapshot : dataSnapshot.getChildren()) {
-                                        Log.d("CAFECONCERT", "je suis dans la boucle !");
                                         String barId = barSnapshot.getKey();
                                         Bar bar = barSnapshot.getValue(Bar.class);
                                         bar.setIsLiked(2);
@@ -117,7 +117,7 @@ public class InscriptionActivity extends AppCompatActivity {
 
                         } else {
                             // If sign in fails, display a message to the user.
-                            Toast.makeText(InscriptionActivity.this, "Authentication failed.",
+                            Toast.makeText(InscriptionActivity.this, R.string.authentification_fail,
                                     Toast.LENGTH_LONG).show();
                             updateUI(null);
                         }

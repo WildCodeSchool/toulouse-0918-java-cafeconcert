@@ -265,5 +265,4 @@
         app:layout_constraintStart_toStartOf="@+id/text_bar_name"
         app:layout_constraintTop_toTopOf="@+id/icon_adress" />
 
-
 </android.support.constraint.ConstraintLayout>

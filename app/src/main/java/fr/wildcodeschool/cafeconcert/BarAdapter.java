@@ -129,6 +129,19 @@ public class BarAdapter extends ArrayAdapter<Bar> {
         } else {
             textWebSite.setText(bar.getWebUrl());
         }
+
+        //"To Map" button
+        fondAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String name = bar.getBarName();
+                Intent intent = new Intent(getContext(), MapsActivity.class);
+                intent.putExtra("BAR_NAME", name);
+                getContext().startActivity(intent);
+            }
+        });
+
+
         //Phone button
         phone.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, InscriptionActivity.class));
             }
         });
+
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
@@ -90,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
                 String email = etLogin.getText().toString();
                 String password = etPassword.getText().toString();
                 if (email.isEmpty() || password.isEmpty()) {
-                    Toast.makeText(MainActivity.this, "BONSOIR", Toast.LENGTH_SHORT).show(); // TODO WUT ?
+                    Toast.makeText(MainActivity.this, R.string.please_give_password, Toast.LENGTH_SHORT).show();
                 } else {
                     ivlogo.startAnimation(anim);
                     signInUser(email, password);
@@ -139,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
-                            Toast.makeText(MainActivity.this, "Authentication failed.",
+                            Toast.makeText(MainActivity.this, R.string.authentification_fail,
                                     Toast.LENGTH_SHORT).show();
                             updateUI(null);
                         }
