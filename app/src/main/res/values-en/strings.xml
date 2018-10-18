@@ -48,6 +48,9 @@
     <string name="les_5_caf_s_les_plus_proches">5 closest places</string>
     <string name="les_5_bars_les_plus_proches">5 closest places</string>
     <string name="pas_encore_inscrit">Not yet registered ?</string>
+    <string name="please_password">Please enter a login ID and a password</string>
+    <string name="authentification_fail">Authentification failed</string>
+    <string name="please_give_password">Please enter a login ID and a password</string>
     <string name="itineraire">Itinerary</string>
     <string name="appeler">Call</string>
     <string name="site_web">Website</string>
