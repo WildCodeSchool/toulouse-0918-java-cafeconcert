@@ -18,7 +18,6 @@ public class Bar {
     private String picture; // Pour un drawable le type est 'int'
     private Context context;
     private String address;
-    private Location barLocation = new Location("Bar");
     private float distanceFromUser;
     
     /*Constructor*/
@@ -109,20 +108,6 @@ public class Bar {
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public Location getBarLocation() {
-        return barLocation;
-    }
-
-    public void setBarLocation(Location barLocation) {
-        this.barLocation = barLocation;
-    }
-
-    public void setBarLocation() {
-        this.barLocation.setLatitude(this.getGeoPoint());
-        this.barLocation.setLongitude(this.getGeoShape());
-        this.barLocation.setTime(new Date().getTime()); //Set time as current Date
     }
 
     public float getDistanceFromUser() {

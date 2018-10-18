@@ -32,6 +32,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Locale;
 
 public class BarListActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -96,8 +97,13 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
 
     public ArrayList<Bar> arrayFilterByDistance(ArrayList<Bar> myBars) {
 
+        Location barLocation = new Location("Bar");
+        barLocation.setTime(new Date().getTime());
+
         for (Bar bar : myBars) {
-            bar.setDistanceFromUser(mUserLocation.distanceTo(bar.getBarLocation()));
+            barLocation.setLatitude(bar.getGeoPoint());
+            barLocation.setLongitude(bar.getGeoShape());
+            bar.setDistanceFromUser(mUserLocation.distanceTo(barLocation));
         }
 
         for (int i = 0; i <= myBars.size() - 1; i++) {
@@ -200,7 +206,6 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
                     final Bar bar = barSnapshot.getValue(Bar.class);
                     String barId = barSnapshot.getKey();
                     bar.setContext(BarListActivity.this);
-                    bar.setBarLocation();
                     bars.add(bar);
                 }
                 initBarVisualisation();
