@@ -14,7 +14,7 @@
     <string name="password">Mot de passe</string>
     <string name="profile">Profil</string>
     <string name="map">La Carte</string>
-    <string name="bar_list">La Liste</string>
+    <string name="bar_list">Liste de bars</string>
     <string name="favorite">Filtre</string>
     <string name="like">Mes favoris</string>
     <string name="be_social">Être sociable</string>
@@ -47,6 +47,9 @@
     <string name="language">English</string>
     <string name="deconnexion">Déconnexion</string>
     <string name="pas_encore_inscrit">Pas encore inscrit?</string>
+    <string name="please_password">Renseignez un mot de passe et un identifiant</string>
+    <string name="authentification_fail">L\'authentification a échoué</string>
+    <string name="please_give_password">Veuillez renseigner votre identifiant et votre mot de passe</string>
     <string name="itineraire">Itinéraire</string>
     <string name="appeler">Appeler</string>
     <string name="site_web">Site web</string>

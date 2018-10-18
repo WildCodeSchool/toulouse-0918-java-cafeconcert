@@ -61,15 +61,10 @@ public class BarAdapter extends ArrayAdapter<Bar> {
         TextView tvBarName = convertView.findViewById(R.id.text_bar_name);
         ImageButton ibBar = convertView.findViewById(R.id.image_bar);
         ImageView navigate = convertView.findViewById(R.id.navigationButton);
-        navigate.setBackgroundResource(R.mipmap.navigate);
         ImageView phone = convertView.findViewById(R.id.ib_phone);
-        phone.setBackgroundResource(R.mipmap.phonelogo);
         ImageButton ibWeb = convertView.findViewById(R.id.ib_web);
-        ibWeb.setBackgroundResource(R.mipmap.globeicon);
-        navigate.setImageResource(R.mipmap.navigate);
-        ImageView likeButton = convertView.findViewById(R.id.like_button);
-        ImageView dontLikeButton = convertView.findViewById(R.id.dont_like_button);
-        ImageView icon = convertView.findViewById(R.id.status_icon);
+        ImageButton zoomAddress = convertView.findViewById(R.id.icon_adress);
+        ImageButton icon = convertView.findViewById(R.id.status_icon);
         TextView barAdress = convertView.findViewById(R.id.adress_bar);
         String[] parts = bar.getAddress().split(" ");
         String adressTerm = "";
@@ -85,8 +80,8 @@ public class BarAdapter extends ArrayAdapter<Bar> {
 
         //Adding efficient likes/dislikes buttons
         setLikeIcon(icon, bar.getIsLiked());
-        adaptLikesButton(likeButton, dontLikeButton, icon, bar);
-        setUserOpinion(likeButton, dontLikeButton, icon, bar);
+        adaptLikesButton(icon, icon, icon, bar);
+        setUserOpinion(icon, icon, icon, bar);
 
         // Drawer hide/shown
         final ConstraintLayout drawerBar = convertView.findViewById(R.id.drawer_bar);
@@ -101,14 +96,18 @@ public class BarAdapter extends ArrayAdapter<Bar> {
             }
         });
 
-        TextView textPhone = convertView.findViewById(R.id.phone_text);
-        TextView textWebSite = convertView.findViewById(R.id.web_text);
-        textPhone.setText(bar.getPhoneNumber());
-        if (bar.getWebUrl().isEmpty()) {
-            textWebSite.setText(R.string.no_website);
-        } else {
-            textWebSite.setText(bar.getWebUrl());
-        }
+        //"To Map" button
+        zoomAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String name = bar.getBarName();
+                Intent intent = new Intent(getContext(), MapsActivity.class);
+                intent.putExtra("BAR_NAME", name);
+                getContext().startActivity(intent);
+            }
+        });
+
+
         //Phone button
         phone.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -196,32 +195,17 @@ public class BarAdapter extends ArrayAdapter<Bar> {
             }
         });
 
-        like.setOnClickListener(new View.OnClickListener() {
+        icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (bar.getIsLiked() != 1) {
-                    bar.setIsLiked(1);
-                    adaptLikesButton(like, dontLike, icon, bar);
-                } else {
-                    bar.setIsLiked(2);
-                    adaptLikesButton(like, dontLike, icon, bar);
-                }
-                if (filter) {
-                    Intent intent = new Intent(getContext(), BarListActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    (getContext()).startActivity(intent);
-                }
-                currentUser.child(barKey[0]).child("isLiked").setValue(bar.getIsLiked());
-            }
-        });
-
-        dontLike.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (bar.getIsLiked() != 0) {
+                if (bar.getIsLiked() == 1) {
                     bar.setIsLiked(0);
                     adaptLikesButton(like, dontLike, icon, bar);
-                } else {
+                } else if (bar.getIsLiked() == 0){
                     bar.setIsLiked(2);
+                    adaptLikesButton(like, dontLike, icon, bar);
+                } else if (bar.getIsLiked() == 2){
+                    bar.setIsLiked(1);
                     adaptLikesButton(like, dontLike, icon, bar);
                 }
                 if (filter) {
@@ -230,6 +214,7 @@ public class BarAdapter extends ArrayAdapter<Bar> {
                 }
                 currentUser.child(barKey[0]).child("isLiked").setValue(bar.getIsLiked());
             }
+
         });
     }
 
