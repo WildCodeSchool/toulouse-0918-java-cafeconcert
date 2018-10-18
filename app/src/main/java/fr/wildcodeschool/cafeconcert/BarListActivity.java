@@ -49,16 +49,6 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
     private String uId;
     private FirebaseAuth mAuth;
 
-    public static ArrayList<Bar> arrayFilter(ArrayList<Bar> bars) {
-        ArrayList<Bar> arrayFilter = new ArrayList<>();
-        for (Bar monBar : bars) {
-            if (monBar.getIsLiked() == 1) {
-                arrayFilter.add(monBar);
-            }
-        }
-        return arrayFilter;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

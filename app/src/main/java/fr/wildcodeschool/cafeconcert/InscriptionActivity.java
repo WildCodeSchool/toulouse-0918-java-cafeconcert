@@ -45,7 +45,7 @@ public class InscriptionActivity extends AppCompatActivity {
                 String email = etLogin.getText().toString();
                 String password = etPassword.getText().toString();
                 if (email.isEmpty() || password.isEmpty()) {
-                    Toast.makeText(InscriptionActivity.this, "Renseignez un mot de passe ou un identifiant", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(InscriptionActivity.this, R.string.please_password, Toast.LENGTH_SHORT).show();
                 } else {
                     signUpUser(email, password);
                 }
@@ -74,7 +74,7 @@ public class InscriptionActivity extends AppCompatActivity {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     for (DataSnapshot barSnapshot : dataSnapshot.getChildren()) {
-                                        Log.d("CAFECONCERT","je suis dans la boucle !");
+                                        Log.d("CAFECONCERT","je suis dans la boucle !"); // TODO to delete ?
                                         String barId = barSnapshot.getKey();
                                         Bar bar = barSnapshot.getValue(Bar.class);
                                         bar.setIsLiked(2);
@@ -93,7 +93,7 @@ public class InscriptionActivity extends AppCompatActivity {
 
                         } else {
                             // If sign in fails, display a message to the user.
-                            Toast.makeText(InscriptionActivity.this, "Authentication failed.",
+                            Toast.makeText(InscriptionActivity.this, R.string.authentification_fail,
                                     Toast.LENGTH_LONG).show();
                             updateUI(null);
                         }
