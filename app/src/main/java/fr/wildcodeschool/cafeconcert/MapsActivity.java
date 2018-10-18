@@ -374,8 +374,20 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 new LatLng(TOULOUSE_LATITUDE_BORDURES_BOT, TOULOUSE_LONGITUDE_BORDURES_BOT), new LatLng(TOULOUSE_LATITUDE_BORDURES_TOP, TOULOUSE_LONGITUDE_BORDURES_TOP));
         mMap.setLatLngBoundsForCameraTarget(toulouseBounds);
         // By default, map zoom on Toulouse
-        LatLng toulouse = new LatLng(TOULOUSE_LATITUDE, TOULOUSE_LONGITUDE);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(toulouse, ZOOM_LVL_BY_DEFAULT));
+        Intent intent1 = getIntent();
+        double lat = intent1.getDoubleExtra("latitute", 0);
+        double lng = intent1.getDoubleExtra("longitude", 0);
+
+        LatLng toulouse;
+        if (lat == 0 && lng == 0) {
+            toulouse = new LatLng(TOULOUSE_LATITUDE, TOULOUSE_LONGITUDE);
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(toulouse, ZOOM_LVL_BY_DEFAULT));
+        } else {
+            toulouse = new LatLng(lat, lng);
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(toulouse, 128));
+        }
+
+
         // Set user localisation and ask permission to get it
         //checkUserLocationPermission(); //TODO A remettre ou à supprimer ?
 

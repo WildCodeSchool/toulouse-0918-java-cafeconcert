@@ -11,23 +11,18 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,6 +38,8 @@ public class Profile extends AppCompatActivity {
     private DrawerLayout drawer;
     private ImageView profilePic;
     private boolean filter = false;
+    private FirebaseAuth mAuth;
+    private String uId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +51,12 @@ public class Profile extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         mCurrentPhotoPath = sharedPreferences.getString("mPhotoPath", null);
+        mAuth = FirebaseAuth.getInstance();
+        uId = mAuth.getCurrentUser().getUid();
+
+        TextView pseudoTxt = findViewById(R.id.text_pseudo);
+        pseudoTxt.setText(mAuth.getCurrentUser().getDisplayName());
+
 
         if (mCurrentPhotoPath != null) {
             File imgFile = new File(mCurrentPhotoPath);
@@ -68,8 +71,6 @@ public class Profile extends AppCompatActivity {
             }
         });
     }
-
-
 
 
     @Override
@@ -158,72 +159,5 @@ public class Profile extends AppCompatActivity {
         editor.putString("mPhotoPath", mCurrentPhotoPath);
         editor.commit();
         return image;
-    }
-
-
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        CheckBox checkboxFilter = findViewById(R.id.checkBoxFilter);
-        switch (item.getItemId()) {
-            case R.id.nav_profile:
-                startActivity(new Intent(this, Profile.class));
-                break;
-            case R.id.nav_map:
-                startActivity(new Intent(this, MapsActivity.class));
-                break;
-            case R.id.nav_bar_list:
-                startActivity(new Intent(this, BarListActivity.class));
-                break;
-            case R.id.app_bar_switch:
-                checkboxFilter.setChecked(!checkboxFilter.isChecked());
-                break;
-
-        }
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
-    //#BurgerMenu For not leaving the activity immediately
-    @Override
-    public void onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    public void checkMenuCreated(final DrawerLayout drawer) {
-        drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
-            @Override
-            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
-                final CheckBox checkboxFilter = findViewById(R.id.checkBoxFilter);
-                checkboxFilter.setChecked(filter);
-
-                checkboxFilter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Profile.this);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putBoolean("filter", checkboxFilter.isChecked());
-                        editor.commit();
-                        filter = checkboxFilter.isChecked();
-                    }
-                });
-            }
-
-            @Override
-            public void onDrawerOpened(@NonNull View drawerView) {
-
-            }
-
-            @Override
-            public void onDrawerClosed(@NonNull View drawerView) {
-            }
-
-            @Override
-            public void onDrawerStateChanged(int newState) {
-
-            }
-        });
     }
 }
