@@ -48,4 +48,6 @@
     <string name="les_5_caf_s_les_plus_proches">5 closest places</string>
     <string name="les_5_bars_les_plus_proches">5 closest places</string>
     <string name="pas_encore_inscrit">Not yet registered ?</string>
+    <string name="profil_pic_camera">Edit profile pic from camera</string>
+    <string name="profil_pic_galery">Edit profile pic from galery</string>
 </resources>

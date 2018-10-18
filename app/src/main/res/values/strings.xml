@@ -47,4 +47,6 @@
     <string name="language">English</string>
     <string name="deconnexion">Déconnexion</string>
     <string name="pas_encore_inscrit">Pas encore inscrit?</string>
+    <string name="profil_pic_camera">Changez votre photo de profil en prenant une photo</string>
+    <string name="profil_pic_galery">Changez votre photo de profil depuis la galerie</string>
 </resources>

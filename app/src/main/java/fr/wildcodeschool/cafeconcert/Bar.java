@@ -91,6 +91,11 @@ public class Bar {
 
     public void setIsLiked(int isLiked) {
         this.isLiked = isLiked;
+        /*SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(this.barName, isLiked);
+        editor.commit();*/
+
     }
 
     public String getPicture() { return picture; }
@@ -104,6 +109,7 @@ public class Bar {
     public void setContext(Context context) {
         this.context = context;
     }
+
 
     public String getAddress() {
         return address;

@@ -7,39 +7,47 @@
     android:layout_height="match_parent"
     tools:context=".Profile">
 
+    <ImageButton
+        android:id="@+id/image_take_pic2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/ic_camera_alt_black_24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/image_pic_profile" />
+
     <ImageView
         android:id="@+id/image_pic_profile"
         android:layout_width="161dp"
         android:layout_height="162dp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginTop="24dp"
-        app:layout_constraintBottom_toTopOf="@+id/text_pseudo"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_pseudo"
         app:srcCompat="@android:drawable/sym_def_app_icon" />
 
     <TextView
         android:id="@+id/text_pseudo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.379"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/image_pic_profile"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="Pseudo" />
 
     <ImageButton
         android:id="@+id/image_take_pic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:background="@android:color/transparent"
-        app:layout_constraintBottom_toBottomOf="@+id/image_pic_profile"
-        app:layout_constraintEnd_toEndOf="@+id/image_pic_profile"
-        app:srcCompat="@android:drawable/radiobutton_on_background" />
+        android:layout_marginTop="4dp"
+        android:background="@drawable/ic_image_black_24dp"
+        app:layout_constraintStart_toStartOf="@+id/image_take_pic2"
+        app:layout_constraintTop_toBottomOf="@+id/image_take_pic2" />
 
     <ImageButton
         android:id="@+id/image_edit"
@@ -57,13 +65,13 @@
     <TextView
         android:id="@+id/text_favorite"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="19dp"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         android:text="@string/mes_coup_coeur"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_pseudo" />
+        app:layout_constraintTop_toBottomOf="@+id/image_take_pic" />
 
     <HorizontalScrollView
         android:layout_width="0dp"
@@ -157,5 +165,27 @@
             </android.support.constraint.ConstraintLayout>
         </LinearLayout>
     </HorizontalScrollView>
+
+    <TextView
+        android:id="@+id/profile_pic_camera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:text="@string/profil_pic_camera"
+        app:layout_constraintBottom_toBottomOf="@+id/image_take_pic2"
+        app:layout_constraintStart_toEndOf="@+id/image_take_pic2"
+        app:layout_constraintTop_toTopOf="@+id/image_take_pic2" />
+
+    <TextView
+        android:id="@+id/profile_pic_galery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:text="@string/profil_pic_galery"
+        app:layout_constraintBottom_toBottomOf="@+id/image_take_pic"
+        app:layout_constraintStart_toEndOf="@+id/image_take_pic"
+        app:layout_constraintTop_toTopOf="@+id/image_take_pic" />
 
 </android.support.constraint.ConstraintLayout>
