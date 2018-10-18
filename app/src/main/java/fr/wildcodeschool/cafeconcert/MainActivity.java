@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, InscriptionActivity.class));
             }
         });
+
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
@@ -56,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
                 String email = etLogin.getText().toString();
                 String password = etPassword.getText().toString();
                 if (email.isEmpty() || password.isEmpty()) {
-                    Toast.makeText(MainActivity.this, R.string.please_give_password, Toast.LENGTH_SHORT).show(); // TODO WUT ?
+                    Toast.makeText(MainActivity.this, R.string.please_give_password, Toast.LENGTH_SHORT).show();
                 } else {
                     signInUser(email, password);
                 }
