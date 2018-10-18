@@ -56,11 +56,13 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Locale;
@@ -90,10 +92,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private ArrayList<Marker> mMarkers = new ArrayList<>();
     private GestureDetectorCompat mGestureObject;
     private MotionEvent mMotionEvent;
+    private FirebaseAuth mAuth;
     private DrawerLayout drawer;
     private LocationManager mLocationManager = null;
     private FusedLocationProviderClient mFusedLocationClient;
     private boolean filter = false;
+    private String uId;
+
     private boolean mFilterDistance = false;
 
     @SuppressLint("ClickableViewAccessibility")
@@ -109,7 +114,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         //#BurgerMenu Here I take the new toolbar to set it in my activity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        mAuth = FirebaseAuth.getInstance();
+        uId = mAuth.getCurrentUser().getUid();
         //#BurgerMenu
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -156,18 +162,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public void initBar() {
-        FirebaseDatabase baseEnFeu = FirebaseDatabase.getInstance();
-        DatabaseReference refBar = baseEnFeu.getReference("cafeconcert");
 
-        refBar.addListenerForSingleValueEvent(new ValueEventListener() {
+        final FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference refBar = firebaseDatabase.getReference("cafeconcert");
+        DatabaseReference refUser = firebaseDatabase.getReference("users");
+        final DatabaseReference currentUser = refUser.child(uId);
+        currentUser.child("bars").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 bars.clear();
-
                 for (DataSnapshot barSnapshot : dataSnapshot.getChildren()) {
-                    Bar bar = barSnapshot.getValue(Bar.class);
-                    bar.setInitIsLiked(2, MapsActivity.this);
+                    final Bar bar = barSnapshot.getValue(Bar.class);
+                    String barId = barSnapshot.getKey();
                     bar.setContext(MapsActivity.this);
                     bar.setBarLocation();
 
@@ -175,6 +182,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
                 initMarkers();
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
@@ -300,6 +308,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             case R.id.app_bar_distance:
                 checkboxDistance.setChecked(!checkboxDistance.isChecked());
                 break;
+            case R.id.deconnexion:
+                mAuth.signOut();
+                startActivity(new Intent(this, MainActivity.class));
+
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -309,7 +321,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         ArrayList<Bar> closestBars = new ArrayList<>();
         range = Math.min(range, myBars.size());
 
-        for (int i = 0 ; i < range ; i ++) {
+        for (int i = 0; i < range; i++) {
             closestBars.add(arrayFilterByDistance(myBars).get(i));
         }
         return closestBars;
@@ -320,9 +332,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             bar.setDistanceFromUser(mUserLocation.distanceTo(bar.getBarLocation()));
         }
 
-        for (int i = 0 ; i <= myBars.size()-1 ; i ++ ) {
-            for (int j = i ; j <= myBars.size()-1 ; j ++) {
-                if (myBars.get(j).getDistanceFromUser() < myBars.get(i).getDistanceFromUser() ) {
+        for (int i = 0; i <= myBars.size() - 1; i++) {
+            for (int j = i; j <= myBars.size() - 1; j++) {
+                if (myBars.get(j).getDistanceFromUser() < myBars.get(i).getDistanceFromUser()) {
                     Collections.swap(myBars, i, j);
                 }
             }
@@ -337,7 +349,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
-            startActivity(new Intent(this, MainActivity.class));
+            finish();
         }
     }
 
@@ -379,7 +391,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (mFilterDistance && !filter) {
             mMap.clear();
             createMarkers(pickClosestBars(bars, CLOSEST_BAR_NUMBERS));
-        }  else if (mFilterDistance && filter) {
+        } else if (mFilterDistance && filter) {
             mMap.clear();
             createMarkers(pickClosestBars(MainActivity.arrayFilter(bars), CLOSEST_BAR_NUMBERS));
         } else if (!mFilterDistance && filter) {
@@ -494,6 +506,26 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public void setUserOpinion(final ImageView like, final ImageView dontLike, final Bar bar, final Marker marker) {
+        final FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference refBar = firebaseDatabase.getReference("cafeconcert");
+        final String[] barKey = new String[1];
+        DatabaseReference refUser = firebaseDatabase.getReference("users");
+        final DatabaseReference currentUser = refUser.child(uId).child("bars");
+
+        refBar.orderByChild("barName").equalTo(bar.getBarName()).limitToFirst(1).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                    barKey[0] = childSnapshot.getKey();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
 
         like.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -509,6 +541,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     mMap.clear();
                     createMarkers(MainActivity.arrayFilter(bars));
                 }
+                currentUser.child(barKey[0]).child("isLiked").setValue(bar.getIsLiked());
             }
 
         });
@@ -528,6 +561,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     createMarkers(MainActivity.arrayFilter(bars));
                     popUp.dismiss();
                 }
+                currentUser.child(barKey[0]).child("isLiked").setValue(bar.getIsLiked());
             }
         });
 
@@ -601,6 +635,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
     }
     /* If all required permissions are granted, set a marker on User Position*/
+
     @SuppressWarnings("MissingPermission")
     private void initLocation() {
         // Get the last known position of the user
