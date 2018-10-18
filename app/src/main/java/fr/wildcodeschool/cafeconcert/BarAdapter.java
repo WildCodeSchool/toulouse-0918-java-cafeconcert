@@ -74,6 +74,16 @@ public class BarAdapter extends ArrayAdapter<Bar> {
         adressTerm.trim();
         barAdress.setText(adressTerm);
 
+        zoomAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), MapsActivity.class);
+                intent.putExtra("latitute", bar.getGeoPoint());
+                intent.putExtra("longitude", bar.getGeoShape());
+                getContext().startActivity(intent);
+            }
+        });
+
         // Populate the data into the template view using the data object
         tvBarName.setText(bar.getBarName());
         MainActivity.setNavigation(navigate, bar, getContext());

@@ -90,6 +90,11 @@ public class Bar {
 
     public void setIsLiked(int isLiked) {
         this.isLiked = isLiked;
+        /*SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(this.barName, isLiked);
+        editor.commit();*/
+
     }
 
     public String getPicture() { return picture; }
@@ -119,6 +124,4 @@ public class Bar {
     public void setDistanceFromUser(float distanceFromUser) {
         this.distanceFromUser = distanceFromUser;
     }
-
-
 }
