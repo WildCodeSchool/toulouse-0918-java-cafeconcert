@@ -333,7 +333,6 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
             case R.id.deconnexion:
                 mAuth.signOut();
                 startActivity(new Intent(this, MainActivity.class));
-
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
