@@ -107,7 +107,6 @@ public class MainActivity extends AppCompatActivity {
         if (!config.locale.getLanguage().equals(lang)) {
             setLanguage(lang);
         }
-
     }
 
     //#Language
@@ -125,7 +124,6 @@ public class MainActivity extends AppCompatActivity {
 
         recreate();
     }
-
     private void signInUser(String email, String password) {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {

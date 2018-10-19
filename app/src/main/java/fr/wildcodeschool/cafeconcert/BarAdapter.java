@@ -28,6 +28,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 
 public class BarAdapter extends ArrayAdapter<Bar> {
@@ -62,7 +64,7 @@ public class BarAdapter extends ArrayAdapter<Bar> {
         uId = mAuth.getCurrentUser().getUid();
         // Lookup view for data population
         TextView tvBarName = convertView.findViewById(R.id.text_bar_name);
-        final ImageButton ibBar = convertView.findViewById(R.id.image_bar);
+        final ImageView ibBar = convertView.findViewById(R.id.image_bar);
         ImageView navigate = convertView.findViewById(R.id.navigationButton);
         ImageView phone = convertView.findViewById(R.id.ib_phone);
         ImageButton ibWeb = convertView.findViewById(R.id.ib_web);
@@ -97,11 +99,14 @@ public class BarAdapter extends ArrayAdapter<Bar> {
 
         // Populate the data into the template view using the data object
         tvBarName.setText(bar.getBarName());
+        Glide.with(getContext()).load(bar.getPicture()).into(ibBar);
+        Glide.with(getContext()).load(bar.getLogo()).into(ivLogoBar);
+
         MainActivity.setNavigation(navigate, bar, getContext());
 
         //Adding efficient likes/dislikes buttons
         setLikeIcon(icon, bar.getIsLiked());
-        adaptLikesButton(icon, icon, icon, bar);
+        adaptLikesButton(icon, bar);
         setUserOpinion(icon, icon, icon, bar);
 
         // Drawer hide/shown
@@ -162,7 +167,7 @@ public class BarAdapter extends ArrayAdapter<Bar> {
         return convertView;
     }
 
-    private void adaptLikesButton(ImageView like, ImageView dontLike, final ImageView icon, Bar bar) {
+    private void adaptLikesButton(final ImageView icon, Bar bar) {
 
         Bitmap initialLikeMarker = BitmapFactory.decodeResource(getContext().getResources(),
                 R.drawable.love_ping);
@@ -172,24 +177,19 @@ public class BarAdapter extends ArrayAdapter<Bar> {
                 R.drawable.love_break_ping);
         Bitmap dislikeMarker = Bitmap.createScaledBitmap(initialDislikeMarker, MARKER_WIDTH, MARKER_HEIGHT, false);
 
-        Bitmap nDislikeMarker = BitmapFactory.decodeResource(getContext().getResources(),
-                R.drawable.neutral_dislike_icon);
-        Bitmap neutralDislikeMarker = Bitmap.createScaledBitmap(nDislikeMarker, MARKER_WIDTH, MARKER_HEIGHT, false);
-
         Bitmap nLikeMarker = BitmapFactory.decodeResource(getContext().getResources(),
                 R.drawable.neutral_like_icon);
         Bitmap neutralLikeMarker = Bitmap.createScaledBitmap(nLikeMarker, MARKER_WIDTH, MARKER_HEIGHT, false);
 
-        like.setImageBitmap(neutralLikeMarker);
-        dontLike.setImageBitmap(neutralDislikeMarker);
+        icon.setImageBitmap(neutralLikeMarker);
 
         //0 dislike, 1 like, 2 neutral
         if (bar.getIsLiked() == 1) {
-            like.setImageBitmap(likeMarker);
-            dontLike.setImageBitmap(neutralDislikeMarker);
+            icon.setImageBitmap(likeMarker);
         } else if (bar.getIsLiked() == 0) {
-            dontLike.setImageBitmap(dislikeMarker);
-            like.setImageBitmap(neutralLikeMarker);
+            icon.setImageBitmap(dislikeMarker);
+        } else {
+            icon.setImageBitmap(neutralLikeMarker);
         }
         setLikeIcon(icon, bar.getIsLiked());
     }
@@ -221,13 +221,13 @@ public class BarAdapter extends ArrayAdapter<Bar> {
             public void onClick(View v) {
                 if (bar.getIsLiked() == 1) {
                     bar.setIsLiked(0);
-                    adaptLikesButton(like, dontLike, icon, bar);
+                    adaptLikesButton(icon, bar);
                 } else if (bar.getIsLiked() == 0){
                     bar.setIsLiked(2);
-                    adaptLikesButton(like, dontLike, icon, bar);
+                    adaptLikesButton(icon, bar);
                 } else if (bar.getIsLiked() == 2){
                     bar.setIsLiked(1);
-                    adaptLikesButton(like, dontLike, icon, bar);
+                    adaptLikesButton(icon, bar);
                 }
                 if (filter) {
                     Intent intent = new Intent(getContext(), BarListActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -235,7 +235,6 @@ public class BarAdapter extends ArrayAdapter<Bar> {
                 }
                 currentUser.child(barKey[0]).child("isLiked").setValue(bar.getIsLiked());
             }
-
         });
     }
 
