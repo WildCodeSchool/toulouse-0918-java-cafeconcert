@@ -57,6 +57,28 @@
         app:layout_constraintTop_toBottomOf="@+id/image_take_pic2" />
 
     <TextView
+        android:id="@+id/profile_pic_camera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:text="@string/profil_pic_camera"
+        app:layout_constraintBottom_toBottomOf="@+id/image_take_pic2"
+        app:layout_constraintStart_toEndOf="@+id/image_take_pic2"
+        app:layout_constraintTop_toTopOf="@+id/image_take_pic2" />
+
+    <TextView
+        android:id="@+id/profile_pic_galery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:text="@string/profil_pic_galery"
+        app:layout_constraintBottom_toBottomOf="@+id/image_take_pic"
+        app:layout_constraintStart_toEndOf="@+id/image_take_pic"
+        app:layout_constraintTop_toTopOf="@+id/image_take_pic" />
+
+    <TextView
         android:id="@+id/text_favorite"
         android:layout_width="wrap_content"
         android:layout_height="19dp"
@@ -71,6 +93,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_favorite">
@@ -160,26 +183,13 @@
         </LinearLayout>
     </HorizontalScrollView>
 
-    <TextView
-        android:id="@+id/profile_pic_camera"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:text="@string/profil_pic_camera"
-        app:layout_constraintBottom_toBottomOf="@+id/image_take_pic2"
-        app:layout_constraintStart_toEndOf="@+id/image_take_pic2"
-        app:layout_constraintTop_toTopOf="@+id/image_take_pic2" />
-
-    <TextView
-        android:id="@+id/profile_pic_galery"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:text="@string/profil_pic_galery"
-        app:layout_constraintBottom_toBottomOf="@+id/image_take_pic"
-        app:layout_constraintStart_toEndOf="@+id/image_take_pic"
-        app:layout_constraintTop_toTopOf="@+id/image_take_pic" />
+    <ListView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.557"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_favorite" />
 
 </android.support.constraint.ConstraintLayout>
