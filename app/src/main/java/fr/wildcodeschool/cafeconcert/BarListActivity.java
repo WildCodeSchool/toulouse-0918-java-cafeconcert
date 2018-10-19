@@ -90,26 +90,12 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
         }
     }
 
-    /*public void setButtonChangeLangageFromMenu() {
-
-        final TextView tvLangues = findViewById(R.id.tv_langues);
-        tvLangues.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SharedPreferences languePreferences = getSharedPreferences("CAFE_CONCERT", MODE_PRIVATE);
-                String lang = languePreferences.getString("Fav_langue", "");
-                Configuration config = getBaseContext().getResources().getConfiguration();
-                setLanguage(lang.equals("fr") ? "en" : "fr");
-            }
-        });
-    }*/
-
     public void connexionOrDeconnexionFromMenuBurger(NavigationView navigationView) {
 
         MenuItem connexion = navigationView.getMenu().findItem(R.id.connexion);
         MenuItem deconnexion = navigationView.getMenu().findItem(R.id.deconnexion);
         connexion.setVisible(false);
-        if(checkIfGuest(mUId)) {
+        if (checkIfGuest(mUId)) {
             deconnexion.setVisible(false);
             connexion.setVisible(true);
         }
@@ -134,7 +120,7 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
         Location barLocation = new Location("Bar");
         barLocation.setTime(new Date().getTime());
 
-        if(mUserLocation == null) {
+        if (mUserLocation == null) {
             Toast.makeText(getApplicationContext(), R.string.location_impossible, Toast.LENGTH_LONG).show();
             return myBars;
         }
@@ -238,7 +224,7 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
         DatabaseReference refUser = firebaseDatabase.getReference("users");
 
         DatabaseReference myRef;
-        if(mUId.equals("guest")) {
+        if (mUId.equals("guest")) {
             myRef = refGuest;
         } else {
             myRef = refUser.child(mUId).child("bars");
@@ -254,7 +240,7 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
                     bar.setContext(BarListActivity.this);
                     //bar.setPicture(R.drawable.photodecafe);
 
-                    if(mUId.equals("guest")) {
+                    if (mUId.equals("guest")) {
                         bar.setIsLiked(2);
                     }
                     bars.add(bar);
@@ -278,7 +264,7 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
                 distanceCheckboxfilter.setChecked(mFilterDistance);
 
                 // Guest restriction
-                if(checkIfGuest(mUId)) {
+                if (checkIfGuest(mUId)) {
                     checkboxFilter.setClickable(false);
                     distanceCheckboxfilter.setClickable(false);
                 }
@@ -288,7 +274,7 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                         // Guest restriction
-                        if(checkIfGuest(mUId)) {
+                        if (checkIfGuest(mUId)) {
                             Toast.makeText(getApplicationContext(), R.string.you_need_to_be_connected, Toast.LENGTH_LONG).show();
                             return;
                         }
@@ -320,7 +306,7 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                         // Guest restriction
-                        if(checkIfGuest(mUId)) {
+                        if (checkIfGuest(mUId)) {
                             Toast.makeText(getApplicationContext(), R.string.you_need_to_be_connected, Toast.LENGTH_LONG).show();
                             return;
                         }
@@ -396,7 +382,7 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
         switch (item.getItemId()) {
             case R.id.nav_profile:
                 // Guest restriction
-                if(checkIfGuest(mUId)) {
+                if (checkIfGuest(mUId)) {
                     Toast.makeText(getApplicationContext(), R.string.you_need_to_be_connected, Toast.LENGTH_LONG).show();
                     break;
                 }
@@ -422,7 +408,6 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
                 mAuth.signOut();
                 startActivity(new Intent(this, MainActivity.class));
                 break;
-
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;

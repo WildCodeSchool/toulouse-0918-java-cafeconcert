@@ -86,7 +86,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private PopupWindow popUp;
     private GoogleMap mMap;
     private ArrayList<Bar> bars = new ArrayList<>();
-    //private ArrayList<Bar> filterBars;
     private Location mUserLocation = new Location("User");
     private ArrayList<Marker> mMarkers = new ArrayList<>();
     private GestureDetectorCompat mGestureObject;
@@ -165,7 +164,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         MenuItem connexion = navigationView.getMenu().findItem(R.id.connexion);
         MenuItem deconnexion = navigationView.getMenu().findItem(R.id.deconnexion);
         connexion.setVisible(false);
-        if(checkIfGuest(mUId)) {
+        if (checkIfGuest(mUId)) {
             deconnexion.setVisible(false);
             connexion.setVisible(true);
         }
@@ -198,7 +197,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         DatabaseReference refUser = firebaseDatabase.getReference("users");
 
         DatabaseReference myRef;
-        if(mUId.equals("guest")) {
+        if (mUId.equals("guest")) {
             myRef = refGuest;
         } else {
             myRef = refUser.child(mUId).child("bars");
@@ -214,7 +213,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     final Bar bar = barSnapshot.getValue(Bar.class);
                     //String barId = barSnapshot.getKey();
                     bar.setContext(MapsActivity.this);
-                    if(mUId.equals("guest")) {
+                    if (mUId.equals("guest")) {
                         bar.setIsLiked(2);
                     }
                     //bar.setPicture(R.drawable.photodecafe); //TODO to delete
@@ -243,7 +242,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 distanceCheckboxfilter.setChecked(mFilterDistance);
 
                 // Guest restriction
-                if(checkIfGuest(mUId)) {
+                if (checkIfGuest(mUId)) {
                     checkboxFilter.setClickable(false);
                     distanceCheckboxfilter.setClickable(false);
                 }
@@ -253,11 +252,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                         // Guest restriction
-                        if(checkIfGuest(mUId)) {
+                        if (checkIfGuest(mUId)) {
                             Toast.makeText(getApplicationContext(), R.string.you_need_to_be_connected, Toast.LENGTH_LONG).show();
                             return;
                         }
-
                         if (checkboxFilter.isChecked() && !mFilterDistance) {
                             mMap.clear();
                             createMarkers(MainActivity.arrayFilter(bars));
@@ -284,11 +282,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                         //Guest Restriction
-                        if(checkIfGuest(mUId)) {
+                        if (checkIfGuest(mUId)) {
                             Toast.makeText(getApplicationContext(), R.string.you_need_to_be_connected, Toast.LENGTH_LONG).show();
                             return;
                         }
-
                         if (distanceCheckboxfilter.isChecked() && !filter) {
                             mMap.clear();
                             createMarkers(pickClosestBars(bars, CLOSEST_BAR_NUMBERS));
@@ -345,7 +342,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBodyText);
                 startActivity(Intent.createChooser(sharingIntent, "Shearing Option"));
                 return true;
-            default:
+            default :
                 return super.onOptionsItemSelected(item);
         }
     }
@@ -359,7 +356,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         switch (item.getItemId()) {
             case R.id.nav_profile:
                 // Guest restriction
-                if(checkIfGuest(mUId)) {
+                if (checkIfGuest(mUId)) {
                     Toast.makeText(getApplicationContext(), R.string.you_need_to_be_connected, Toast.LENGTH_LONG).show();
                     break;
                 }
@@ -754,7 +751,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             String barName = extras.getString("BAR_NAME");
 
             for (Bar bar : bars) {
-                if(bar.getBarName().equals(barName)) {
+                if (bar.getBarName().equals(barName)) {
                     Toast.makeText(getApplicationContext(), bar.getBarName(), Toast.LENGTH_SHORT).show(); //TODO A enlever ou pas ?
                     Location barLocation = new Location("Bar");
                     barLocation.setTime(new Date().getTime());

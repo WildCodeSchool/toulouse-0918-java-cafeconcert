@@ -44,7 +44,6 @@ public class BarAdapter extends ArrayAdapter<Bar> {
     private String mUId;
     private FirebaseAuth mAuth;
 
-
     public BarAdapter(Context context, ArrayList<Bar> bars) {
         super(context, 0, bars);
     }
@@ -68,8 +67,6 @@ public class BarAdapter extends ArrayAdapter<Bar> {
         } else {
             mUId = mAuth.getCurrentUser().getUid();
         }
-
-
 
         // Lookup view for data population
         TextView tvBarName = convertView.findViewById(R.id.text_bar_name);
@@ -212,8 +209,7 @@ public class BarAdapter extends ArrayAdapter<Bar> {
         final DatabaseReference currentUser = refUser.child(mUId).child("bars");
 
         // Guest restriction
-        if(!checkIfGuest(mUId)) {
-
+        if (!checkIfGuest(mUId)) {
             refBar.orderByChild("barName").equalTo(bar.getBarName()).limitToFirst(1).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -224,7 +220,6 @@ public class BarAdapter extends ArrayAdapter<Bar> {
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-
                 }
             });
 
@@ -236,7 +231,7 @@ public class BarAdapter extends ArrayAdapter<Bar> {
             public void onClick(View v) {
 
                 // Guest restriction
-                if(checkIfGuest(mUId)) {
+                if (checkIfGuest(mUId)) {
                     Toast.makeText(getContext(), R.string.you_need_to_be_connected, Toast.LENGTH_LONG).show();
                     return;
                 }
