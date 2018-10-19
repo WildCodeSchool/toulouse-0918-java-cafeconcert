@@ -22,6 +22,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -38,6 +39,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListPopupWindow;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -97,8 +99,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private FusedLocationProviderClient mFusedLocationClient;
     private boolean filter = false;
     private String uId;
-
     private boolean mFilterDistance = false;
+
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -142,6 +144,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 setLanguage(lang.equals("fr") ? "en" : "fr");
             }
         });
+
     }
 
     //#Language
