@@ -84,18 +84,21 @@ public class Bar {
         this.webUrl = webUrl;
     }
 
-    public int getIsLiked() {
-        return isLiked;
-    }
-
-    public void setIsLiked(int isLiked) {
-        this.isLiked = isLiked;
-    }
-
     public String getPicture() { return picture; }
 
     public void setPicture(String picture) { this.picture = picture; }
 
+    public int getIsLiked() {
+        return isLiked;
+    }
+    public void setIsLiked(int isLiked) {
+        this.isLiked = isLiked;
+        /*SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(this.barName, isLiked);
+        editor.commit();*/
+
+    }
     public Context getContext() {
         return context;
     }
@@ -119,6 +122,4 @@ public class Bar {
     public void setDistanceFromUser(float distanceFromUser) {
         this.distanceFromUser = distanceFromUser;
     }
-
-
 }
