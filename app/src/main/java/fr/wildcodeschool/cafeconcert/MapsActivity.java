@@ -94,7 +94,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private LocationManager mLocationManager = null;
     private FusedLocationProviderClient mFusedLocationClient;
     private boolean filter = false;
-    private String uId;
+    private String mUId;
 
     private boolean mFilterDistance = false;
 
@@ -111,8 +111,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         //#BurgerMenu Here I take the new toolbar to set it in my activity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        //Is user guest or registered ?
         mAuth = FirebaseAuth.getInstance();
-        uId = mAuth.getCurrentUser().getUid();
+        if (mAuth.getCurrentUser() == null) {
+            mUId = "guest";
+        } else {
+            mUId = mAuth.getCurrentUser().getUid();
+        }
+
         //#BurgerMenu
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -142,6 +149,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
     }
 
+    public boolean checkIfGuest(String uId) {
+        return uId.equals("guest");
+    }
+
     //#Language
     public void setLanguage(String lang) {
         final SharedPreferences languePreferences = getSharedPreferences("CAFE_CONCERT", MODE_PRIVATE);
@@ -161,18 +172,31 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void initBar() {
 
         final FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference refBar = firebaseDatabase.getReference("cafeconcert");
+        DatabaseReference refGuest = firebaseDatabase.getReference("cafeconcert");
         DatabaseReference refUser = firebaseDatabase.getReference("users");
-        final DatabaseReference currentUser = refUser.child(uId);
-        currentUser.child("bars").addListenerForSingleValueEvent(new ValueEventListener() {
+
+        DatabaseReference myRef;
+        if(mUId.equals("guest")) {
+            myRef = refGuest;
+        } else {
+            myRef = refUser.child(mUId).child("bars");
+        }
+
+        //final DatabaseReference currentUser = myRef.child(mUId);
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 bars.clear();
                 for (DataSnapshot barSnapshot : dataSnapshot.getChildren()) {
                     final Bar bar = barSnapshot.getValue(Bar.class);
-                    String barId = barSnapshot.getKey();
+                    //String barId = barSnapshot.getKey();
                     bar.setContext(MapsActivity.this);
+
+                    if(mUId.equals("guest")) {
+                        bar.setIsLiked(2);
+                    }
+
                     //bar.setPicture(R.drawable.photodecafe); //TODO to delete
                     bars.add(bar);
                 }
@@ -197,9 +221,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 final CheckBox distanceCheckboxfilter = findViewById(R.id.checkbox_distance);
                 distanceCheckboxfilter.setChecked(mFilterDistance);
 
+                // Guest restriction
+                if(checkIfGuest(mUId)) {
+                    checkboxFilter.setClickable(false);
+                    distanceCheckboxfilter.setClickable(false);
+                }
+
                 checkboxFilter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                        // Guest restriction
+                        if(checkIfGuest(mUId)) {
+                            Toast.makeText(getApplicationContext(), R.string.you_need_to_be_connected, Toast.LENGTH_LONG).show();
+                            return;
+                        }
 
                         if (checkboxFilter.isChecked() && !mFilterDistance) {
                             mMap.clear();
@@ -225,6 +261,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 distanceCheckboxfilter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                        //Guest Restriction
+                        if(checkIfGuest(mUId)) {
+                            Toast.makeText(getApplicationContext(), R.string.you_need_to_be_connected, Toast.LENGTH_LONG).show();
+                            return;
+                        }
 
                         if (distanceCheckboxfilter.isChecked() && !filter) {
                             mMap.clear();
@@ -294,6 +336,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         CheckBox checkboxDistance = findViewById(R.id.checkbox_distance);
         switch (item.getItemId()) {
             case R.id.nav_profile:
+                // Guest restriction
+                if(checkIfGuest(mUId)) {
+                    Toast.makeText(getApplicationContext(), R.string.you_need_to_be_connected, Toast.LENGTH_LONG).show();
+                    break;
+                }
                 startActivity(new Intent(this, Profile.class));
                 break;
             case R.id.nav_map:
@@ -508,30 +555,40 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public void setUserOpinion(final ImageView like, final ImageView dontLike, final Bar bar, final Marker marker) {
+
         final FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference refBar = firebaseDatabase.getReference("cafeconcert");
         final String[] barKey = new String[1];
         DatabaseReference refUser = firebaseDatabase.getReference("users");
-        final DatabaseReference currentUser = refUser.child(uId).child("bars");
+        final DatabaseReference currentUser = refUser.child(mUId).child("bars");
 
-        refBar.orderByChild("barName").equalTo(bar.getBarName()).limitToFirst(1).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
-                    barKey[0] = childSnapshot.getKey();
+        // Guest restriction
+        if(!checkIfGuest(mUId)) {
+            refBar.orderByChild("barName").equalTo(bar.getBarName()).limitToFirst(1).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                        barKey[0] = childSnapshot.getKey();
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
+            });
+        }
 
         like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                // Guest restriction
+                if(checkIfGuest(mUId)) {
+                    Toast.makeText(getApplicationContext(), R.string.you_need_to_be_connected, Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+
                 if (bar.getIsLiked() == 1) {
                     bar.setIsLiked(0);
                     adaptLikesButton(like, dontLike, bar, marker);
