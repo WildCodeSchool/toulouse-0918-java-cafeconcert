@@ -84,10 +84,13 @@ public class Bar {
         this.webUrl = webUrl;
     }
 
+    public String getPicture() { return picture; }
+
+    public void setPicture(String picture) { this.picture = picture; }
+
     public int getIsLiked() {
         return isLiked;
     }
-
     public void setIsLiked(int isLiked) {
         this.isLiked = isLiked;
         /*SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -96,11 +99,6 @@ public class Bar {
         editor.commit();*/
 
     }
-
-    public String getPicture() { return picture; }
-
-    public void setPicture(String picture) { this.picture = picture; }
-
     public Context getContext() {
         return context;
     }

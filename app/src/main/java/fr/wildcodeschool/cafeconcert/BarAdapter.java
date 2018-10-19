@@ -25,6 +25,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 
 public class BarAdapter extends ArrayAdapter<Bar> {
@@ -101,6 +103,8 @@ public class BarAdapter extends ArrayAdapter<Bar> {
 
         // Populate the data into the template view using the data object
         tvBarName.setText(bar.getBarName());
+        Glide.with(getContext()).load(bar.getPicture()) .into(ibBar);
+
         MainActivity.setNavigation(navigate, bar, getContext());
 
         //Adding efficient likes/dislikes buttons
@@ -243,7 +247,6 @@ public class BarAdapter extends ArrayAdapter<Bar> {
                     Intent intent = new Intent(getContext(), BarListActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     (getContext()).startActivity(intent);
                 }
-                currentUser.child(barKey[0]).child("isLiked").setValue(bar.getIsLiked());
             }
         });
 
@@ -261,7 +264,6 @@ public class BarAdapter extends ArrayAdapter<Bar> {
                     Intent intent = new Intent(getContext(), BarListActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     (getContext()).startActivity(intent);
                 }
-                currentUser.child(barKey[0]).child("isLiked").setValue(bar.getIsLiked());
             }
         });
     }
