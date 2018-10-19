@@ -624,7 +624,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     return;
                 }
 
-
                 if (bar.getIsLiked() == 1) {
                     bar.setIsLiked(0);
                     adaptLikesButton(like, dontLike, bar, marker);
