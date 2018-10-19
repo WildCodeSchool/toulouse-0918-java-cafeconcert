@@ -86,7 +86,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private PopupWindow popUp;
     private GoogleMap mMap;
     private ArrayList<Bar> bars = new ArrayList<>();
-    //private ArrayList<Bar> filterBars;
     private Location mUserLocation = new Location("User");
     private ArrayList<Marker> mMarkers = new ArrayList<>();
     private GestureDetectorCompat mGestureObject;
@@ -96,7 +95,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private LocationManager mLocationManager = null;
     private FusedLocationProviderClient mFusedLocationClient;
     private boolean filter = false;
-    private String uId;
+    private String mUId;
 
     private boolean mFilterDistance = false;
 
@@ -113,8 +112,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         //#BurgerMenu Here I take the new toolbar to set it in my activity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        mAuth = FirebaseAuth.getInstance();
-        uId = mAuth.getCurrentUser().getUid();
+
+        setUserIDAsRegisteredOrGuest();
+
+
         //#BurgerMenu
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -124,15 +125,29 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         toggle.syncState();
         navigationView.setCheckedItem(R.id.nav_map);
         checkMenuCreated(drawer);
+        //If user is guest, he can connect. If he is yet connected, he can disconnect
+        connexionOrDeconnexionFromMenuBurger(navigationView);
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         filter = sharedPreferences.getBoolean("filter", false);
         mFilterDistance = sharedPreferences.getBoolean("distanceFilter", false);
 
+        setButtonChangeLangageFromMenu();
+    }
 
-        //#Language
+    private void setUserIDAsRegisteredOrGuest() {
+        //Is user guest or registered ?
+        mAuth = FirebaseAuth.getInstance();
+        if (mAuth.getCurrentUser() == null) {
+            mUId = "guest";
+        } else {
+            mUId = mAuth.getCurrentUser().getUid();
+        }
+    }
+
+    public void setButtonChangeLangageFromMenu() {
+
         final TextView tvLangues = findViewById(R.id.tv_langues);
-
         tvLangues.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -142,6 +157,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 setLanguage(lang.equals("fr") ? "en" : "fr");
             }
         });
+    }
+
+    public void connexionOrDeconnexionFromMenuBurger(NavigationView navigationView) {
+
+        MenuItem connexion = navigationView.getMenu().findItem(R.id.connexion);
+        MenuItem deconnexion = navigationView.getMenu().findItem(R.id.deconnexion);
+        connexion.setVisible(false);
+        if (checkIfGuest(mUId)) {
+            deconnexion.setVisible(false);
+            connexion.setVisible(true);
+        }
+    }
+
+    public boolean checkIfGuest(String uId) {
+        return uId.equals("guest");
     }
 
     //#Language
@@ -163,18 +193,30 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void initBar() {
 
         final FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference refBar = firebaseDatabase.getReference("cafeconcert");
+        DatabaseReference refGuest = firebaseDatabase.getReference("cafeconcert");
         DatabaseReference refUser = firebaseDatabase.getReference("users");
-        final DatabaseReference currentUser = refUser.child(uId);
-        currentUser.child("bars").addListenerForSingleValueEvent(new ValueEventListener() {
+
+        DatabaseReference myRef;
+        if (mUId.equals("guest")) {
+            myRef = refGuest;
+        } else {
+            myRef = refUser.child(mUId).child("bars");
+        }
+
+        //final DatabaseReference currentUser = myRef.child(mUId);
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 bars.clear();
                 for (DataSnapshot barSnapshot : dataSnapshot.getChildren()) {
                     final Bar bar = barSnapshot.getValue(Bar.class);
-                    String barId = barSnapshot.getKey();
+                    //String barId = barSnapshot.getKey();
                     bar.setContext(MapsActivity.this);
+                    if (mUId.equals("guest")) {
+                        bar.setIsLiked(2);
+                    }
+                    //bar.setPicture(R.drawable.photodecafe); //TODO to delete
                     bars.add(bar);
                 }
                 initMarkers();
@@ -190,6 +232,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     //#BurgerMenu
     public void checkMenuCreated(DrawerLayout drawer) {
+
         drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
@@ -198,10 +241,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 final CheckBox distanceCheckboxfilter = findViewById(R.id.checkbox_distance);
                 distanceCheckboxfilter.setChecked(mFilterDistance);
 
+                // Guest restriction
+                if (checkIfGuest(mUId)) {
+                    checkboxFilter.setClickable(false);
+                    distanceCheckboxfilter.setClickable(false);
+                }
+
                 checkboxFilter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
+                        // Guest restriction
+                        if (checkIfGuest(mUId)) {
+                            Toast.makeText(getApplicationContext(), R.string.you_need_to_be_connected, Toast.LENGTH_LONG).show();
+                            return;
+                        }
                         if (checkboxFilter.isChecked() && !mFilterDistance) {
                             mMap.clear();
                             createMarkers(MainActivity.arrayFilter(bars));
@@ -227,6 +281,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
+                        //Guest Restriction
+                        if (checkIfGuest(mUId)) {
+                            Toast.makeText(getApplicationContext(), R.string.you_need_to_be_connected, Toast.LENGTH_LONG).show();
+                            return;
+                        }
                         if (distanceCheckboxfilter.isChecked() && !filter) {
                             mMap.clear();
                             createMarkers(pickClosestBars(bars, CLOSEST_BAR_NUMBERS));
@@ -269,6 +328,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         getMenuInflater().inflate(R.menu.share_menu, menu);
         return true;
     }
+
     //#ShareMenu : Send a text
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -282,17 +342,24 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBodyText);
                 startActivity(Intent.createChooser(sharingIntent, "Shearing Option"));
                 return true;
-            default:
+            default :
                 return super.onOptionsItemSelected(item);
         }
     }
+
     //#BurgerMenu links
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
         CheckBox checkboxFilter = findViewById(R.id.checkBoxFilter);
         CheckBox checkboxDistance = findViewById(R.id.checkbox_distance);
         switch (item.getItemId()) {
             case R.id.nav_profile:
+                // Guest restriction
+                if (checkIfGuest(mUId)) {
+                    Toast.makeText(getApplicationContext(), R.string.you_need_to_be_connected, Toast.LENGTH_LONG).show();
+                    break;
+                }
                 startActivity(new Intent(this, Profile.class));
                 break;
             case R.id.nav_map:
@@ -310,7 +377,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             case R.id.deconnexion:
                 mAuth.signOut();
                 startActivity(new Intent(this, MainActivity.class));
-
+                break;
+            case R.id.connexion:
+                mAuth.signOut();
+                startActivity(new Intent(this, MainActivity.class));
+                break;
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -325,6 +396,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
         return closestBars;
     }
+
     public ArrayList<Bar> arrayFilterByDistance(ArrayList<Bar> myBars) {
 
         Location barLocation = new Location("Bar");
@@ -516,30 +588,39 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public void setUserOpinion(final ImageView like, final ImageView dontLike, final Bar bar, final Marker marker) {
+
         final FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference refBar = firebaseDatabase.getReference("cafeconcert");
         final String[] barKey = new String[1];
         DatabaseReference refUser = firebaseDatabase.getReference("users");
-        final DatabaseReference currentUser = refUser.child(uId).child("bars");
+        final DatabaseReference currentUser = refUser.child(mUId).child("bars");
 
-        refBar.orderByChild("barName").equalTo(bar.getBarName()).limitToFirst(1).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
-                    barKey[0] = childSnapshot.getKey();
+        // Guest restriction
+        if(!checkIfGuest(mUId)) {
+            refBar.orderByChild("barName").equalTo(bar.getBarName()).limitToFirst(1).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                        barKey[0] = childSnapshot.getKey();
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
+            });
+        }
 
         like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                // Guest restriction
+                if(checkIfGuest(mUId)) {
+                    Toast.makeText(getApplicationContext(), R.string.you_need_to_be_connected, Toast.LENGTH_LONG).show();
+                    return;
+                }
+
                 if (bar.getIsLiked() == 1) {
                     bar.setIsLiked(0);
                     adaptLikesButton(like, dontLike, bar, marker);
@@ -670,7 +751,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             String barName = extras.getString("BAR_NAME");
 
             for (Bar bar : bars) {
-                if(bar.getBarName().equals(barName)) {
+                if (bar.getBarName().equals(barName)) {
                     Toast.makeText(getApplicationContext(), bar.getBarName(), Toast.LENGTH_SHORT).show(); //TODO A enlever ou pas ?
                     Location barLocation = new Location("Bar");
                     barLocation.setTime(new Date().getTime());
