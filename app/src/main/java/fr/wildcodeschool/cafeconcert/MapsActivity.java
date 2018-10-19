@@ -114,13 +114,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //Is user guest or registered ?
-        mAuth = FirebaseAuth.getInstance();
-        if (mAuth.getCurrentUser() == null) {
-            mUId = "guest";
-        } else {
-            mUId = mAuth.getCurrentUser().getUid();
-        }
+        setUserIDAsRegisteredOrGuest();
+
 
         //#BurgerMenu
         drawer = findViewById(R.id.drawer_layout);
@@ -131,15 +126,29 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         toggle.syncState();
         navigationView.setCheckedItem(R.id.nav_map);
         checkMenuCreated(drawer);
+        //If user is guest, he can connect. If he is yet connected, he can disconnect
+        connexionOrDeconnexionFromMenuBurger(navigationView);
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         filter = sharedPreferences.getBoolean("filter", false);
         mFilterDistance = sharedPreferences.getBoolean("distanceFilter", false);
 
+        setButtonChangeLangageFromMenu();
+    }
 
-        //#Language
+    private void setUserIDAsRegisteredOrGuest() {
+        //Is user guest or registered ?
+        mAuth = FirebaseAuth.getInstance();
+        if (mAuth.getCurrentUser() == null) {
+            mUId = "guest";
+        } else {
+            mUId = mAuth.getCurrentUser().getUid();
+        }
+    }
+
+    public void setButtonChangeLangageFromMenu() {
+
         final TextView tvLangues = findViewById(R.id.tv_langues);
-
         tvLangues.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -149,6 +158,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 setLanguage(lang.equals("fr") ? "en" : "fr");
             }
         });
+    }
+
+    public void connexionOrDeconnexionFromMenuBurger(NavigationView navigationView) {
+
+        MenuItem connexion = navigationView.getMenu().findItem(R.id.connexion);
+        MenuItem deconnexion = navigationView.getMenu().findItem(R.id.deconnexion);
+        connexion.setVisible(false);
+        if(checkIfGuest(mUId)) {
+            deconnexion.setVisible(false);
+            connexion.setVisible(true);
+        }
     }
 
     public boolean checkIfGuest(String uId) {
@@ -213,6 +233,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     //#BurgerMenu
     public void checkMenuCreated(DrawerLayout drawer) {
+
         drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
@@ -310,6 +331,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         getMenuInflater().inflate(R.menu.share_menu, menu);
         return true;
     }
+
     //#ShareMenu : Send a text
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -327,9 +349,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 return super.onOptionsItemSelected(item);
         }
     }
+
     //#BurgerMenu links
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
         CheckBox checkboxFilter = findViewById(R.id.checkBoxFilter);
         CheckBox checkboxDistance = findViewById(R.id.checkbox_distance);
         switch (item.getItemId()) {
@@ -356,7 +380,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             case R.id.deconnexion:
                 mAuth.signOut();
                 startActivity(new Intent(this, MainActivity.class));
-
+                break;
+            case R.id.connexion:
+                mAuth.signOut();
+                startActivity(new Intent(this, MainActivity.class));
+                break;
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -371,6 +399,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
         return closestBars;
     }
+
     public ArrayList<Bar> arrayFilterByDistance(ArrayList<Bar> myBars) {
 
         Location barLocation = new Location("Bar");

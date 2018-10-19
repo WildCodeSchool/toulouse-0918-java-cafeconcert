@@ -58,12 +58,7 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
         listBar = findViewById(R.id.list_bar);
 
         //Is user guest or registered ?
-        mAuth = FirebaseAuth.getInstance();
-        if (mAuth.getCurrentUser() == null) {
-            mUId = "guest";
-        } else {
-            mUId = mAuth.getCurrentUser().getUid();
-        }
+        setUserIDAsRegisteredOrGuest();
 
         //#BurgerMenu Here I take the new toolbar to set it in my activity
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -78,8 +73,46 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
         toggle.syncState();
         navigationView.setCheckedItem(R.id.nav_bar_list);
         checkMenuCreated(drawer);
+        //If user is guest, he can connect. If he is yet connected, he can disconnect
+        connexionOrDeconnexionFromMenuBurger(navigationView);
 
         getUserLocation();
+    }
+
+
+    private void setUserIDAsRegisteredOrGuest() {
+        //Is user guest or registered ?
+        mAuth = FirebaseAuth.getInstance();
+        if (mAuth.getCurrentUser() == null) {
+            mUId = "guest";
+        } else {
+            mUId = mAuth.getCurrentUser().getUid();
+        }
+    }
+
+    /*public void setButtonChangeLangageFromMenu() {
+
+        final TextView tvLangues = findViewById(R.id.tv_langues);
+        tvLangues.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences languePreferences = getSharedPreferences("CAFE_CONCERT", MODE_PRIVATE);
+                String lang = languePreferences.getString("Fav_langue", "");
+                Configuration config = getBaseContext().getResources().getConfiguration();
+                setLanguage(lang.equals("fr") ? "en" : "fr");
+            }
+        });
+    }*/
+
+    public void connexionOrDeconnexionFromMenuBurger(NavigationView navigationView) {
+
+        MenuItem connexion = navigationView.getMenu().findItem(R.id.connexion);
+        MenuItem deconnexion = navigationView.getMenu().findItem(R.id.deconnexion);
+        connexion.setVisible(false);
+        if(checkIfGuest(mUId)) {
+            deconnexion.setVisible(false);
+            connexion.setVisible(true);
+        }
     }
 
     public boolean checkIfGuest(String uId) {
@@ -200,12 +233,6 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
 
     public void initBarList() {
 
-        //TODO delete this block
-        /*final FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference refBar = firebaseDatabase.getReference("cafeconcert");
-        DatabaseReference refUser = firebaseDatabase.getReference("users");
-        final DatabaseReference currentUser = refUser.child(uId);*/
-
         final FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference refGuest = firebaseDatabase.getReference("cafeconcert");
         DatabaseReference refUser = firebaseDatabase.getReference("users");
@@ -216,7 +243,6 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
         } else {
             myRef = refUser.child(mUId).child("bars");
         }
-
 
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -391,6 +417,11 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
             case R.id.deconnexion:
                 mAuth.signOut();
                 startActivity(new Intent(this, MainActivity.class));
+                break;
+            case R.id.connexion:
+                mAuth.signOut();
+                startActivity(new Intent(this, MainActivity.class));
+                break;
 
         }
         drawer.closeDrawer(GravityCompat.START);

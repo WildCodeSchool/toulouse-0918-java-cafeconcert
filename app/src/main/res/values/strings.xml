@@ -57,4 +57,6 @@
     <string name="site_web">Site web</string>
     <string name="you_need_to_be_connected">Veuillez vous connecter pour bénéficier de cette fonctionnalité !</string>
     <string name="location_impossible">Localisation de votre position impossible</string>
+    <string name="access_menu">Accès</string>
+    <string name="connexion_menu">Connexion</string>
 </resources>
