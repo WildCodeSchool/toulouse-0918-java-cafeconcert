@@ -23,6 +23,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -30,7 +31,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -47,7 +47,7 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
     private boolean filter = false;
     private boolean mFilterDistance = false;
     private ListView listBar;
-    private String uId;
+    private String mUId;
     private FirebaseAuth mAuth;
 
     @Override
@@ -56,8 +56,9 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
         setContentView(R.layout.activity_bar_list);
         bars = new ArrayList<>();
         listBar = findViewById(R.id.list_bar);
-        mAuth = FirebaseAuth.getInstance();
-        uId = mAuth.getCurrentUser().getUid();
+
+        //Is user guest or registered ?
+        setUserIDAsRegisteredOrGuest();
 
         //#BurgerMenu Here I take the new toolbar to set it in my activity
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -72,8 +73,36 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
         toggle.syncState();
         navigationView.setCheckedItem(R.id.nav_bar_list);
         checkMenuCreated(drawer);
+        //If user is guest, he can connect. If he is yet connected, he can disconnect
+        connexionOrDeconnexionFromMenuBurger(navigationView);
 
         getUserLocation();
+    }
+
+
+    private void setUserIDAsRegisteredOrGuest() {
+        //Is user guest or registered ?
+        mAuth = FirebaseAuth.getInstance();
+        if (mAuth.getCurrentUser() == null) {
+            mUId = "guest";
+        } else {
+            mUId = mAuth.getCurrentUser().getUid();
+        }
+    }
+
+    public void connexionOrDeconnexionFromMenuBurger(NavigationView navigationView) {
+
+        MenuItem connexion = navigationView.getMenu().findItem(R.id.connexion);
+        MenuItem deconnexion = navigationView.getMenu().findItem(R.id.deconnexion);
+        connexion.setVisible(false);
+        if (checkIfGuest(mUId)) {
+            deconnexion.setVisible(false);
+            connexion.setVisible(true);
+        }
+    }
+
+    public boolean checkIfGuest(String uId) {
+        return uId.equals("guest");
     }
 
     public ArrayList<Bar> pickClosestBars(ArrayList<Bar> myBars, int range) {
@@ -90,6 +119,11 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
 
         Location barLocation = new Location("Bar");
         barLocation.setTime(new Date().getTime());
+
+        if (mUserLocation == null) {
+            Toast.makeText(getApplicationContext(), R.string.location_impossible, Toast.LENGTH_LONG).show();
+            return myBars;
+        }
 
         for (Bar bar : myBars) {
             barLocation.setLatitude(bar.getGeoPoint());
@@ -186,10 +220,17 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
     public void initBarList() {
 
         final FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference refBar = firebaseDatabase.getReference("cafeconcert");
+        DatabaseReference refGuest = firebaseDatabase.getReference("cafeconcert");
         DatabaseReference refUser = firebaseDatabase.getReference("users");
-        final DatabaseReference currentUser = refUser.child(uId);
-        currentUser.child("bars").addListenerForSingleValueEvent(new ValueEventListener() {
+
+        DatabaseReference myRef;
+        if (mUId.equals("guest")) {
+            myRef = refGuest;
+        } else {
+            myRef = refUser.child(mUId).child("bars");
+        }
+
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 bars.clear();
@@ -198,6 +239,10 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
                     String barId = barSnapshot.getKey();
                     bar.setContext(BarListActivity.this);
                     //bar.setPicture(R.drawable.photodecafe);
+
+                    if (mUId.equals("guest")) {
+                        bar.setIsLiked(2);
+                    }
                     bars.add(bar);
                 }
                 initBarVisualisation();
@@ -218,9 +263,21 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
                 final CheckBox distanceCheckboxfilter = findViewById(R.id.checkbox_distance);
                 distanceCheckboxfilter.setChecked(mFilterDistance);
 
+                // Guest restriction
+                if (checkIfGuest(mUId)) {
+                    checkboxFilter.setClickable(false);
+                    distanceCheckboxfilter.setClickable(false);
+                }
+
                 checkboxFilter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                        // Guest restriction
+                        if (checkIfGuest(mUId)) {
+                            Toast.makeText(getApplicationContext(), R.string.you_need_to_be_connected, Toast.LENGTH_LONG).show();
+                            return;
+                        }
 
                         if (checkboxFilter.isChecked() && !mFilterDistance) {
                             adapter = new BarAdapter(BarListActivity.this,
@@ -247,6 +304,12 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
                 distanceCheckboxfilter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                        // Guest restriction
+                        if (checkIfGuest(mUId)) {
+                            Toast.makeText(getApplicationContext(), R.string.you_need_to_be_connected, Toast.LENGTH_LONG).show();
+                            return;
+                        }
 
                         if (distanceCheckboxfilter.isChecked() && !filter) {
                             adapter = new BarAdapter(BarListActivity.this,
@@ -318,6 +381,11 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
         CheckBox checkboxDistance = findViewById(R.id.checkbox_distance);
         switch (item.getItemId()) {
             case R.id.nav_profile:
+                // Guest restriction
+                if (checkIfGuest(mUId)) {
+                    Toast.makeText(getApplicationContext(), R.string.you_need_to_be_connected, Toast.LENGTH_LONG).show();
+                    break;
+                }
                 startActivity(new Intent(this, Profile.class));
                 break;
             case R.id.nav_map:
@@ -335,7 +403,11 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
             case R.id.deconnexion:
                 mAuth.signOut();
                 startActivity(new Intent(this, MainActivity.class));
-
+                break;
+            case R.id.connexion:
+                mAuth.signOut();
+                startActivity(new Intent(this, MainActivity.class));
+                break;
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;

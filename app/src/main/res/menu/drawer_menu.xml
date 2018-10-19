@@ -35,11 +35,26 @@
             </menu>
         </item>
 
-    <item android:title = "@string/deconnexion">
+    <item android:title = "@string/access_menu">
+        <menu>
+            <item
+                android:id="@+id/deconnexion"
+                android:title="@string/deconnexion"/>
+
+            <item
+                android:id="@+id/connexion"
+                android:title="@string/connexion_menu"/>
+
+        </menu>
+    </item>
+
+    <!--<item android:title = "@string/deconnexion">
         <menu>
             <item
                 android:id="@+id/deconnexion"
                 android:title="@string/deconnexion"/>
         </menu>
-    </item>
+    </item>-->
+
+
 </menu>
