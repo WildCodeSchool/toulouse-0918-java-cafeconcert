@@ -56,4 +56,6 @@
     <string name="itineraire">Itinerary</string>
     <string name="appeler">Call</string>
     <string name="site_web">Website</string>
+    <string name="you_need_to_be_connected">Please sign in to access this functionality !</string>
+    <string name="location_impossible">Impossible to detect your position</string>
 </resources>
