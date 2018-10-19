@@ -1,10 +1,6 @@
 package fr.wildcodeschool.cafeconcert;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.location.Location;
-import android.preference.PreferenceManager;
-import java.util.Date;
 
 public class Bar {
 
@@ -18,30 +14,20 @@ public class Bar {
     private String picture; // Pour un drawable le type est 'int'
     private Context context;
     private String address;
+    private String logo;
     private float distanceFromUser;
-    
-    /*Constructor*/
-    public Bar(String barName, String phoneNumber, double geoPoint, double geoShape, String webUrl, int isLiked, String picture, Context context) {
-        this.barName = barName;
-        this.phoneNumber = phoneNumber;
-        this.geoShape = geoShape;
-        this.geoPoint = geoPoint;
-        this.webUrl = webUrl;
-        this.picture = picture;
-        this.context = context;
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        if (!sharedPreferences.contains(this.barName)) {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putInt(this.barName, isLiked);
-            editor.commit();
-            this.isLiked = isLiked;
-        } else {
-            this.isLiked = sharedPreferences.getInt(this.barName, 2);
-        }
+    /*Constructor*/
+    public Bar() {
     }
 
-    public Bar() {}
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
+    }
 
     /*Getters and setters*/
     public String getBarName() {
@@ -84,21 +70,22 @@ public class Bar {
         this.webUrl = webUrl;
     }
 
-    public String getPicture() { return picture; }
+    public String getPicture() {
+        return picture;
+    }
 
-    public void setPicture(String picture) { this.picture = picture; }
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
 
     public int getIsLiked() {
         return isLiked;
     }
+
     public void setIsLiked(int isLiked) {
         this.isLiked = isLiked;
-        /*SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(this.barName, isLiked);
-        editor.commit();*/
-
     }
+
     public Context getContext() {
         return context;
     }

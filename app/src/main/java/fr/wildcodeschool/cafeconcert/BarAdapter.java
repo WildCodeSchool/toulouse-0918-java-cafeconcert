@@ -1,5 +1,7 @@
 package fr.wildcodeschool.cafeconcert;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,6 +14,7 @@ import android.support.constraint.ConstraintLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -61,28 +64,14 @@ public class BarAdapter extends ArrayAdapter<Bar> {
         uId = mAuth.getCurrentUser().getUid();
         // Lookup view for data population
         TextView tvBarName = convertView.findViewById(R.id.text_bar_name);
-        ImageButton ibBar = convertView.findViewById(R.id.image_bar);
+        final ImageView ibBar = convertView.findViewById(R.id.image_bar);
         ImageView navigate = convertView.findViewById(R.id.navigationButton);
-        navigate.setBackgroundResource(R.mipmap.navigate);
         ImageView phone = convertView.findViewById(R.id.ib_phone);
-        phone.setBackgroundResource(R.mipmap.phonelogo);
         ImageButton ibWeb = convertView.findViewById(R.id.ib_web);
-        ibWeb.setBackgroundResource(R.mipmap.globeicon);
-        navigate.setImageResource(R.mipmap.navigate);
-        ImageView likeButton = convertView.findViewById(R.id.like_button);
-        ImageView dontLikeButton = convertView.findViewById(R.id.dont_like_button);
-        ImageView icon = convertView.findViewById(R.id.status_icon);
-        ImageView fondIcon = convertView.findViewById(R.id.fond_icon);
-        ImageView fondAddress = convertView.findViewById(R.id.fond_bar_address);
-        ImageView fondName = convertView.findViewById(R.id.fond_bar_name);
+        ImageButton zoomAddress = convertView.findViewById(R.id.icon_adress);
+        ImageButton icon = convertView.findViewById(R.id.status_icon);
         TextView barAdress = convertView.findViewById(R.id.adress_bar);
-        fondIcon.setBackgroundResource(R.drawable.fond_icone_like);
-        fondName.setBackgroundResource(R.drawable.fond_txt);
-        ImageView iconAdress = convertView.findViewById(R.id.icon_adress);
-        iconAdress.setBackgroundResource(R.drawable.ic_my_location_black_24dp);
-        ConstraintLayout constraintLayout = convertView.findViewById(R.id.drawer_bar);
-        constraintLayout.setBackgroundResource(R.drawable.fondpopup);
-        fondAddress.setBackgroundResource(R.drawable.fond_txt);
+        final ImageView ivLogoBar = convertView.findViewById(R.id.iv_logobar);
         String[] parts = bar.getAddress().split(" ");
         String adressTerm = "";
         for (int i = 0; i < parts.length - 2; i++) {
@@ -91,7 +80,14 @@ public class BarAdapter extends ArrayAdapter<Bar> {
         adressTerm.trim();
         barAdress.setText(adressTerm);
 
-        fondAddress.setOnClickListener(new View.OnClickListener() {
+        ivLogoBar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ivLogoBar.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.shake));
+            }
+        });
+
+        zoomAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), MapsActivity.class);
@@ -103,14 +99,15 @@ public class BarAdapter extends ArrayAdapter<Bar> {
 
         // Populate the data into the template view using the data object
         tvBarName.setText(bar.getBarName());
-        Glide.with(getContext()).load(bar.getPicture()) .into(ibBar);
+        Glide.with(getContext()).load(bar.getPicture()).into(ibBar);
+        Glide.with(getContext()).load(bar.getLogo()).into(ivLogoBar);
 
         MainActivity.setNavigation(navigate, bar, getContext());
 
         //Adding efficient likes/dislikes buttons
         setLikeIcon(icon, bar.getIsLiked());
-        adaptLikesButton(likeButton, dontLikeButton, icon, bar);
-        setUserOpinion(likeButton, dontLikeButton, icon, bar);
+        adaptLikesButton(icon, bar);
+        setUserOpinion(icon, icon, icon, bar);
 
         // Drawer hide/shown
         final ConstraintLayout drawerBar = convertView.findViewById(R.id.drawer_bar);
@@ -125,17 +122,8 @@ public class BarAdapter extends ArrayAdapter<Bar> {
             }
         });
 
-        TextView textPhone = convertView.findViewById(R.id.phone_text);
-        TextView textWebSite = convertView.findViewById(R.id.web_text);
-        textPhone.setText(bar.getPhoneNumber());
-        if (bar.getWebUrl().isEmpty()) {
-            textWebSite.setText(R.string.no_website);
-        } else {
-            textWebSite.setText(bar.getWebUrl());
-        }
-
         //"To Map" button
-        fondAddress.setOnClickListener(new View.OnClickListener() {
+        zoomAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String name = bar.getBarName();
@@ -182,7 +170,7 @@ public class BarAdapter extends ArrayAdapter<Bar> {
         return convertView;
     }
 
-    private void adaptLikesButton(ImageView like, ImageView dontLike, final ImageView icon, Bar bar) {
+    private void adaptLikesButton(final ImageView icon, Bar bar) {
 
         Bitmap initialLikeMarker = BitmapFactory.decodeResource(getContext().getResources(),
                 R.drawable.love_ping);
@@ -192,24 +180,19 @@ public class BarAdapter extends ArrayAdapter<Bar> {
                 R.drawable.love_break_ping);
         Bitmap dislikeMarker = Bitmap.createScaledBitmap(initialDislikeMarker, MARKER_WIDTH, MARKER_HEIGHT, false);
 
-        Bitmap nDislikeMarker = BitmapFactory.decodeResource(getContext().getResources(),
-                R.drawable.neutral_dislike_icon);
-        Bitmap neutralDislikeMarker = Bitmap.createScaledBitmap(nDislikeMarker, MARKER_WIDTH, MARKER_HEIGHT, false);
-
         Bitmap nLikeMarker = BitmapFactory.decodeResource(getContext().getResources(),
                 R.drawable.neutral_like_icon);
         Bitmap neutralLikeMarker = Bitmap.createScaledBitmap(nLikeMarker, MARKER_WIDTH, MARKER_HEIGHT, false);
 
-        like.setImageBitmap(neutralLikeMarker);
-        dontLike.setImageBitmap(neutralDislikeMarker);
+        icon.setImageBitmap(neutralLikeMarker);
 
         //0 dislike, 1 like, 2 neutral
         if (bar.getIsLiked() == 1) {
-            like.setImageBitmap(likeMarker);
-            dontLike.setImageBitmap(neutralDislikeMarker);
+            icon.setImageBitmap(likeMarker);
         } else if (bar.getIsLiked() == 0) {
-            dontLike.setImageBitmap(dislikeMarker);
-            like.setImageBitmap(neutralLikeMarker);
+            icon.setImageBitmap(dislikeMarker);
+        } else {
+            icon.setImageBitmap(neutralLikeMarker);
         }
         setLikeIcon(icon, bar.getIsLiked());
     }
@@ -236,37 +219,24 @@ public class BarAdapter extends ArrayAdapter<Bar> {
             }
         });
 
-        like.setOnClickListener(new View.OnClickListener() {
+        icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (bar.getIsLiked() != 1) {
-                    bar.setIsLiked(1);
-                    adaptLikesButton(like, dontLike, icon, bar);
-                } else {
-                    bar.setIsLiked(2);
-                    adaptLikesButton(like, dontLike, icon, bar);
-                }
-                if (filter) {
-                    Intent intent = new Intent(getContext(), BarListActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    (getContext()).startActivity(intent);
-                }
-            }
-        });
-
-        dontLike.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (bar.getIsLiked() != 0) {
+                if (bar.getIsLiked() == 1) {
                     bar.setIsLiked(0);
-                    adaptLikesButton(like, dontLike, icon, bar);
-                } else {
+                    adaptLikesButton(icon, bar);
+                } else if (bar.getIsLiked() == 0){
                     bar.setIsLiked(2);
-                    adaptLikesButton(like, dontLike, icon, bar);
+                    adaptLikesButton(icon, bar);
+                } else if (bar.getIsLiked() == 2){
+                    bar.setIsLiked(1);
+                    adaptLikesButton(icon, bar);
                 }
                 if (filter) {
                     Intent intent = new Intent(getContext(), BarListActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     (getContext()).startActivity(intent);
                 }
+                currentUser.child(barKey[0]).child("isLiked").setValue(bar.getIsLiked());
             }
         });
     }
