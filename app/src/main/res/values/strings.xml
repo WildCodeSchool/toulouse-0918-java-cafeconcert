@@ -55,4 +55,5 @@
     <string name="itineraire">Itinéraire</string>
     <string name="appeler">Appeler</string>
     <string name="site_web">Site web</string>
+    <string name="aucun_numero">Aucun numéro disponible pour ce bar</string>
 </resources>
