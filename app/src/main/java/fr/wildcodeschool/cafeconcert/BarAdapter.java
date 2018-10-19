@@ -1,5 +1,7 @@
 package fr.wildcodeschool.cafeconcert;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,6 +14,7 @@ import android.support.constraint.ConstraintLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -59,13 +62,14 @@ public class BarAdapter extends ArrayAdapter<Bar> {
         uId = mAuth.getCurrentUser().getUid();
         // Lookup view for data population
         TextView tvBarName = convertView.findViewById(R.id.text_bar_name);
-        ImageButton ibBar = convertView.findViewById(R.id.image_bar);
+        final ImageButton ibBar = convertView.findViewById(R.id.image_bar);
         ImageView navigate = convertView.findViewById(R.id.navigationButton);
         ImageView phone = convertView.findViewById(R.id.ib_phone);
         ImageButton ibWeb = convertView.findViewById(R.id.ib_web);
         ImageButton zoomAddress = convertView.findViewById(R.id.icon_adress);
         ImageButton icon = convertView.findViewById(R.id.status_icon);
         TextView barAdress = convertView.findViewById(R.id.adress_bar);
+        final ImageView ivLogoBar = convertView.findViewById(R.id.iv_logobar);
         String[] parts = bar.getAddress().split(" ");
         String adressTerm = "";
         for (int i = 0; i < parts.length - 2; i++) {
@@ -73,6 +77,13 @@ public class BarAdapter extends ArrayAdapter<Bar> {
         }
         adressTerm.trim();
         barAdress.setText(adressTerm);
+
+        ivLogoBar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ivLogoBar.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.shake));
+            }
+        });
 
         zoomAddress.setOnClickListener(new View.OnClickListener() {
             @Override
