@@ -33,6 +33,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -131,6 +132,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         filter = sharedPreferences.getBoolean("filter", false);
         mFilterDistance = sharedPreferences.getBoolean("distanceFilter", false);
+
+        View header = navigationView.getHeaderView(0);
+        final ImageView image = header.findViewById(R.id.image_bar);
+        image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                image.startAnimation(AnimationUtils.loadAnimation(MapsActivity.this, R.anim.shake));
+            }
+        });
 
         setButtonChangeLangageFromMenu();
     }
@@ -424,8 +434,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
+            Intent a = new Intent(Intent.ACTION_MAIN);
+            a.addCategory(Intent.CATEGORY_HOME);
+            a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(a);
             super.onBackPressed();
-            finish();
         }
     }
 

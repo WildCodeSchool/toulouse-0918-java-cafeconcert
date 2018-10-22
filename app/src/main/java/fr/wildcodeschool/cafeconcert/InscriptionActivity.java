@@ -95,6 +95,7 @@ public class InscriptionActivity extends AppCompatActivity {
                             DatabaseReference refBar = database.getReference("cafeconcert");
                             final DatabaseReference refUser = database.getReference("users");
                             final DatabaseReference currentUser = refUser.child(uId).child("bars");
+                            refUser.child(uId).child("profilePic").setValue("https://res.cloudinary.com/teepublic/image/private/s---Orh_gAT--/t_Preview/b_rgb:ffffff,c_limit,f_jpg,h_630,q_90,w_630/v1489813788/production/designs/1332589_1.jpg");
 
                             refBar.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
