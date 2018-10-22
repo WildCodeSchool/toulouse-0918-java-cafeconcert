@@ -79,8 +79,8 @@ public class Profile extends AppCompatActivity {
         currentUserProfile.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String profilePic = (String) dataSnapshot.getValue();
 
+                String profilePic = (String) dataSnapshot.getValue();
                 Glide.with(Profile.this)
                         .load(profilePic)
                         .apply(RequestOptions.circleCropTransform())
@@ -180,24 +180,18 @@ public class Profile extends AppCompatActivity {
         if (resultCode == this.RESULT_CANCELED) {
             return;
         }
+        final RotateAnimation anim = new RotateAnimation(0f, 350f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        anim.setInterpolator(new LinearInterpolator());
+        anim.setRepeatCount(Animation.INFINITE);
+        anim.setDuration(700);
+        ImageView profilePicView = findViewById(R.id.image_pic_profile);
+        profilePicView.setAnimation(anim);
         if (requestCode == GALLERY) {
             if (data != null) {
                 Uri contentURI = data.getData();
                 uploadPictureFirebaseStorage(contentURI);
-                ImageView profilePicView = findViewById(R.id.image_pic_profile);
-                final RotateAnimation anim = new RotateAnimation(0f, 350f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-                anim.setInterpolator(new LinearInterpolator());
-                anim.setRepeatCount(Animation.INFINITE);
-                anim.setDuration(700);
-                profilePicView.setAnimation(anim);
             }
         } else if (requestCode == CAMERA) {
-            ImageView profilePicView = findViewById(R.id.image_pic_profile);
-            final RotateAnimation anim = new RotateAnimation(0f, 350f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-            anim.setInterpolator(new LinearInterpolator());
-            anim.setRepeatCount(Animation.INFINITE);
-            anim.setDuration(700);
-            profilePicView.setAnimation(anim);
             File f = new File(mCurrentPhotoPath);
             Uri contentUri = Uri.fromFile(f);
             uploadPictureFirebaseStorage(contentUri);
