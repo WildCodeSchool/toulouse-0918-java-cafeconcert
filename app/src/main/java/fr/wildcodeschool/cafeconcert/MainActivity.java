@@ -140,6 +140,8 @@ public class MainActivity extends AppCompatActivity {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(MainActivity.this, R.string.authentification_fail,
                                     Toast.LENGTH_SHORT).show();
+                            final ImageView ivlogo = findViewById(R.id.iv_logoapp);
+                            ivlogo.setAnimation(null);
                             updateUI(null);
                         }
                     }
