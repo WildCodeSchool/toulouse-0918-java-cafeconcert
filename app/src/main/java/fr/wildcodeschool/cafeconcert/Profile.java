@@ -19,12 +19,16 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -75,11 +79,13 @@ public class Profile extends AppCompatActivity {
         currentUserProfile.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String profilePic = (String) dataSnapshot.getValue();
 
+                String profilePic = (String) dataSnapshot.getValue();
                 Glide.with(Profile.this)
                         .load(profilePic)
+                        .apply(RequestOptions.circleCropTransform())
                         .into(profilePicView);
+                profilePicView.setAnimation(null);
             }
 
             @Override
@@ -97,13 +103,6 @@ public class Profile extends AppCompatActivity {
                 checkUserCameraStoragePermission();
             }
         });
-
-    }
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
 
     }
 
@@ -133,7 +132,6 @@ public class Profile extends AppCompatActivity {
     public void choosePhotoFromGallary() {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK,
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
         startActivityForResult(galleryIntent, GALLERY);
     }
 
@@ -182,15 +180,18 @@ public class Profile extends AppCompatActivity {
         if (resultCode == this.RESULT_CANCELED) {
             return;
         }
+        final RotateAnimation anim = new RotateAnimation(0f, 350f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        anim.setInterpolator(new LinearInterpolator());
+        anim.setRepeatCount(Animation.INFINITE);
+        anim.setDuration(700);
+        ImageView profilePicView = findViewById(R.id.image_pic_profile);
+        profilePicView.setAnimation(anim);
         if (requestCode == GALLERY) {
             if (data != null) {
                 Uri contentURI = data.getData();
                 uploadPictureFirebaseStorage(contentURI);
-
-
             }
         } else if (requestCode == CAMERA) {
-
             File f = new File(mCurrentPhotoPath);
             Uri contentUri = Uri.fromFile(f);
             uploadPictureFirebaseStorage(contentUri);
@@ -231,7 +232,6 @@ public class Profile extends AppCompatActivity {
                         "com.example.android.fileprovider",
                         photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                uploadPictureFirebaseStorage(photoURI);
                 startActivityForResult(takePictureIntent, CAMERA);
             }
         }
