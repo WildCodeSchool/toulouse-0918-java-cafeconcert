@@ -100,13 +100,6 @@ public class Profile extends AppCompatActivity {
 
     }
 
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-    }
-
     private void showPictureDialog() {
         AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
         pictureDialog.setTitle(getString(R.string.select_action));
@@ -133,7 +126,6 @@ public class Profile extends AppCompatActivity {
     public void choosePhotoFromGallary() {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK,
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
         startActivityForResult(galleryIntent, GALLERY);
     }
 
@@ -186,11 +178,8 @@ public class Profile extends AppCompatActivity {
             if (data != null) {
                 Uri contentURI = data.getData();
                 uploadPictureFirebaseStorage(contentURI);
-
-
             }
         } else if (requestCode == CAMERA) {
-
             File f = new File(mCurrentPhotoPath);
             Uri contentUri = Uri.fromFile(f);
             uploadPictureFirebaseStorage(contentUri);
@@ -231,7 +220,6 @@ public class Profile extends AppCompatActivity {
                         "com.example.android.fileprovider",
                         photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                uploadPictureFirebaseStorage(photoURI);
                 startActivityForResult(takePictureIntent, CAMERA);
             }
         }
