@@ -4,19 +4,11 @@ import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.annotation.GlideModule;
-import com.bumptech.glide.module.AppGlideModule;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -32,14 +24,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.signin.internal.Storage;
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -51,10 +40,8 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 
@@ -63,15 +50,15 @@ public class Profile extends AppCompatActivity {
     private static final int CAMERA = 3;
     private static final int GALLERY = 2;
     private final int requestCode = 20;
+    String mCurrentPhotoPath;
     private DrawerLayout drawer;
     private ImageView profilePic;
     private boolean filter = false;
     private FirebaseAuth mAuth;
     private String uId;
-
     private Uri photoStringLing;
-    String mCurrentPhotoPath;
     private FirebaseDatabase database;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         CharSequence[] items = {getString(R.string.from_camera), getString(R.string.from_gallery), getString(R.string.cancel)};
@@ -88,7 +75,7 @@ public class Profile extends AppCompatActivity {
         currentUserProfile.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String profilePic  = (String) dataSnapshot.getValue();
+                String profilePic = (String) dataSnapshot.getValue();
 
                 Glide.with(Profile.this)
                         .load(profilePic)
@@ -100,9 +87,6 @@ public class Profile extends AppCompatActivity {
 
             }
         });
-
-
-
 
         TextView pseudoTxt = findViewById(R.id.text_pseudo);
         pseudoTxt.setText(mAuth.getCurrentUser().getDisplayName());
@@ -123,12 +107,12 @@ public class Profile extends AppCompatActivity {
 
     }
 
-    private void showPictureDialog(){
+    private void showPictureDialog() {
         AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
         pictureDialog.setTitle(getString(R.string.select_action));
         String[] pictureDialogItems = {
                 getString(R.string.from_gallery),
-                getString(R.string.from_camera) };
+                getString(R.string.from_camera)};
         pictureDialog.setItems(pictureDialogItems,
                 new DialogInterface.OnClickListener() {
                     @Override
@@ -154,11 +138,11 @@ public class Profile extends AppCompatActivity {
     }
 
 
-    private void uploadPictureFirebaseStorage(Uri contentURI){
+    private void uploadPictureFirebaseStorage(Uri contentURI) {
         try {
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
             FirebaseStorage storage = FirebaseStorage.getInstance();
-            final StorageReference storageRef = storage.getReference("profilepics/"+System.currentTimeMillis()+".jpg");
+            final StorageReference storageRef = storage.getReference("profilepics/" + System.currentTimeMillis() + ".jpg");
             storageRef.putFile(contentURI).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                 @Override
                 public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
@@ -168,7 +152,7 @@ public class Profile extends AppCompatActivity {
             }).addOnCompleteListener(new OnCompleteListener<Uri>() {
                 @Override
                 public void onComplete(@NonNull Task<Uri> task) {
-                    if (task.isSuccessful()){
+                    if (task.isSuccessful()) {
                         photoStringLing = task.getResult();
                         final DatabaseReference refUser = database.getReference("users");
                         final DatabaseReference currentUser = refUser.child(uId).child("profilePic");
@@ -177,7 +161,6 @@ public class Profile extends AppCompatActivity {
                     }
                 }
             });
-
 
 
         } catch (IOException e) {
@@ -206,8 +189,7 @@ public class Profile extends AppCompatActivity {
 
 
             }
-        }
-        else if (requestCode == CAMERA) {
+        } else if (requestCode == CAMERA) {
 
             File f = new File(mCurrentPhotoPath);
             Uri contentUri = Uri.fromFile(f);
