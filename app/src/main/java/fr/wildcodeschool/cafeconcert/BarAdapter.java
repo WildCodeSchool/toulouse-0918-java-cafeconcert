@@ -156,8 +156,8 @@ public class BarAdapter extends ArrayAdapter<Bar> {
             @Override
             public void onClick(View v) {
                 String url = bar.getWebUrl();
-                if (bar.getWebUrl().isEmpty()) {
-                    Toast.makeText(getContext(), R.string.no_website, Toast.LENGTH_LONG);
+                if (bar.getWebUrl().isEmpty() || bar.getWebUrl()=="") {
+                    Toast.makeText(getContext(), R.string.no_website, Toast.LENGTH_LONG).show();
                 } else {
                     if (url.charAt(0) == 'w') {
                         url = "http://" + url;
