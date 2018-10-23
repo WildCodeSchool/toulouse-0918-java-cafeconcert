@@ -19,8 +19,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -75,6 +77,15 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
         checkMenuCreated(drawer);
         //If user is guest, he can connect. If he is yet connected, he can disconnect
         connexionOrDeconnexionFromMenuBurger(navigationView);
+
+        View header = navigationView.getHeaderView(0);
+        final ImageView image = header.findViewById(R.id.image_bar);
+        image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                image.startAnimation(AnimationUtils.loadAnimation(BarListActivity.this, R.anim.shake));
+            }
+        });
 
         getUserLocation();
     }

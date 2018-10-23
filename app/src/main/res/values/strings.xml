@@ -62,4 +62,5 @@
     <string name="location_impossible">Localisation de votre position impossible</string>
     <string name="access_menu">Accès</string>
     <string name="connexion_menu">Connexion</string>
+    <string name="gallerie">Gallerie</string>
 </resources>
