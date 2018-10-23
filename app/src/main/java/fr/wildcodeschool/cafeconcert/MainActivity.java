@@ -1,5 +1,6 @@
 package fr.wildcodeschool.cafeconcert;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -100,6 +101,10 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     ivlogo.startAnimation(anim);
                     signInUser(email, password);
+                    ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
+                    progressDialog.setTitle("Un moment ...");
+                    progressDialog.setMessage(" Chargement en cours .");
+                    progressDialog.show();
                 }
             }
         });
