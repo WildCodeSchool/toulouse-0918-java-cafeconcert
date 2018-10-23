@@ -17,6 +17,8 @@ import android.support.v4.content.FileProvider;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
@@ -42,6 +44,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 
@@ -58,12 +61,30 @@ public class Profile extends AppCompatActivity {
     private String uId;
     private Uri photoStringLing;
     private FirebaseDatabase database;
+    private ArrayList<Bar> mBars;
+    private SingletonBar singleton = SingletonBar.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        CharSequence[] items = {getString(R.string.from_camera), getString(R.string.from_gallery), getString(R.string.cancel)};
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        mBars = singleton.getFavorites();
+
+        CharSequence[] items = {getString(R.string.from_camera), getString(R.string.from_gallery), getString(R.string.cancel)};
+
+        //#RecyclerView
+        RecyclerView listLogos = findViewById(R.id.list_logos);
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        listLogos.setLayoutManager(layoutManager);
+        //TODO : implémenter Firebase ou Singleton pour RecyclerView
+
+        // TODO : afficher la liste de logo avec un adapter
+        final ProfilRecyclerAdapter adapter = new ProfilRecyclerAdapter(mBars, this);
+        listLogos.setAdapter(adapter);
+
+
         database = FirebaseDatabase.getInstance();
         ImageButton editPhoto = findViewById(R.id.image_take_pic_camera);
         final ImageView profilePicView = findViewById(R.id.image_pic_profile);

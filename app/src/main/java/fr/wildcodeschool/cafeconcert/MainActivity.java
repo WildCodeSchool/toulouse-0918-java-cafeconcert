@@ -150,6 +150,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser user) {
         if (user != null) {
+            //TODO : Charger la liste des Bars de l'utilisateur
+            SingletonBar singleton = SingletonBar.getInstance();
+            singleton.initBars(user.getUid());
             startActivity(new Intent(MainActivity.this, MapsActivity.class));
         }
     }
