@@ -424,8 +424,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
+            Intent a = new Intent(Intent.ACTION_MAIN);
+            a.addCategory(Intent.CATEGORY_HOME);
+            a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(a);
             super.onBackPressed();
-            finish();
         }
     }
 
@@ -691,7 +694,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onClick(View v) {
                 String url = bar.getWebUrl();
                 if (bar.getWebUrl().isEmpty()) {
-                    Toast.makeText(MapsActivity.this, R.string.no_website, Toast.LENGTH_LONG);
+                    Toast.makeText(MapsActivity.this, R.string.no_website, Toast.LENGTH_LONG).show();
                 } else {
                     if (url.charAt(0) == 'w') {
                         url = "http://" + url;
