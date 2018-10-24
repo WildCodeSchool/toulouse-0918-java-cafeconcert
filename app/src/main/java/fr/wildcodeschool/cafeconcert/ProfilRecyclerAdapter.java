@@ -1,6 +1,7 @@
 package fr.wildcodeschool.cafeconcert;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
 import android.view.LayoutInflater;
@@ -42,12 +43,21 @@ public class ProfilRecyclerAdapter extends RecyclerView.Adapter<ProfilRecyclerAd
     }
 
     @Override
-    public void onBindViewHolder(ProfilRecyclerAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(final ProfilRecyclerAdapter.ViewHolder holder, int position) {
 
-        Bar barModel = mBar.get(position);
+        final Bar barModel = mBar.get(position);
         //holder.ivLogo.setImageBitmap(barModel.getLogo());
 
         Glide.with(context).load(barModel.getLogo()).into(holder.ivLogo);
+        holder.ivLogo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String name = barModel.getBarName();
+                Intent intent = new Intent(holder.ivLogo.getContext(), MapsActivity.class);
+                intent.putExtra("BAR_NAME", name);
+                holder.ivLogo.getContext().startActivity(intent);
+            }
+        });
     }
 
     @Override
