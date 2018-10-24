@@ -97,8 +97,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private boolean filter = false;
     private String mUId;
     private String mToastlanguage = "";
-
-
     private boolean mFilterDistance = false;
 
     @SuppressLint("ClickableViewAccessibility")
