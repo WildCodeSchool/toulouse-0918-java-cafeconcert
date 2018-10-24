@@ -22,6 +22,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -39,6 +40,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListPopupWindow;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -116,7 +118,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         setUserIDAsRegisteredOrGuest();
 
-
         //#BurgerMenu
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -167,6 +168,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 setLanguage(lang.equals("fr") ? "en" : "fr");
             }
         });
+
     }
 
     public void connexionOrDeconnexionFromMenuBurger(NavigationView navigationView) {
@@ -692,10 +694,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         phone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String uri = "tel:" + bar.getPhoneNumber();
-                Intent intent = new Intent(Intent.ACTION_DIAL);
-                intent.setData(Uri.parse(uri));
-                startActivity(intent);
+                if (bar.getPhoneNumber().isEmpty()){
+                    Toast.makeText(MapsActivity.this, R.string.nophone, Toast.LENGTH_LONG).show();
+                }else {
+                    String uri = "tel:" + bar.getPhoneNumber();
+                    Intent intent = new Intent(Intent.ACTION_DIAL);
+                    intent.setData(Uri.parse(uri));
+                    startActivity(intent);
+                }
             }
         });
         //Website button

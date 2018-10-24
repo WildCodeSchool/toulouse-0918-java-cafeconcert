@@ -1,5 +1,6 @@
 package fr.wildcodeschool.cafeconcert;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -29,8 +30,6 @@ import com.google.firebase.database.ValueEventListener;
 
 public class InscriptionActivity extends AppCompatActivity {
     final static String LINK_DEFAULT_PICTURE = "http://toulouse.aujourdhui.fr/uploads/assets/evenements/recto_flyer/2016/07/708059_journees-portes-ouvertes-wild-code-school-toulouse_195955.png";
-
-
     private FirebaseAuth mAuth;
     private FirebaseDatabase database;
 
@@ -39,7 +38,6 @@ public class InscriptionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_inscription);
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
-
         //reprendre la firebase du projet pour y installer un nouvel utilisateur sur le noeud utilisateur
         database = FirebaseDatabase.getInstance();
         final ImageView ivlogo = findViewById(R.id.iv_logo);
@@ -67,7 +65,6 @@ public class InscriptionActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 
     private void signUpUser(String email, String password, final String pseudo) {
@@ -107,7 +104,6 @@ public class InscriptionActivity extends AppCompatActivity {
                                         Bar bar = barSnapshot.getValue(Bar.class);
                                         bar.setIsLiked(2);
                                         currentUser.child(barId).setValue(bar);
-
                                     }
                                     updateUI(user);
                                 }
@@ -116,8 +112,6 @@ public class InscriptionActivity extends AppCompatActivity {
                                 public void onCancelled(@NonNull DatabaseError databaseError) {
                                 }
                             });
-
-
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(InscriptionActivity.this, R.string.authentification_fail,

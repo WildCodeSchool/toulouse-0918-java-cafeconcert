@@ -1,5 +1,6 @@
 package fr.wildcodeschool.cafeconcert;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -7,7 +8,9 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
@@ -15,6 +18,7 @@ import android.view.animation.RotateAnimation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -42,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
     public static ArrayList<Bar> arrayFilter(ArrayList<Bar> bars) {
         ArrayList<Bar> arrayFilter = new ArrayList<>();
         for (Bar monBar : bars) {
@@ -71,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, InscriptionActivity.class));
             }
         });
-
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
@@ -98,7 +100,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
         //#Language
         Configuration config = getBaseContext().getResources().getConfiguration();
         SharedPreferences languePreferences = getSharedPreferences("CAFE_CONCERT", MODE_PRIVATE);
@@ -131,7 +132,6 @@ public class MainActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
 
                         if (task.isSuccessful()) {
-
                             FirebaseUser user = mAuth.getCurrentUser();
                             // TODO : faire une requête pour récupérer les données supplementaire de l'utilisateur
                             String uId = user.getUid();

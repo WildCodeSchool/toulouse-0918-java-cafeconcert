@@ -148,6 +148,9 @@ public class BarAdapter extends ArrayAdapter<Bar> {
                 Intent intent = new Intent(Intent.ACTION_DIAL);
                 intent.setData(Uri.parse(uri));
                 getContext().startActivity(intent);
+               if (bar.getPhoneNumber().isEmpty()){
+                   Toast.makeText(getContext(), R.string.aucun_numero, Toast.LENGTH_LONG);
+               }
             }
         });
 
