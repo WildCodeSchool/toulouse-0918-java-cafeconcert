@@ -21,6 +21,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -38,11 +39,11 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListPopupWindow;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -97,6 +98,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private LocationManager mLocationManager = null;
     private FusedLocationProviderClient mFusedLocationClient;
     private boolean filter = false;
+    private String mToastlanguage = "";
     private boolean mFilterDistance = false;
 
     @SuppressLint("ClickableViewAccessibility")
@@ -104,6 +106,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        mToastlanguage = getString(R.string.you_need_to_be_connected);
         // Setting map
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -160,6 +163,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 setLanguage(lang.equals("fr") ? "en" : "fr");
             }
         });
+
     }
 
     public void connexionOrDeconnexionFromMenuBurger(NavigationView navigationView) {
@@ -216,7 +220,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                         // Guest restriction
                         if (checkIfGuest(mUId)) {
-                            Toast.makeText(getApplicationContext(), R.string.you_need_to_be_connected, Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), mToastlanguage, Toast.LENGTH_LONG).show();
                             return;
                         }
                         if (checkboxFilter.isChecked() && !mFilterDistance) {
@@ -246,7 +250,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                         //Guest Restriction
                         if (checkIfGuest(mUId)) {
-                            Toast.makeText(getApplicationContext(), R.string.you_need_to_be_connected, Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), mToastlanguage, Toast.LENGTH_LONG).show();
                             return;
                         }
                         if (distanceCheckboxfilter.isChecked() && !filter) {
@@ -320,7 +324,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             case R.id.nav_profile:
                 // Guest restriction
                 if (checkIfGuest(mUId)) {
-                    Toast.makeText(getApplicationContext(), R.string.you_need_to_be_connected, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), mToastlanguage, Toast.LENGTH_LONG).show();
                     break;
                 }
                 startActivity(new Intent(this, Profile.class));
@@ -561,11 +565,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 // Guest restriction
                 if(checkIfGuest(mUId)) {
-                    Toast.makeText(getApplicationContext(), R.string.you_need_to_be_connected, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), mToastlanguage, Toast.LENGTH_LONG).show();
                     return;
                 }
-
-                Toast.makeText(MapsActivity.this, "Bar modifié dans la database", Toast.LENGTH_SHORT).show();
 
                 if (bar.getIsLiked() == 1) {
                     mSingleton.setNewPreferences(0, bar);
@@ -630,10 +632,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         phone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String uri = "tel:" + bar.getPhoneNumber();
-                Intent intent = new Intent(Intent.ACTION_DIAL);
-                intent.setData(Uri.parse(uri));
-                startActivity(intent);
+                if (bar.getPhoneNumber().isEmpty()){
+                    Toast.makeText(MapsActivity.this, R.string.nophone, Toast.LENGTH_LONG).show();
+                }else {
+                    String uri = "tel:" + bar.getPhoneNumber();
+                    Intent intent = new Intent(Intent.ACTION_DIAL);
+                    intent.setData(Uri.parse(uri));
+                    startActivity(intent);
+                }
             }
         });
         //Website button

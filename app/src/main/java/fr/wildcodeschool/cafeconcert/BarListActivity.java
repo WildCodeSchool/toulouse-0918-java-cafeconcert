@@ -52,12 +52,14 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
     private String mUId;
     private FirebaseAuth mAuth;
     private SingletonBar mSingleton;
+    private String mToastlanguage = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bar_list);
-        //bars = new ArrayList<>();
+        mToastlanguage = getString(R.string.you_need_to_be_connected);
+
         listBar = findViewById(R.id.list_bar);
 
         //Is user guest or registered ?
@@ -246,7 +248,7 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
 
                         // Guest restriction
                         if (checkIfGuest(mUId)) {
-                            Toast.makeText(getApplicationContext(), R.string.you_need_to_be_connected, Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), mToastlanguage, Toast.LENGTH_LONG).show();
                             return;
                         }
 
@@ -278,7 +280,7 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
 
                         // Guest restriction
                         if (checkIfGuest(mUId)) {
-                            Toast.makeText(getApplicationContext(), R.string.you_need_to_be_connected, Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), mToastlanguage, Toast.LENGTH_LONG).show();
                             return;
                         }
 
@@ -354,7 +356,7 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
             case R.id.nav_profile:
                 // Guest restriction
                 if (checkIfGuest(mUId)) {
-                    Toast.makeText(getApplicationContext(), R.string.you_need_to_be_connected, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), mToastlanguage, Toast.LENGTH_LONG).show();
                     break;
                 }
                 startActivity(new Intent(this, Profile.class));
