@@ -695,7 +695,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onClick(View v) {
                 if (bar.getPhoneNumber().isEmpty()){
-                    Toast.makeText(MapsActivity.this,"veuillez renseigner un numéro de telephone", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MapsActivity.this, R.string.nophone, Toast.LENGTH_LONG).show();
                 }else {
                     String uri = "tel:" + bar.getPhoneNumber();
                     Intent intent = new Intent(Intent.ACTION_DIAL);

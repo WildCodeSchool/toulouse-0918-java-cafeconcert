@@ -64,4 +64,5 @@
     <string name="access_menu">Access</string>
     <string name="connexion_menu">Log in</string>
     <string name="gallerie">Photo gallery</string>
+    <string name="nophone">No phone number available</string>
 </resources>
