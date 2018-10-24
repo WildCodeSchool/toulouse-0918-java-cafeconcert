@@ -28,6 +28,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class InscriptionActivity extends AppCompatActivity {
+    final static String LINK_DEFAULT_PICTURE = "http://toulouse.aujourdhui.fr/uploads/assets/evenements/recto_flyer/2016/07/708059_journees-portes-ouvertes-wild-code-school-toulouse_195955.png";
+
+
     private FirebaseAuth mAuth;
     private FirebaseDatabase database;
 
@@ -95,7 +98,7 @@ public class InscriptionActivity extends AppCompatActivity {
                             DatabaseReference refBar = database.getReference("cafeconcert");
                             final DatabaseReference refUser = database.getReference("users");
                             final DatabaseReference currentUser = refUser.child(uId).child("bars");
-                            refUser.child(uId).child("profilePic").setValue("http://toulouse.aujourdhui.fr/uploads/assets/evenements/recto_flyer/2016/07/708059_journees-portes-ouvertes-wild-code-school-toulouse_195955.png");
+                            refUser.child(uId).child("profilePic").setValue(LINK_DEFAULT_PICTURE);
 
                             refBar.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
