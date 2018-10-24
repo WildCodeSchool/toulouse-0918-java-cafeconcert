@@ -15,7 +15,7 @@
     <string name="profile">Profil</string>
     <string name="map">La Carte</string>
     <string name="bar_list">Liste de bars</string>
-    <string name="favorite">Filtre</string>
+    <string name="favorite">Filtres</string>
     <string name="like">Mes favoris</string>
     <string name="be_social">Être sociable</string>
     <string name="share">Partager</string>
@@ -58,7 +58,7 @@
     <string name="from_camera">Prendre une photo</string>
     <string name="cancel">Annuler</string>
     <string name="select_action">Que faire ?</string>
-    <string name="you_need_to_be_connected">Veuillez vous connecter pour bénéficier de cette fonctionnalité !</string>
+    <string name="you_need_to_be_connected">Veuillez d\'abord vous connecter!</string>
     <string name="location_impossible">Localisation de votre position impossible</string>
     <string name="access_menu">Accès</string>
     <string name="connexion_menu">Connexion</string>

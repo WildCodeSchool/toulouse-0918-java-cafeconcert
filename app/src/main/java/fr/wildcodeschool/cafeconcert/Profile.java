@@ -77,6 +77,8 @@ public class Profile extends AppCompatActivity {
         ImageButton editPhoto = findViewById(R.id.image_take_pic_camera);
         final ImageView profilePicView = findViewById(R.id.image_pic_profile);
 
+        editPhoto.bringToFront();
+
         mBars = singleton.getFavorites();
 
         //#RecyclerView

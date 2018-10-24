@@ -13,24 +13,18 @@
         android:layout_height="35dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:background="@drawable/ic_camera_alt_black_24dp"
-        app:layout_constraintEnd_toStartOf="@+id/profile_pic_camera"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/image_pic_profile" />
+        app:layout_constraintBottom_toBottomOf="@+id/image_pic_profile"
+        app:layout_constraintEnd_toEndOf="@+id/image_pic_profile" />
 
     <ImageView
         android:id="@+id/image_pic_profile"
         android:layout_width="170dp"
         android:layout_height="170dp"
-        android:layout_marginBottom="8dp"
         android:layout_marginTop="16dp"
         android:maxHeight="170dp"
         android:maxWidth="170dp"
-        app:layout_constraintBottom_toTopOf="@+id/image_take_pic_camera"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
@@ -54,19 +48,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Pseudo" />
-
-
-    <TextView
-        android:id="@+id/profile_pic_camera"
-        android:layout_width="wrap_content"
-        android:layout_height="20dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/profil_pic_camera"
-        app:layout_constraintBottom_toBottomOf="@+id/image_take_pic_camera"
-        app:layout_constraintStart_toEndOf="@+id/image_take_pic_camera"
-        app:layout_constraintTop_toBottomOf="@+id/image_pic_profile" />
 
 
     <TextView
