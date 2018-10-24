@@ -116,7 +116,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         setUserIDAsRegisteredOrGuest();
 
-
         //#BurgerMenu
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
