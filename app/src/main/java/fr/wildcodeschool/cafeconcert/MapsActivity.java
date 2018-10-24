@@ -43,7 +43,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -97,6 +96,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private FusedLocationProviderClient mFusedLocationClient;
     private boolean filter = false;
     private String mUId;
+    private String mToastlanguage = "";
+
 
     private boolean mFilterDistance = false;
 
@@ -105,6 +106,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        mToastlanguage = getString(R.string.you_need_to_be_connected);
         // Setting map
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -263,7 +265,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                         // Guest restriction
                         if (checkIfGuest(mUId)) {
-                            Toast.makeText(getApplicationContext(), R.string.you_need_to_be_connected, Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), mToastlanguage, Toast.LENGTH_LONG).show();
                             return;
                         }
                         if (checkboxFilter.isChecked() && !mFilterDistance) {
@@ -293,7 +295,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                         //Guest Restriction
                         if (checkIfGuest(mUId)) {
-                            Toast.makeText(getApplicationContext(), R.string.you_need_to_be_connected, Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), mToastlanguage, Toast.LENGTH_LONG).show();
                             return;
                         }
                         if (distanceCheckboxfilter.isChecked() && !filter) {
@@ -367,7 +369,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             case R.id.nav_profile:
                 // Guest restriction
                 if (checkIfGuest(mUId)) {
-                    Toast.makeText(getApplicationContext(), R.string.you_need_to_be_connected, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), mToastlanguage, Toast.LENGTH_LONG).show();
                     break;
                 }
                 startActivity(new Intent(this, Profile.class));
@@ -630,7 +632,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 // Guest restriction
                 if(checkIfGuest(mUId)) {
-                    Toast.makeText(getApplicationContext(), R.string.you_need_to_be_connected, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), mToastlanguage, Toast.LENGTH_LONG).show();
                     return;
                 }
 

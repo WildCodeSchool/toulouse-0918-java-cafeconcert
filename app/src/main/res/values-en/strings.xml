@@ -16,7 +16,7 @@
     <string name="profile">Profile</string>
     <string name="map">Map</string>
     <string name="bar_list">List of bars</string>
-    <string name="favorite">Filter</string>
+    <string name="favorite">Filters</string>
     <string name="like">Like</string>
     <string name="be_social">Be Social</string>
     <string name="share">Share</string>
@@ -44,7 +44,7 @@
     <string name="no_website">No Website Available</string>
     <string name="share_text"> You should test the app Café-Concert to discover the best spots to listen good concerts in Toulouse ! It\'s free on Google Play Store ! </string>
     <string name="language">Français</string>
-    <string name="deconnexion">Deconnexion</string>
+    <string name="deconnexion">Logout</string>
     <string name="les_5_caf_s_les_plus_proches">5 closest places</string>
     <string name="les_5_bars_les_plus_proches">5 closest places</string>
     <string name="pas_encore_inscrit">Not yet registered ?</string>
@@ -57,6 +57,11 @@
     <string name="site_web">Website</string>
     <string name="cancel">Cancel</string>
     <string name="select_action">What do I do ?</string>
-    <string name="you_need_to_be_connected">Please sign in to access this functionality !</string>
+    <string name="you_need_to_be_connected">You have first to sign in!</string>
     <string name="location_impossible">Impossible to detect your position</string>
+    <string name="from_gallery">From gallery</string>
+    <string name="from_camera">From camera</string>
+    <string name="access_menu">Access</string>
+    <string name="connexion_menu">Log in</string>
+    <string name="gallerie">Photo gallery</string>
 </resources>
