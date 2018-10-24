@@ -65,7 +65,7 @@ public class Profile extends AppCompatActivity {
     private String uId;
     private Uri photoStringLing;
     private FirebaseDatabase database;
-    private ArrayList<Bar> mBars;
+    private ArrayList<Bar> mFavoritesBars;
     private SingletonBar singleton = SingletonBar.getInstance();
 
     @Override
@@ -77,8 +77,7 @@ public class Profile extends AppCompatActivity {
         ImageButton editPhoto = findViewById(R.id.image_take_pic_camera);
         final ImageView profilePicView = findViewById(R.id.image_pic_profile);
 
-        //TODO empêcher cela lorsque l'utilisateur est connecté en mode invité
-        mBars = singleton.getFavorites();
+        mFavoritesBars = singleton.getFavorites();
 
         //#RecyclerView
         RecyclerView listLogos = findViewById(R.id.list_logos);
@@ -86,7 +85,7 @@ public class Profile extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         listLogos.setLayoutManager(layoutManager);
 
-        final ProfilRecyclerAdapter adapter = new ProfilRecyclerAdapter(mBars, this);
+        final ProfilRecyclerAdapter adapter = new ProfilRecyclerAdapter(mFavoritesBars, this);
         listLogos.setAdapter(adapter);
 
 

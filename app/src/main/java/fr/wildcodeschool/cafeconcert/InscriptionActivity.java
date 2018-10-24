@@ -103,9 +103,10 @@ public class InscriptionActivity extends AppCompatActivity {
                                     for (DataSnapshot barSnapshot : dataSnapshot.getChildren()) {
                                         String barId = barSnapshot.getKey();
                                         Bar bar = barSnapshot.getValue(Bar.class);
-                                        bar.setIsLiked(2);
+                                        //bar.setIsLiked(2);
+                                        //bar.setBarID(barId);
                                         currentUser.child(barId).setValue(bar);
-
+                                        //currentUser.child(barId).child("barId").setValue(barId);
                                     }
                                     updateUI(user);
                                 }
