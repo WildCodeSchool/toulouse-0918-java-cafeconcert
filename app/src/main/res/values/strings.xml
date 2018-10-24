@@ -47,8 +47,7 @@
     <string name="language">English</string>
     <string name="deconnexion">Déconnexion</string>
     <string name="pas_encore_inscrit">Pas encore inscrit?</string>
-    <string name="profil_pic_camera">Changez votre photo de profil en prenant une photo</string>
-    <string name="profil_pic_galery">Changez votre photo de profil depuis la galerie</string>
+    <string name="profil_pic_camera">Changez votre photo de profil</string>
     <string name="please_password">Renseignez un mot de passe et un identifiant</string>
     <string name="authentification_fail">L\'authentification a échoué</string>
     <string name="please_give_password">Veuillez renseigner votre identifiant et votre mot de passe</string>
@@ -56,4 +55,14 @@
     <string name="appeler">Appeler</string>
     <string name="site_web">Site web</string>
     <string name="aucun_numero">Aucun numéro disponible pour ce bar</string>
+    <string name="from_gallery">Depuis la galerie</string>
+    <string name="from_camera">Prendre une photo</string>
+    <string name="cancel">Annuler</string>
+    <string name="select_action">Que faire ?</string>
+    <string name="you_need_to_be_connected">Veuillez vous connecter pour bénéficier de cette fonctionnalité !</string>
+    <string name="location_impossible">Localisation de votre position impossible</string>
+    <string name="access_menu">Accès</string>
+    <string name="connexion_menu">Connexion</string>
+    <string name="gallerie">Gallerie</string>
+
 </resources>

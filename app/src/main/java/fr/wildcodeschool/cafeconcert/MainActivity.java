@@ -147,6 +147,8 @@ public class MainActivity extends AppCompatActivity {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(MainActivity.this, R.string.authentification_fail,
                                     Toast.LENGTH_SHORT).show();
+                            final ImageView ivlogo = findViewById(R.id.iv_logoapp);
+                            ivlogo.setAnimation(null);
                             updateUI(null);
                         }
                     }
@@ -155,6 +157,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser user) {
         if (user != null) {
+            //TODO : Charger la liste des Bars de l'utilisateur
+            SingletonBar singleton = SingletonBar.getInstance();
+            singleton.initBars(user.getUid());
             startActivity(new Intent(MainActivity.this, MapsActivity.class));
         }
     }

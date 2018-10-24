@@ -34,16 +34,15 @@ import java.util.ArrayList;
 
 public class BarAdapter extends ArrayAdapter<Bar> {
 
-    final static int MARKER_HEIGHT = 72;
-    final static int MARKER_WIDTH = 72;
-    final static int ICON_HEIGHT = 100;
-    final static int ICON_WIDTH = 100;
-    private static ArrayList<Bar> filterBars;
-    private ArrayList<Bar> bars;
+    private final static int MARKER_HEIGHT = 72;
+    private final static int MARKER_WIDTH = 72;
+    private final static int ICON_HEIGHT = 100;
+    private final static int ICON_WIDTH = 100;
+    //private static ArrayList<Bar> filterBars; // TODO to delete ?
+    //private ArrayList<Bar> bars;
     private boolean filter = false;
-    private String uId;
+    private String mUId;
     private FirebaseAuth mAuth;
-
 
     public BarAdapter(Context context, ArrayList<Bar> bars) {
         super(context, 0, bars);
@@ -60,8 +59,15 @@ public class BarAdapter extends ArrayAdapter<Bar> {
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_bar, parent, false);
         }
+
+        //Is user guest or registered ?
         mAuth = FirebaseAuth.getInstance();
-        uId = mAuth.getCurrentUser().getUid();
+        if (mAuth.getCurrentUser() == null) {
+            mUId = "guest";
+        } else {
+            mUId = mAuth.getCurrentUser().getUid();
+        }
+
         // Lookup view for data population
         TextView tvBarName = convertView.findViewById(R.id.text_bar_name);
         final ImageView ibBar = convertView.findViewById(R.id.image_bar);
@@ -154,7 +160,7 @@ public class BarAdapter extends ArrayAdapter<Bar> {
             public void onClick(View v) {
                 String url = bar.getWebUrl();
                 if (bar.getWebUrl().isEmpty()) {
-                    Toast.makeText(getContext(), R.string.no_website, Toast.LENGTH_LONG);
+                    Toast.makeText(getContext(), R.string.no_website, Toast.LENGTH_LONG).show();
                 } else {
                     if (url.charAt(0) == 'w') {
                         url = "http://" + url;
@@ -203,25 +209,36 @@ public class BarAdapter extends ArrayAdapter<Bar> {
         DatabaseReference refBar = firebaseDatabase.getReference("cafeconcert");
         final String[] barKey = new String[1];
         DatabaseReference refUser = firebaseDatabase.getReference("users");
-        final DatabaseReference currentUser = refUser.child(uId).child("bars");
+        final DatabaseReference currentUser = refUser.child(mUId).child("bars");
 
-        refBar.orderByChild("barName").equalTo(bar.getBarName()).limitToFirst(1).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
-                    barKey[0] = childSnapshot.getKey();
+        // Guest restriction
+        if (!checkIfGuest(mUId)) {
+            refBar.orderByChild("barName").equalTo(bar.getBarName()).limitToFirst(1).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                        barKey[0] = childSnapshot.getKey();
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
+            });
 
-            }
-        });
+        }
+
 
         icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                // Guest restriction
+                if (checkIfGuest(mUId)) {
+                    Toast.makeText(getContext(), R.string.you_need_to_be_connected, Toast.LENGTH_LONG).show();
+                    return;
+                }
+
                 if (bar.getIsLiked() == 1) {
                     bar.setIsLiked(0);
                     adaptLikesButton(icon, bar);
@@ -267,6 +284,10 @@ public class BarAdapter extends ArrayAdapter<Bar> {
                 break;
         }
 
+    }
+
+    public boolean checkIfGuest(String uId) {
+        return uId.equals("guest");
     }
 
 }
