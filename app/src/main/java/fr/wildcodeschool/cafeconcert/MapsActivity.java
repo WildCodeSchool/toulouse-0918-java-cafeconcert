@@ -125,6 +125,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         toggle.syncState();
         navigationView.setCheckedItem(R.id.nav_map);
         checkMenuCreated(drawer);
+
         //If user is guest, he can connect. If he is yet connected, he can disconnect
         connexionOrDeconnexionFromMenuBurger(navigationView);
 

@@ -77,6 +77,7 @@ public class Profile extends AppCompatActivity {
         ImageButton editPhoto = findViewById(R.id.image_take_pic_camera);
         final ImageView profilePicView = findViewById(R.id.image_pic_profile);
 
+        //TODO empêcher cela lorsque l'utilisateur est connecté en mode invité
         mBars = singleton.getFavorites();
 
         //#RecyclerView
@@ -84,9 +85,7 @@ public class Profile extends AppCompatActivity {
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         listLogos.setLayoutManager(layoutManager);
-        //TODO : implémenter Firebase ou Singleton pour RecyclerView
 
-        // TODO : afficher la liste de logo avec un adapter
         final ProfilRecyclerAdapter adapter = new ProfilRecyclerAdapter(mBars, this);
         listLogos.setAdapter(adapter);
 

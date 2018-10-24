@@ -27,43 +27,38 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
+
     private FirebaseAuth mAuth;
+    SingletonBar singleton;
 
-    /*Launch Googlemaps on Navigation mode.
-     * User position as departure, bar coordonates as destination */
-    public static void setNavigation(ImageView navigate, final Bar bar, final Context context) {
 
-        navigate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
-                        Uri.parse("http://maps.google.com/maps?.34&daddr=" + bar.getGeoPoint() + "," + bar.getGeoShape()));
-                context.startActivity(intent);
-            }
-        });
-    }
-
-    public static ArrayList<Bar> arrayFilter(ArrayList<Bar> bars) {
-        ArrayList<Bar> arrayFilter = new ArrayList<>();
-        for (Bar monBar : bars) {
-            if (monBar.getIsLiked() == 1) {
-                arrayFilter.add(monBar);
-            }
-        }
-        return arrayFilter;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Button button = (Button) findViewById(R.id.button_visiteur);
-        button.setOnClickListener(new View.OnClickListener() {
+
+        // Initialize Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
+
+        // Prepare animation
+        final ImageView ivlogo = findViewById(R.id.iv_logoapp);
+        final RotateAnimation anim = new RotateAnimation(0f, 350f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        anim.setInterpolator(new LinearInterpolator());
+        anim.setRepeatCount(Animation.INFINITE);
+        anim.setDuration(700);
+        ivlogo.setAnimation(null);
+
+        // Setting page items
+        Button btnGuestConnexion = findViewById(R.id.button_visiteur);
+        btnGuestConnexion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this, MapsActivity.class));
             }
         });
+
         Button buttonScription = (Button) findViewById(R.id.button_inscription);
         buttonScription.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,16 +66,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, InscriptionActivity.class));
             }
         });
-
-        // Initialize Firebase Auth
-        mAuth = FirebaseAuth.getInstance();
-
-        final ImageView ivlogo = findViewById(R.id.iv_logoapp);
-        final RotateAnimation anim = new RotateAnimation(0f, 350f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        anim.setInterpolator(new LinearInterpolator());
-        anim.setRepeatCount(Animation.INFINITE);
-        anim.setDuration(700);
-        ivlogo.setAnimation(null);
 
         Button btLogin = findViewById(R.id.button_connexion);
         btLogin.setOnClickListener(new View.OnClickListener() {
@@ -133,8 +118,7 @@ public class MainActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
 
                             FirebaseUser user = mAuth.getCurrentUser();
-                            // TODO : faire une requête pour récupérer les données supplementaire de l'utilisateur
-                            String uId = user.getUid();
+                            //String uId = user.getUid();
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -149,11 +133,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateUI(FirebaseUser user) {
+
         if (user != null) {
-            //TODO : Charger la liste des Bars de l'utilisateur
-            SingletonBar singleton = SingletonBar.getInstance();
-            singleton.initBars(user.getUid());
-            startActivity(new Intent(MainActivity.this, MapsActivity.class));
+           launchApplication(user);
         }
     }
 
@@ -162,8 +144,53 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        //mAuth.signOut(); // forcer la deconnexion de l'utilisateur
         updateUI(currentUser);
     }
+
+    private void launchApplication(FirebaseUser user) {
+
+
+        //TODO : Prévoir un mode visiteur ici (condition)
+        singleton.setUserID(user.getUid());
+        singleton.initBars(user.getUid()); //TODO a delete quand on aura adapté la méthode initBars
+        startActivity(new Intent(MainActivity.this, MapsActivity.class));
+    }
+
+    private void setUserAsGuestOrRegistered() {
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        singleton = SingletonBar.getInstance();
+        if(currentUser != null) {
+
+        } else {
+
+        }
+
+    }
+
+    /*Launch Googlemaps on Navigation mode.
+     * User position as departure, bar coordonates as destination */
+    public static void setNavigation(ImageView navigate, final Bar bar, final Context context) {
+
+        navigate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                        Uri.parse("http://maps.google.com/maps?.34&daddr=" + bar.getGeoPoint() + "," + bar.getGeoShape()));
+                context.startActivity(intent);
+            }
+        });
+    }
+
+    public static ArrayList<Bar> arrayFilter(ArrayList<Bar> bars) {
+        ArrayList<Bar> arrayFilter = new ArrayList<>();
+        for (Bar monBar : bars) {
+            if (monBar.getIsLiked() == 1) {
+                arrayFilter.add(monBar);
+            }
+        }
+        return arrayFilter;
+    }
+
 
 }

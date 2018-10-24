@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 class SingletonBar {
     ArrayList<Bar> bars = new ArrayList<>();
+    String userID;
 
     private static final SingletonBar ourInstance = new SingletonBar();
 
@@ -52,5 +53,13 @@ class SingletonBar {
             }
         }
         return favorites;
+    }
+
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
     }
 }
