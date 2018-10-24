@@ -99,7 +99,6 @@ public class InscriptionActivity extends AppCompatActivity {
                             final DatabaseReference refUser = database.getReference("users");
                             final DatabaseReference currentUser = refUser.child(uId).child("bars");
                             refUser.child(uId).child("profilePic").setValue(LINK_DEFAULT_PICTURE);
-
                             refBar.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
