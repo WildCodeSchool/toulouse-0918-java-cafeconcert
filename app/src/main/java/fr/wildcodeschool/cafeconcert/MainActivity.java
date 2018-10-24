@@ -33,8 +33,6 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
-
-
     /*Launch Googlemaps on Navigation mode.
      * User position as departure, bar coordonates as destination */
     public static void setNavigation(ImageView navigate, final Bar bar, final Context context) {
@@ -48,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
     public static ArrayList<Bar> arrayFilter(ArrayList<Bar> bars) {
         ArrayList<Bar> arrayFilter = new ArrayList<>();
         for (Bar monBar : bars) {
@@ -77,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, InscriptionActivity.class));
             }
         });
-
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
@@ -101,11 +97,9 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     ivlogo.startAnimation(anim);
                     signInUser(email, password);
-
                 }
             }
         });
-
         //#Language
         Configuration config = getBaseContext().getResources().getConfiguration();
         SharedPreferences languePreferences = getSharedPreferences("CAFE_CONCERT", MODE_PRIVATE);
@@ -138,7 +132,6 @@ public class MainActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
 
                         if (task.isSuccessful()) {
-
                             FirebaseUser user = mAuth.getCurrentUser();
                             // TODO : faire une requête pour récupérer les données supplementaire de l'utilisateur
                             String uId = user.getUid();
