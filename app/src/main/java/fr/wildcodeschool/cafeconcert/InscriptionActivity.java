@@ -62,11 +62,7 @@ public class InscriptionActivity extends AppCompatActivity {
                 } else {
                     ivlogo.startAnimation(anim);
                     signUpUser(email, password, pseudo);
-                    // TODO: A DEPLACER VERS L'ENDROIT SOUHAITÉ
-                    ProgressDialog progressDialog = new ProgressDialog(InscriptionActivity.this);
-                    progressDialog.setTitle("Un moment ...");
-                    progressDialog.setMessage(" Chargement en cours .");
-                    progressDialog.show();
+
                 }
             }
         });
