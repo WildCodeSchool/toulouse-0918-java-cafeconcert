@@ -49,7 +49,7 @@
     <string name="pas_encore_inscrit">Pas encore inscrit?</string>
     <string name="profil_pic_camera">Changez votre photo de profil</string>
     <string name="please_password">Renseignez un mot de passe et un identifiant</string>
-    <string name="authentification_fail">L\'authentification a échoué</string>
+    <string name="authentification_fail">Es-tu certain d\'être bien inscrit ?</string>
     <string name="please_give_password">Veuillez renseigner votre identifiant et votre mot de passe</string>
     <string name="itineraire">Itinéraire</string>
     <string name="appeler">Appeler</string>
