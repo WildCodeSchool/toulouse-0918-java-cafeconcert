@@ -648,7 +648,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     createMarkers(MainActivity.arrayFilter(bars));
                     popUp.dismiss();
                 }
-                //currentUser.child(barKey[0]).child("isLiked").setValue(bar.getIsLiked());
+                currentUser.child(barKey[0]).child("isLiked").setValue(bar.getIsLiked());
             }
         });
     }
