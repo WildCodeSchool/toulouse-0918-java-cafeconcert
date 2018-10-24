@@ -22,6 +22,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageButton;
@@ -78,6 +79,13 @@ public class Profile extends AppCompatActivity {
         final ImageView profilePicView = findViewById(R.id.image_pic_profile);
 
         editPhoto.bringToFront();
+
+        profilePicView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                profilePicView.startAnimation(AnimationUtils.loadAnimation(Profile.this, R.anim.shake));
+            }
+        });
 
         mBars = singleton.getFavorites();
 

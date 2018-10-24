@@ -95,7 +95,7 @@ public class InscriptionActivity extends AppCompatActivity {
                             DatabaseReference refBar = database.getReference("cafeconcert");
                             final DatabaseReference refUser = database.getReference("users");
                             final DatabaseReference currentUser = refUser.child(uId).child("bars");
-                            refUser.child(uId).child("profilePic").setValue("https://res.cloudinary.com/teepublic/image/private/s---Orh_gAT--/t_Preview/b_rgb:ffffff,c_limit,f_jpg,h_630,q_90,w_630/v1489813788/production/designs/1332589_1.jpg");
+                            refUser.child(uId).child("profilePic").setValue("http://toulouse.aujourdhui.fr/uploads/assets/evenements/recto_flyer/2016/07/708059_journees-portes-ouvertes-wild-code-school-toulouse_195955.png");
 
                             refBar.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
