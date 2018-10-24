@@ -694,10 +694,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         phone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String uri = "tel:" + bar.getPhoneNumber();
-                Intent intent = new Intent(Intent.ACTION_DIAL);
-                intent.setData(Uri.parse(uri));
-                startActivity(intent);
+                if (bar.getPhoneNumber().isEmpty()){
+                    Toast.makeText(MapsActivity.this, R.string.yolo, Toast.LENGTH_LONG).show();
+                }else {
+                    String uri = "tel:" + bar.getPhoneNumber();
+                    Intent intent = new Intent(Intent.ACTION_DIAL);
+                    intent.setData(Uri.parse(uri));
+                    startActivity(intent);
+                }
             }
         });
         //Website button
