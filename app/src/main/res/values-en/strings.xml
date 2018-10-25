@@ -57,7 +57,7 @@
     <string name="site_web">Website</string>
     <string name="cancel">Cancel</string>
     <string name="select_action">What do I do ?</string>
-    <string name="you_need_to_be_connected">You have first to sign in!</string>
+    <string name="you_need_to_be_connected">"You have first to sign up ! "</string>
     <string name="location_impossible">Impossible to detect your position</string>
     <string name="from_gallery">From gallery</string>
     <string name="from_camera">From camera</string>
@@ -69,4 +69,6 @@
     <string name="a_instant">Please wait...</string>
     <string name="loading_current">In progress</string>
     <string name="connexion_impossible">Connexion failed</string>
+    <string name="inscrire">Sign up</string>
+
 </resources>

@@ -25,7 +25,7 @@
     //#BurgerMenu String need for onBackPressed method
     <string name="cafe_concert">Café Concert</string>
     <string name="nom_du_bar">Nom du bar</string>
-    <string name="mes_coup_coeur">Mes coup de coeur :</string>
+    <string name="mes_coup_coeur">Mes coups de coeur :</string>
     <string name="profil">Profil</string>
     <string name="title_activity_login">Connexion</string>
     <!-- Strings related to login -->
@@ -59,7 +59,7 @@
     <string name="from_camera">Prendre une photo</string>
     <string name="cancel">Annuler</string>
     <string name="select_action">Que faire ?</string>
-    <string name="you_need_to_be_connected">Veuillez d\'abord vous connecter!</string>
+    <string name="you_need_to_be_connected">Veuillez d\'abord vous connecter !</string>
     <string name="location_impossible">Localisation de votre position impossible</string>
     <string name="access_menu">Accès</string>
     <string name="connexion_menu">Connexion</string>
@@ -68,5 +68,6 @@
     <string name="a_instant">Un moment ...</string>
     <string name="loading_current">Chargement en cours .</string>
     <string name="connexion_impossible">Connexion impossible</string>
+    <string name="inscrire">S\'inscrire</string>
 
 </resources>
