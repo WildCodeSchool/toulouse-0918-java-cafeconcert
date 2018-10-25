@@ -12,7 +12,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 class SingletonBar {
-    ArrayList<Bar> bars = new ArrayList<>();
+    private ArrayList<Bar> bars = new ArrayList<>();
     private String userID;
 
     private static final SingletonBar ourInstance = new SingletonBar();
@@ -36,7 +36,6 @@ class SingletonBar {
         } else {
             myRef = refUser.child(this.userID).child("bars");
         }
-
 
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
