@@ -1,25 +1,20 @@
 package fr.wildcodeschool.cafeconcert;
 
 import android.Manifest;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -36,11 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.Target;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -100,20 +91,13 @@ public class Profile extends AppCompatActivity {
         });
 
         mFavoritesBars = singleton.getFavorites();
-
-
         //#RecyclerView
         RecyclerView listLogos = findViewById(R.id.list_logos);
-
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         listLogos.setLayoutManager(layoutManager);
-
         final ProfilRecyclerAdapter adapter = new ProfilRecyclerAdapter(mFavoritesBars, this);
         listLogos.setAdapter(adapter);
-
-
         database = FirebaseDatabase.getInstance();
-
         mAuth = FirebaseAuth.getInstance();
         uId = mAuth.getCurrentUser().getUid();
         final DatabaseReference refUser = database.getReference("users");
@@ -136,7 +120,6 @@ public class Profile extends AppCompatActivity {
 
             }
         });
-
         TextView pseudoTxt = findViewById(R.id.text_pseudo);
         pseudoTxt.setText(mAuth.getCurrentUser().getDisplayName());
 
@@ -146,10 +129,7 @@ public class Profile extends AppCompatActivity {
                 checkUserCameraStoragePermission();
             }
         });
-
     }
-
-
 
     private void showPictureDialog() {
         AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
@@ -187,7 +167,6 @@ public class Profile extends AppCompatActivity {
             super.onBackPressed();
         }
     }
-
 
 
     private void uploadPictureFirebaseStorage(Uri contentURI) {
