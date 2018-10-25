@@ -166,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
         mSingleton.initBars(new BarListener() {
             @Override
             public void onResponse(boolean success) {
-                if(success) {
+                if (success) {
                     //progressDialog.dismiss();
                     startActivity(new Intent(MainActivity.this, MapsActivity.class));
                 } else  {
@@ -210,6 +210,4 @@ public class MainActivity extends AppCompatActivity {
         }
         return arrayFilter;
     }
-
-
 }

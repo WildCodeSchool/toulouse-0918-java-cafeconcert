@@ -88,14 +88,10 @@ class SingletonBar {
         DatabaseReference refBarsOfCurrentUser = refUsers.child(this.userID).child("bars");
         refBarsOfCurrentUser.child(bar.getBarId()).child("isLiked").setValue(newPreferences);
 
-        for(Bar myBar : this.bars) {
-            if(myBar.getBarName().equals(bar.getBarName())) {
+        for (Bar myBar : this.bars) {
+            if (myBar.getBarName().equals(bar.getBarName())) {
                 myBar.setIsLiked(newPreferences);
             }
-
         }
     }
-
-
-
 }

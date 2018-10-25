@@ -441,7 +441,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         // Set user localisation and ask permission to get it
         checkUserLocationPermission();
         initMarkers();
-
     }
 
     public void initMarkers() {

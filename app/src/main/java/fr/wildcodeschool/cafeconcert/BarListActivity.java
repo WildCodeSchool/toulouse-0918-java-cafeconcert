@@ -59,18 +59,13 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bar_list);
         mToastlanguage = getString(R.string.you_need_to_be_connected);
-
         listBar = findViewById(R.id.list_bar);
-
-        //Is user guest or registered ?
-        //setUserIDAsRegisteredOrGuest();
 
         //Get bars and user information
         mAuth = FirebaseAuth.getInstance();
         mSingleton = SingletonBar.getInstance();
         mUId = mSingleton.getUserID();
         mBars = mSingleton.getBars();
-
 
         //#BurgerMenu Here I take the new toolbar to set it in my activity
         Toolbar toolbar = findViewById(R.id.toolbar);
