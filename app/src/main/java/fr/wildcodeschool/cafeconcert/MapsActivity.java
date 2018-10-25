@@ -522,7 +522,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
     }
 
-    //TODO remplaçer par une méthode "refresh" beaucoup plus propre ?
     public void adaptLikesButton(ImageView like, ImageView dontLike, Bar bar, Marker marker) {
 
 
@@ -678,7 +677,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     }
                 });
         mLocationManager = (LocationManager) this.getSystemService(this.LOCATION_SERVICE);
-        //TODO à garder ou à delete ?
         mUserLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         mUserLocation = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
