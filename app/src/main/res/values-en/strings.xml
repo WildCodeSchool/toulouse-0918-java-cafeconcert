@@ -70,5 +70,7 @@
     <string name="loading_current">In progress</string>
     <string name="connexion_impossible">Connexion failed</string>
     <string name="inscrire">Sign up</string>
+    <string name="loading_picture">Please wait during the loading</string>
+
 
 </resources>

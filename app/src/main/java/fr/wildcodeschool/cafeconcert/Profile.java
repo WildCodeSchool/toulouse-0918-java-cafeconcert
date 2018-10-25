@@ -1,20 +1,25 @@
 package fr.wildcodeschool.cafeconcert;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -31,7 +36,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -68,11 +77,14 @@ public class Profile extends AppCompatActivity {
     private FirebaseDatabase database;
     private ArrayList<Bar> mFavoritesBars;
     private SingletonBar singleton = SingletonBar.getInstance();
+    private boolean shouldAllowBack = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         CharSequence[] items = {getString(R.string.from_camera), getString(R.string.from_gallery), getString(R.string.cancel)};
         super.onCreate(savedInstanceState);
+        //disable back button
+        android.app.ActionBar actionBar = getActionBar();
         setContentView(R.layout.activity_profile);
         database = FirebaseDatabase.getInstance();
         ImageButton editPhoto = findViewById(R.id.image_take_pic_camera);
@@ -116,6 +128,7 @@ public class Profile extends AppCompatActivity {
                         .apply(RequestOptions.circleCropTransform())
                         .into(profilePicView);
                 profilePicView.setAnimation(null);
+                shouldAllowBack = true;
             }
 
             @Override
@@ -135,6 +148,8 @@ public class Profile extends AppCompatActivity {
         });
 
     }
+
+
 
     private void showPictureDialog() {
         AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
@@ -164,6 +179,15 @@ public class Profile extends AppCompatActivity {
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(galleryIntent, GALLERY);
     }
+
+    @Override
+    public void onBackPressed() {
+        if (!shouldAllowBack) {
+        } else {
+            super.onBackPressed();
+        }
+    }
+
 
 
     private void uploadPictureFirebaseStorage(Uri contentURI) {
@@ -216,6 +240,8 @@ public class Profile extends AppCompatActivity {
         anim.setDuration(700);
         ImageView profilePicView = findViewById(R.id.image_pic_profile);
         profilePicView.setAnimation(anim);
+        Toast.makeText(Profile.this, R.string.loading_picture, Toast.LENGTH_LONG).show();
+        shouldAllowBack = false;
         if (requestCode == GALLERY) {
             if (data != null) {
                 Uri contentURI = data.getData();

@@ -69,5 +69,6 @@
     <string name="loading_current">Chargement en cours .</string>
     <string name="connexion_impossible">Connexion impossible</string>
     <string name="inscrire">S\'inscrire</string>
+    <string name="loading_picture">Veuillez patienter pendant le chargement de votre nouvelle photo de profil</string>
 
 </resources>
