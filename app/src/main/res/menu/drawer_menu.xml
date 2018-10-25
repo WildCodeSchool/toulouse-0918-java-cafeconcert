@@ -43,7 +43,7 @@
 
             <item
                 android:id="@+id/connexion"
-                android:title="@string/connexion_menu"/>
+                android:title="@string/inscrire" />
 
         </menu>
     </item>
