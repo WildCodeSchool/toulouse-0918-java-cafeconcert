@@ -68,11 +68,14 @@ public class Profile extends AppCompatActivity {
     private FirebaseDatabase database;
     private ArrayList<Bar> mFavoritesBars;
     private SingletonBar singleton = SingletonBar.getInstance();
+    private boolean shouldAllowBack = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         CharSequence[] items = {getString(R.string.from_camera), getString(R.string.from_gallery), getString(R.string.cancel)};
         super.onCreate(savedInstanceState);
+        //disable back button
+        android.app.ActionBar actionBar = getActionBar();
         setContentView(R.layout.activity_profile);
         database = FirebaseDatabase.getInstance();
         ImageButton editPhoto = findViewById(R.id.image_take_pic_camera);
@@ -88,20 +91,13 @@ public class Profile extends AppCompatActivity {
         });
 
         mFavoritesBars = singleton.getFavorites();
-
-
         //#RecyclerView
         RecyclerView listLogos = findViewById(R.id.list_logos);
-
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         listLogos.setLayoutManager(layoutManager);
-
         final ProfilRecyclerAdapter adapter = new ProfilRecyclerAdapter(mFavoritesBars, this);
         listLogos.setAdapter(adapter);
-
-
         database = FirebaseDatabase.getInstance();
-
         mAuth = FirebaseAuth.getInstance();
         uId = mAuth.getCurrentUser().getUid();
         final DatabaseReference refUser = database.getReference("users");
@@ -116,6 +112,7 @@ public class Profile extends AppCompatActivity {
                         .apply(RequestOptions.circleCropTransform())
                         .into(profilePicView);
                 profilePicView.setAnimation(null);
+                shouldAllowBack = true;
             }
 
             @Override
@@ -123,7 +120,6 @@ public class Profile extends AppCompatActivity {
 
             }
         });
-
         TextView pseudoTxt = findViewById(R.id.text_pseudo);
         pseudoTxt.setText(mAuth.getCurrentUser().getDisplayName());
 
@@ -133,7 +129,6 @@ public class Profile extends AppCompatActivity {
                 checkUserCameraStoragePermission();
             }
         });
-
     }
 
     private void showPictureDialog() {
@@ -163,6 +158,14 @@ public class Profile extends AppCompatActivity {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK,
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(galleryIntent, GALLERY);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!shouldAllowBack) {
+        } else {
+            super.onBackPressed();
+        }
     }
 
 
@@ -216,6 +219,8 @@ public class Profile extends AppCompatActivity {
         anim.setDuration(700);
         ImageView profilePicView = findViewById(R.id.image_pic_profile);
         profilePicView.setAnimation(anim);
+        Toast.makeText(Profile.this, R.string.loading_picture, Toast.LENGTH_LONG).show();
+        shouldAllowBack = false;
         if (requestCode == GALLERY) {
             if (data != null) {
                 Uri contentURI = data.getData();
