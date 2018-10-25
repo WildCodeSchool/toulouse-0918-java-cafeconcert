@@ -161,8 +161,17 @@ public class MainActivity extends AppCompatActivity {
 
     private void launchApplication() {
         setUserAsGuestOrRegistered();
-        mSingleton.initBars(); //TODO implanter un loader ici pour ne lançer la MapsActivity que quand initbar a terminé son travail
-        startActivity(new Intent(MainActivity.this, MapsActivity.class));
+        mSingleton.initBars(new BarListener() {
+            @Override
+            public void onResponse(boolean success) {
+                if(success) {
+                    startActivity(new Intent(MainActivity.this, MapsActivity.class));
+                } else  {
+                    //TODO Loader
+                }
+            }
+        });
+
     }
 
     private void setUserAsGuestOrRegistered() {

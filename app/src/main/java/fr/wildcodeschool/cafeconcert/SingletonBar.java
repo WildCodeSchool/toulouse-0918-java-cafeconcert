@@ -24,7 +24,7 @@ class SingletonBar {
     private SingletonBar() {
     }
 
-    public void initBars() {
+    public void initBars(final BarListener myListener) {
 
         final FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference refGuest = firebaseDatabase.getReference("cafeconcert");
@@ -45,10 +45,12 @@ class SingletonBar {
                     final Bar bar = barSnapshot.getValue(Bar.class);
                     bars.add(bar);
                 }
+                myListener.onResponse(true);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
+                myListener.onResponse(false);
             }
         });
     }
@@ -93,5 +95,7 @@ class SingletonBar {
 
         }
     }
+
+
 
 }
