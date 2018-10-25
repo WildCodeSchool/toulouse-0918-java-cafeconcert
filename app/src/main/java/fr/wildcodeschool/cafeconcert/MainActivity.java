@@ -157,16 +157,21 @@ public class MainActivity extends AppCompatActivity {
 
     private void launchApplication() {
         setUserAsGuestOrRegistered();
+        //TODO traduire + extract strings ressources
+        final ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
+        progressDialog.setTitle(getString(R.string.a_instant));
+        progressDialog.setMessage(getString(R.string.loading_current));
+        progressDialog.show();
+
         mSingleton.initBars(new BarListener() {
             @Override
             public void onResponse(boolean success) {
                 if(success) {
+                    //progressDialog.dismiss();
                     startActivity(new Intent(MainActivity.this, MapsActivity.class));
                 } else  {
-                    ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
-                    progressDialog.setTitle("Un moment ...");
-                    progressDialog.setMessage(" Chargement en cours .");
-                    progressDialog.show();
+                    //progressDialog.dismiss();
+                    Toast.makeText(MainActivity.this, R.string.connexion_impossible, Toast.LENGTH_SHORT ).show();
                 }
             }
         });

@@ -37,7 +37,7 @@ class SingletonBar {
             myRef = refUser.child(this.userID).child("bars");
         }
 
-        myRef.addValueEventListener(new ValueEventListener() {
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 bars.clear();

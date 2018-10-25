@@ -65,5 +65,8 @@
     <string name="connexion_menu">Connexion</string>
     <string name="gallerie">Gallerie</string>
     <string name="nophone">Aucun numéro disponible</string>
+    <string name="a_instant">Un moment ...</string>
+    <string name="loading_current">Chargement en cours .</string>
+    <string name="connexion_impossible">Connexion impossible</string>
 
 </resources>
