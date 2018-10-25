@@ -130,10 +130,6 @@ public class MainActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             setUserAsGuestOrRegistered();
                             updateUI();
-                            // TODO : To DELETE ?
-                            /*FirebaseUser user = mAuth.getCurrentUser();
-                            String uId = user.getUid();
-                            updateUI(user);*/
 
                         } else {
                             // If sign in fails, display a message to the user.

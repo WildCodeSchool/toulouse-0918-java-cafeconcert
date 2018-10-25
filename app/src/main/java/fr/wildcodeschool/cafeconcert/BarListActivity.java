@@ -177,7 +177,6 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
         mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
 
-        //TODO à déplacer au bon endroit
         //#Language
         final TextView tvLangues = findViewById(R.id.tv_langues);
 
