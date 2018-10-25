@@ -102,12 +102,6 @@
             android:name=".Profile"
             android:label="@string/profil"
             android:screenOrientation="portrait"/>
-        <!--android:parentActivityName=".MapsActivity"-->
-
-            <!--<meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />-->
-       <!-- </activity>-->
     </application>
 
 </manifest>
