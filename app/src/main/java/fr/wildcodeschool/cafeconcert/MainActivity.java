@@ -163,7 +163,10 @@ public class MainActivity extends AppCompatActivity {
                 if(success) {
                     startActivity(new Intent(MainActivity.this, MapsActivity.class));
                 } else  {
-                    //TODO Loader
+                    ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
+                    progressDialog.setTitle("Un moment ...");
+                    progressDialog.setMessage(" Chargement en cours .");
+                    progressDialog.show();
                 }
             }
         });
