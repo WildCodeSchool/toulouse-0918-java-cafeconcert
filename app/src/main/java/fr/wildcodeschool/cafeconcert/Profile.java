@@ -66,7 +66,7 @@ public class Profile extends AppCompatActivity {
     private String uId;
     private Uri photoStringLing;
     private FirebaseDatabase database;
-    private ArrayList<Bar> mBars;
+    private ArrayList<Bar> mFavoritesBars;
     private SingletonBar singleton = SingletonBar.getInstance();
 
     @Override
@@ -87,17 +87,16 @@ public class Profile extends AppCompatActivity {
             }
         });
 
-        mBars = singleton.getFavorites();
+        mFavoritesBars = singleton.getFavorites();
+
 
         //#RecyclerView
         RecyclerView listLogos = findViewById(R.id.list_logos);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         listLogos.setLayoutManager(layoutManager);
-        //TODO : implémenter Firebase ou Singleton pour RecyclerView
 
-        // TODO : afficher la liste de logo avec un adapter
-        final ProfilRecyclerAdapter adapter = new ProfilRecyclerAdapter(mBars, this);
+        final ProfilRecyclerAdapter adapter = new ProfilRecyclerAdapter(mFavoritesBars, this);
         listLogos.setAdapter(adapter);
 
 

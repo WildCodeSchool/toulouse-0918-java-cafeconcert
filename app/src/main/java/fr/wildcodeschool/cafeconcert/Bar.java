@@ -16,9 +16,18 @@ public class Bar {
     private String address;
     private String logo;
     private float distanceFromUser;
+    private String barId;
 
     /*Constructor*/
     public Bar() {
+    }
+
+    public String getBarId() {
+        return barId;
+    }
+
+    public void setBarId(String barID) {
+        this.barId = barID;
     }
 
     public String getLogo() {

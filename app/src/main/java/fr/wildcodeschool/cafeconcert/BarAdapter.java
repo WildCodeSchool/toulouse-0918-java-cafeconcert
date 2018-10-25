@@ -1,7 +1,6 @@
 package fr.wildcodeschool.cafeconcert;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,7 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,13 +19,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
@@ -38,11 +29,9 @@ public class BarAdapter extends ArrayAdapter<Bar> {
     private final static int MARKER_WIDTH = 72;
     private final static int ICON_HEIGHT = 100;
     private final static int ICON_WIDTH = 100;
-    //private static ArrayList<Bar> filterBars; // TODO to delete ?
-    //private ArrayList<Bar> bars;
     private boolean filter = false;
     private String mUId;
-    private FirebaseAuth mAuth;
+    private SingletonBar mSingleton;
 
     public BarAdapter(Context context, ArrayList<Bar> bars) {
         super(context, 0, bars);
@@ -60,13 +49,8 @@ public class BarAdapter extends ArrayAdapter<Bar> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_bar, parent, false);
         }
 
-        //Is user guest or registered ?
-        mAuth = FirebaseAuth.getInstance();
-        if (mAuth.getCurrentUser() == null) {
-            mUId = "guest";
-        } else {
-            mUId = mAuth.getCurrentUser().getUid();
-        }
+        mSingleton = SingletonBar.getInstance();
+        mUId = mSingleton.getUserID();
 
         // Lookup view for data population
         TextView tvBarName = convertView.findViewById(R.id.text_bar_name);
@@ -113,7 +97,7 @@ public class BarAdapter extends ArrayAdapter<Bar> {
         //Adding efficient likes/dislikes buttons
         setLikeIcon(icon, bar.getIsLiked());
         adaptLikesButton(icon, bar);
-        setUserOpinion(icon, icon, icon, bar);
+        setUserOpinion(icon, bar);
 
         // Drawer hide/shown
         final ConstraintLayout drawerBar = convertView.findViewById(R.id.drawer_bar);
@@ -148,6 +132,9 @@ public class BarAdapter extends ArrayAdapter<Bar> {
                 Intent intent = new Intent(Intent.ACTION_DIAL);
                 intent.setData(Uri.parse(uri));
                 getContext().startActivity(intent);
+               if (bar.getPhoneNumber().isEmpty()){
+                   Toast.makeText(getContext(), R.string.aucun_numero, Toast.LENGTH_LONG);
+               }
             }
         });
 
@@ -200,31 +187,7 @@ public class BarAdapter extends ArrayAdapter<Bar> {
         setLikeIcon(icon, bar.getIsLiked());
     }
 
-    private void setUserOpinion(final ImageView like, final ImageView dontLike, final ImageView icon, final Bar bar) {
-
-        final FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference refBar = firebaseDatabase.getReference("cafeconcert");
-        final String[] barKey = new String[1];
-        DatabaseReference refUser = firebaseDatabase.getReference("users");
-        final DatabaseReference currentUser = refUser.child(mUId).child("bars");
-
-        // Guest restriction
-        if (!checkIfGuest(mUId)) {
-            refBar.orderByChild("barName").equalTo(bar.getBarName()).limitToFirst(1).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
-                        barKey[0] = childSnapshot.getKey();
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                }
-            });
-
-        }
-
+    private void setUserOpinion(final ImageView icon, final Bar bar) {
 
         icon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -237,12 +200,15 @@ public class BarAdapter extends ArrayAdapter<Bar> {
                 }
 
                 if (bar.getIsLiked() == 1) {
+                    mSingleton.setNewPreferences(0, bar);
                     bar.setIsLiked(0);
                     adaptLikesButton(icon, bar);
                 } else if (bar.getIsLiked() == 0){
+                    mSingleton.setNewPreferences(2, bar);
                     bar.setIsLiked(2);
                     adaptLikesButton(icon, bar);
                 } else if (bar.getIsLiked() == 2){
+                    mSingleton.setNewPreferences(1, bar);
                     bar.setIsLiked(1);
                     adaptLikesButton(icon, bar);
                 }
@@ -250,7 +216,6 @@ public class BarAdapter extends ArrayAdapter<Bar> {
                     Intent intent = new Intent(getContext(), BarListActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     (getContext()).startActivity(intent);
                 }
-                currentUser.child(barKey[0]).child("isLiked").setValue(bar.getIsLiked());
             }
         });
     }
@@ -283,7 +248,7 @@ public class BarAdapter extends ArrayAdapter<Bar> {
 
     }
 
-    public boolean checkIfGuest(String uId) {
+    private boolean checkIfGuest(String uId) {
         return uId.equals("guest");
     }
 
