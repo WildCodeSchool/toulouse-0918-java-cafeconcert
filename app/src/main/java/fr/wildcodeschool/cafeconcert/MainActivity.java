@@ -212,7 +212,6 @@ public class MainActivity extends AppCompatActivity {
         return arrayFilter;
     }
 
-    //#BurgerMenu For not leaving the activity immediately
     @Override
     public void onBackPressed() {
         Intent a = new Intent(Intent.ACTION_MAIN);
