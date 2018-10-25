@@ -84,6 +84,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     final static float ZOOM_LVL_ON_BAR = 15.5f;
     final static int CLOSEST_BAR_NUMBERS = 5;
 
+
     private PopupWindow popUp;
     private GoogleMap mMap;
     private ArrayList<Bar> mBars = new ArrayList<>();
@@ -163,7 +164,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 setLanguage(lang.equals("fr") ? "en" : "fr");
             }
         });
-
     }
 
     public void connexionOrDeconnexionFromMenuBurger(NavigationView navigationView) {
@@ -346,7 +346,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 startActivity(new Intent(this, MainActivity.class));
                 break;
             case R.id.connexion:
-                mAuth.signOut();
+                //mAuth.signOut();
                 startActivity(new Intent(this, MainActivity.class));
                 break;
         }
@@ -436,12 +436,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         filter = sharedPreferences.getBoolean("filter", false);
+        mFilterDistance = sharedPreferences.getBoolean("distanceFilter", false);
         //Instantiation of an arrayList of café-concert objects
-        //bars = (MainActivity.creatingBars(this));
-        mSingleton.initBars();
-        initMarkers();
         // Set user localisation and ask permission to get it
         checkUserLocationPermission();
+        initMarkers();
+
     }
 
     public void initMarkers() {
@@ -678,6 +678,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     }
                 });
         mLocationManager = (LocationManager) this.getSystemService(this.LOCATION_SERVICE);
+        //TODO à garder ou à delete ?
+        mUserLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        mUserLocation = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
         LocationListener locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
                 mUserLocation = location;
