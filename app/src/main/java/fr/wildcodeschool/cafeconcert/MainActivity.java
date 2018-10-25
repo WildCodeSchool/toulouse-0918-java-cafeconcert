@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private SingletonBar mSingleton;
     private FirebaseUser mUser;
     private FirebaseAuth mAuth;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +55,9 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
         setUserAsGuestOrRegistered();
+        progressDialog = new ProgressDialog(MainActivity.this);
+        progressDialog.setTitle(getString(R.string.a_instant));
+        progressDialog.setMessage(getString(R.string.loading_current));
 
         // Prepare Connexion Loader Animation
         final ImageView ivlogo = findViewById(R.id.iv_logoapp);
@@ -152,16 +156,15 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onStart() {
-        super.onStart();
         updateUI();
+        progressDialog.dismiss();
+        super.onStart();
     }
 
     private void launchApplication() {
         setUserAsGuestOrRegistered();
         //TODO traduire + extract strings ressources
-        final ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
-        progressDialog.setTitle(getString(R.string.a_instant));
-        progressDialog.setMessage(getString(R.string.loading_current));
+
         progressDialog.show();
 
         mSingleton.initBars(new BarListener() {
