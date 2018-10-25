@@ -43,7 +43,7 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
     final static int CLOSEST_BAR_NUMBERS = 5;
     BarAdapter adapter;
     private DrawerLayout drawer;
-    private ArrayList<Bar> bars;
+    private ArrayList<Bar> mBars = new ArrayList<>();
     private Location mUserLocation = new Location("User");
     private LocationManager mLocationManager = null;
     private boolean filter = false;
@@ -51,6 +51,7 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
     private ListView listBar;
     private String mUId;
     private FirebaseAuth mAuth;
+    private SingletonBar mSingleton;
     private String mToastlanguage = "";
 
     @Override
@@ -58,11 +59,13 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bar_list);
         mToastlanguage = getString(R.string.you_need_to_be_connected);
-        bars = new ArrayList<>();
         listBar = findViewById(R.id.list_bar);
 
-        //Is user guest or registered ?
-        setUserIDAsRegisteredOrGuest();
+        //Get bars and user information
+        mAuth = FirebaseAuth.getInstance();
+        mSingleton = SingletonBar.getInstance();
+        mUId = mSingleton.getUserID();
+        mBars = mSingleton.getBars();
 
         //#BurgerMenu Here I take the new toolbar to set it in my activity
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -90,17 +93,6 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
         });
 
         getUserLocation();
-    }
-
-
-    private void setUserIDAsRegisteredOrGuest() {
-        //Is user guest or registered ?
-        mAuth = FirebaseAuth.getInstance();
-        if (mAuth.getCurrentUser() == null) {
-            mUId = "guest";
-        } else {
-            mUId = mAuth.getCurrentUser().getUid();
-        }
     }
 
     public void connexionOrDeconnexionFromMenuBurger(NavigationView navigationView) {
@@ -160,7 +152,7 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
         mLocationManager = (LocationManager) this.getSystemService(this.LOCATION_SERVICE);
         mUserLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         mUserLocation = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-        initBarList();
+        initBarVisualisation();
 
         LocationListener locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
@@ -217,54 +209,17 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
 
         if (mFilterDistance && !filter) {
             adapter = new BarAdapter(BarListActivity.this,
-                    pickClosestBars(bars, CLOSEST_BAR_NUMBERS));
+                    pickClosestBars(mBars, CLOSEST_BAR_NUMBERS));
         } else if (mFilterDistance && filter) {
             adapter = new BarAdapter(BarListActivity.this,
-                    pickClosestBars(MainActivity.arrayFilter(bars), CLOSEST_BAR_NUMBERS));
+                    pickClosestBars(MainActivity.arrayFilter(mBars), CLOSEST_BAR_NUMBERS));
         } else if (!mFilterDistance && filter) {
             adapter = new BarAdapter(BarListActivity.this,
-                    arrayFilterByDistance(MainActivity.arrayFilter(bars)));
+                    arrayFilterByDistance(MainActivity.arrayFilter(mBars)));
         } else {
-            adapter = new BarAdapter(BarListActivity.this, arrayFilterByDistance(bars));
+            adapter = new BarAdapter(BarListActivity.this, arrayFilterByDistance(mBars));
         }
         listBar.setAdapter(adapter);
-    }
-
-    public void initBarList() {
-
-        final FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference refGuest = firebaseDatabase.getReference("cafeconcert");
-        DatabaseReference refUser = firebaseDatabase.getReference("users");
-
-        DatabaseReference myRef;
-        if (mUId.equals("guest")) {
-            myRef = refGuest;
-        } else {
-            myRef = refUser.child(mUId).child("bars");
-        }
-
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                bars.clear();
-                for (DataSnapshot barSnapshot : dataSnapshot.getChildren()) {
-                    final Bar bar = barSnapshot.getValue(Bar.class);
-                    String barId = barSnapshot.getKey();
-                    bar.setContext(BarListActivity.this);
-                    //bar.setPicture(R.drawable.photodecafe);
-
-                    if (mUId.equals("guest")) {
-                        bar.setIsLiked(2);
-                    }
-                    bars.add(bar);
-                }
-                initBarVisualisation();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });
     }
 
     public void checkMenuCreated(DrawerLayout drawer) {
@@ -294,15 +249,15 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
 
                         if (checkboxFilter.isChecked() && !mFilterDistance) {
                             adapter = new BarAdapter(BarListActivity.this,
-                                    arrayFilterByDistance(MainActivity.arrayFilter(bars)));
+                                    arrayFilterByDistance(MainActivity.arrayFilter(mBars)));
                         } else if (checkboxFilter.isChecked() && mFilterDistance) {
                             adapter = new BarAdapter(BarListActivity.this,
-                                    pickClosestBars(MainActivity.arrayFilter(bars), CLOSEST_BAR_NUMBERS));
+                                    pickClosestBars(MainActivity.arrayFilter(mBars), CLOSEST_BAR_NUMBERS));
                         } else if (!checkboxFilter.isChecked() && mFilterDistance) {
                             adapter = new BarAdapter(BarListActivity.this,
-                                    pickClosestBars(bars, CLOSEST_BAR_NUMBERS));
+                                    pickClosestBars(mBars, CLOSEST_BAR_NUMBERS));
                         } else {
-                            adapter = new BarAdapter(BarListActivity.this, arrayFilterByDistance(bars));
+                            adapter = new BarAdapter(BarListActivity.this, arrayFilterByDistance(mBars));
                         }
                         listBar.setAdapter(adapter);
 
@@ -326,15 +281,15 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
 
                         if (distanceCheckboxfilter.isChecked() && !filter) {
                             adapter = new BarAdapter(BarListActivity.this,
-                                    pickClosestBars(bars, CLOSEST_BAR_NUMBERS));
+                                    pickClosestBars(mBars, CLOSEST_BAR_NUMBERS));
                         } else if (distanceCheckboxfilter.isChecked() && filter) {
                             adapter = new BarAdapter(BarListActivity.this,
-                                    pickClosestBars(MainActivity.arrayFilter(bars), CLOSEST_BAR_NUMBERS));
+                                    pickClosestBars(MainActivity.arrayFilter(mBars), CLOSEST_BAR_NUMBERS));
                         } else if (!distanceCheckboxfilter.isChecked() && filter) {
                             adapter = new BarAdapter(BarListActivity.this,
-                                    MainActivity.arrayFilter(arrayFilterByDistance(bars)));
+                                    MainActivity.arrayFilter(arrayFilterByDistance(mBars)));
                         } else {
-                            adapter = new BarAdapter(BarListActivity.this, arrayFilterByDistance(bars));
+                            adapter = new BarAdapter(BarListActivity.this, arrayFilterByDistance(mBars));
                         }
                         listBar.setAdapter(adapter);
 

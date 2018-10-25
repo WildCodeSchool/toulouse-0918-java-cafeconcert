@@ -65,4 +65,8 @@
     <string name="connexion_menu">Log in</string>
     <string name="gallerie">Photo gallery</string>
     <string name="nophone">No phone number available</string>
+    <string name="aucun_numero">No phone number available</string>
+    <string name="a_instant">Please wait...</string>
+    <string name="loading_current">In progress</string>
+    <string name="connexion_impossible">Connexion failed</string>
 </resources>

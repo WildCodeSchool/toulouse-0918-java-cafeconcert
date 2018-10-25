@@ -1,6 +1,7 @@
 package fr.wildcodeschool.cafeconcert;
 
 import android.support.annotation.NonNull;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -11,7 +12,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 class SingletonBar {
-    ArrayList<Bar> bars = new ArrayList<>();
+    private ArrayList<Bar> bars = new ArrayList<>();
+    private String userID;
 
     private static final SingletonBar ourInstance = new SingletonBar();
 
@@ -22,24 +24,33 @@ class SingletonBar {
     private SingletonBar() {
     }
 
-    public void initBars(String mUId) {
+    public void initBars(final BarListener myListener) {
 
         final FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference refUser = firebaseDatabase.getReference("users").child(mUId).child("bars");
+        DatabaseReference refGuest = firebaseDatabase.getReference("cafeconcert");
+        DatabaseReference refUser = firebaseDatabase.getReference("users");
 
-        refUser.addValueEventListener(new ValueEventListener() {
+        DatabaseReference myRef;
+        if (this.userID.equals("guest")) {
+            myRef = refGuest;
+        } else {
+            myRef = refUser.child(this.userID).child("bars");
+        }
+
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
                 bars.clear();
                 for (DataSnapshot barSnapshot : dataSnapshot.getChildren()) {
                     final Bar bar = barSnapshot.getValue(Bar.class);
                     bars.add(bar);
                 }
+                myListener.onResponse(true);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
+                myListener.onResponse(false);
             }
         });
     }
@@ -52,5 +63,35 @@ class SingletonBar {
             }
         }
         return favorites;
+    }
+
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
+
+    public ArrayList<Bar> getBars() {
+        return bars;
+    }
+
+    public void setBars(ArrayList<Bar> bars) {
+        this.bars = bars;
+    }
+
+    public void setNewPreferences(int newPreferences, Bar bar) {
+
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference refUsers = firebaseDatabase.getReference("users");
+        DatabaseReference refBarsOfCurrentUser = refUsers.child(this.userID).child("bars");
+        refBarsOfCurrentUser.child(bar.getBarId()).child("isLiked").setValue(newPreferences);
+
+        for (Bar myBar : this.bars) {
+            if (myBar.getBarName().equals(bar.getBarName())) {
+                myBar.setIsLiked(newPreferences);
+            }
+        }
     }
 }
