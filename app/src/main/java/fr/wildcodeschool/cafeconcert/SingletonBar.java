@@ -94,4 +94,10 @@ class SingletonBar {
             }
         }
     }
+
+    public void clear(){
+        bars.clear();
+        setUserID(null);
+    }
+
 }
