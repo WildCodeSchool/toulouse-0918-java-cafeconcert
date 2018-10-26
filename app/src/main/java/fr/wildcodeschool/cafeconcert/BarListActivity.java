@@ -372,7 +372,7 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
                 mAuth.signOut();
                 mSingleton.clear();
                 finish();
-                startActivity(new Intent(this, MainActivity.class));git
+                startActivity(new Intent(this, MainActivity.class));
                 break;
             case R.id.connexion:
                 mAuth.signOut();
