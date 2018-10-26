@@ -342,6 +342,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 checkboxDistance.setChecked(!checkboxDistance.isChecked());
                 break;
             case R.id.deconnexion:
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MapsActivity.this);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean("distanceFilter", false);
+                editor.putBoolean("filter", false);
+                editor.commit();
                 mAuth.signOut();
                 mSingleton.clear();
                 finish();

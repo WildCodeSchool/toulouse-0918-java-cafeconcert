@@ -369,6 +369,11 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
                 checkboxDistance.setChecked(!checkboxDistance.isChecked());
                 break;
             case R.id.deconnexion:
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(BarListActivity.this);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean("distanceFilter", false);
+                editor.putBoolean("filter", false);
+                editor.commit();
                 mAuth.signOut();
                 mSingleton.clear();
                 finish();

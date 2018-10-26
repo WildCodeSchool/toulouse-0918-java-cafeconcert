@@ -59,7 +59,7 @@
     <string name="from_camera">Prendre une photo</string>
     <string name="cancel">Annuler</string>
     <string name="select_action">Que faire ?</string>
-    <string name="you_need_to_be_connected">Veuillez d\'abord vous connecter !</string>
+    <string name="you_need_to_be_connected">Veuillez d\'abord vous inscrire !</string>
     <string name="location_impossible">Localisation de votre position impossible</string>
     <string name="access_menu">Accès</string>
     <string name="connexion_menu">Connexion</string>
