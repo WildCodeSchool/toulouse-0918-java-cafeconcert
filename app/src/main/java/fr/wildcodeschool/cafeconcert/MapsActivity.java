@@ -343,6 +343,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 break;
             case R.id.deconnexion:
                 mAuth.signOut();
+                mSingleton.clear();
+                finish();
                 startActivity(new Intent(this, MainActivity.class));
                 break;
             case R.id.connexion:

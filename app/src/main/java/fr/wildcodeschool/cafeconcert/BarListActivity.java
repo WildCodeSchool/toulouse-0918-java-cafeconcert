@@ -370,7 +370,9 @@ public class BarListActivity extends AppCompatActivity implements NavigationView
                 break;
             case R.id.deconnexion:
                 mAuth.signOut();
-                startActivity(new Intent(this, MainActivity.class));
+                mSingleton.clear();
+                finish();
+                startActivity(new Intent(this, MainActivity.class));git
                 break;
             case R.id.connexion:
                 mAuth.signOut();

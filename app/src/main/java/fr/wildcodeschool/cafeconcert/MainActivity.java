@@ -149,15 +149,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateUI() {
-        if (mUser != null) {
-           launchApplication();
+        if (mSingleton.getUserID().equals("guest") || mUser==null) {
+            progressDialog.dismiss();
+        }
+        else  {
+            launchApplication();
         }
     }
 
     @Override
     public void onStart() {
         updateUI();
-        progressDialog.dismiss();
         super.onStart();
     }
 
@@ -172,6 +174,7 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(boolean success) {
                 if (success) {
                     //progressDialog.dismiss();
+                    finish();
                     startActivity(new Intent(MainActivity.this, MapsActivity.class));
                 } else  {
                     //progressDialog.dismiss();
