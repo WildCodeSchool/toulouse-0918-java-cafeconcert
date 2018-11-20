@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/borderphone"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    android:background="@drawable/back_button_popup">
+
+    <ImageView
+        android:id="@+id/photoBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="16dp"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toTopOf="@+id/horizontalScrollView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/barTitlePopup"
+        style="@style/TitlePopup"
+        android:layout_width="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginStart="16dp"
+        android:background="@color/common_google_signin_btn_text_light_focused"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:text="@string/nom_du_bar"
+        android:textColor="#FFF"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/photoBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/likeButton"
+        style="@style/borderPopup"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/transparent"
+        android:clickable="true"
+        android:padding="8dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintEnd_toEndOf="@+id/photoBar"
+        app:layout_constraintTop_toTopOf="@+id/photoBar" />
+
+    <HorizontalScrollView
+        android:id="@+id/horizontalScrollView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
+        android:layout_marginStart="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/photoBar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="8dp"
+            android:orientation="horizontal">
+
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/constraint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/mapButton"
+                    android:layout_width="140dp"
+                    android:layout_height="40dp"
+                    android:layout_marginEnd="4dp"
+                    android:layout_marginRight="4dp"
+                    android:background="@drawable/back_design"
+                    android:clickable="true"
+                    android:paddingBottom="6dp"
+                    android:paddingLeft="12dp"
+                    android:paddingTop="6dp"
+                    android:scaleType="fitStart"
+                    android:src="@drawable/itinerary"
+                    android:tint="@android:color/background_light"
+                    app:layout_constraintBottom_toBottomOf="@+id/constraint"
+                    app:layout_constraintEnd_toStartOf="@+id/phoneButton"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/constraint" />
+
+                <TextView
+                    android:id="@+id/tv_itinerary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginStart="8dp"
+                    android:paddingLeft="25dp"
+                    android:text="@string/itineraire"
+                    android:textColor="#fff"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/mapButton"
+                    app:layout_constraintEnd_toEndOf="@+id/mapButton"
+                    app:layout_constraintStart_toStartOf="@+id/mapButton"
+                    app:layout_constraintTop_toTopOf="@+id/mapButton"
+                    app:layout_constraintVertical_bias="0.513" />
+
+                <ImageView
+                    android:id="@+id/phoneButton"
+                    android:layout_width="140dp"
+                    android:layout_height="40dp"
+                    android:layout_marginEnd="4dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginStart="4dp"
+                    android:background="@drawable/back_design"
+                    android:clickable="true"
+                    android:paddingBottom="8dp"
+                    android:paddingLeft="12dp"
+                    android:paddingTop="8dp"
+                    android:scaleType="fitStart"
+                    android:src="@mipmap/phonelogo"
+                    android:tint="@android:color/background_light"
+                    app:layout_constraintBottom_toBottomOf="@+id/constraint"
+                    app:layout_constraintEnd_toEndOf="@+id/webButton"
+                    app:layout_constraintStart_toEndOf="@+id/mapButton"
+                    app:layout_constraintTop_toTopOf="@+id/constraint" />
+
+                <TextView
+                    android:id="@+id/tv_appeler"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginStart="8dp"
+                    android:paddingLeft="25dp"
+                    android:text="@string/appeler"
+                    android:textColor="#fff"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/phoneButton"
+                    app:layout_constraintEnd_toEndOf="@+id/phoneButton"
+                    app:layout_constraintStart_toStartOf="@+id/phoneButton"
+                    app:layout_constraintTop_toTopOf="@+id/phoneButton"
+                    app:layout_constraintVertical_bias="0.513" />
+
+                <ImageView
+                    android:id="@+id/webButton"
+                    android:layout_width="140dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginStart="4dp"
+                    android:background="@drawable/back_design"
+                    android:clickable="true"
+                    android:paddingBottom="6dp"
+                    android:paddingLeft="12dp"
+                    android:paddingTop="6dp"
+                    android:scaleType="fitStart"
+                    android:src="@drawable/web"
+                    android:tint="@color/cardview_light_background"
+                    app:layout_constraintBottom_toBottomOf="@+id/constraint"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/phoneButton"
+                    app:layout_constraintTop_toTopOf="@+id/constraint" />
+
+                <TextView
+                    android:id="@+id/tv_site_web"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginStart="8dp"
+                    android:paddingLeft="25dp"
+                    android:text="@string/site_web"
+                    android:textColor="#fff"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/webButton"
+                    app:layout_constraintEnd_toEndOf="@+id/webButton"
+                    app:layout_constraintStart_toStartOf="@+id/webButton"
+                    app:layout_constraintTop_toTopOf="@+id/webButton"
+                    app:layout_constraintVertical_bias="0.513" />
+            </android.support.constraint.ConstraintLayout>
+        </LinearLayout>
+    </HorizontalScrollView>
+
+</android.support.constraint.ConstraintLayout>

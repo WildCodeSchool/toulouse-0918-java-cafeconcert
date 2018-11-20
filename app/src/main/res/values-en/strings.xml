@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Café Concert</string>
+    <string name="title_activity_maps">Café Concert</string>
+    <string name="continuer_en_tant_que_visiteur">Continue as a guest</string>
+    <string name="se_connecter">Log in</string>
+    <string name="s_inscrire">Sign up</string>
+    <string name="saisissez_votre_mot_de_passe">Enter your password</string>
+    <string name="valider">Validate !</string>
+    <string name="choisissez_un_pseudo">Choose your pseudo</string>
+    <string name="gps_has_been_refused">Please allow localisation to enjoy all functionalities of this app !</string>
+    <string name="nom_du_cafe">Place name</string>
+    <string name="renseignez_une_adresse_e_mail">Enter your e-mail address</string>
+    <string name="pseudo">Pseudo</string>
+    <string name="password">Password</string>
+    <string name="profile">Profile</string>
+    <string name="map">Map</string>
+    <string name="bar_list">List of bars</string>
+    <string name="favorite">Filters</string>
+    <string name="like">Like</string>
+    <string name="be_social">Be Social</string>
+    <string name="share">Share</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    //#BurgerMenu String need for onBackPressed method
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    //#BurgerMenu String need for onBackPressed method
+    <string name="cafe_concert">Café Concert</string>
+    <string name="nom_du_bar">Place name</string>
+    <string name="mes_coup_coeur">My favorites :</string>
+    <string name="profil">Profile</string>
+    <string name="title_activity_login">Sign in</string>
+    <!-- Strings related to login -->
+    <string name="prompt_Username">Username</string>
+    <string name="camera_has_been_refused">"You should authorize this app to access to your camera, in order to take a nice profile photo!" </string>
+    <string name="prompt_email">E-mail</string>
+    <string name="prompt_password">Password </string>
+    <string name="action_sign_in">Sign in or Register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
+    <string name="no_website">No Website Available</string>
+    <string name="share_text"> You should test the app Café-Concert to discover the best spots to listen good concerts in Toulouse ! It\'s free on Google Play Store ! </string>
+    <string name="language">Français</string>
+    <string name="deconnexion">Logout</string>
+    <string name="les_5_caf_s_les_plus_proches">5 closest places</string>
+    <string name="les_5_bars_les_plus_proches">5 closest places</string>
+    <string name="pas_encore_inscrit">Not yet registered ?</string>
+    <string name="profil_pic_camera">Edit profile pic</string>
+    <string name="please_password">Please enter a login ID and a password</string>
+    <string name="authentification_fail">Authentification failed</string>
+    <string name="please_give_password">Please enter a login ID and a password</string>
+    <string name="itineraire">Itinerary</string>
+    <string name="appeler">Call</string>
+    <string name="site_web">Website</string>
+    <string name="cancel">Cancel</string>
+    <string name="select_action">What do I do ?</string>
+    <string name="you_need_to_be_connected">"You have first to sign up! "</string>
+    <string name="location_impossible">Impossible to detect your position</string>
+    <string name="from_gallery">From gallery</string>
+    <string name="from_camera">From camera</string>
+    <string name="access_menu">Access</string>
+    <string name="connexion_menu">Log in</string>
+    <string name="gallerie">Photo gallery</string>
+    <string name="nophone">No phone number available</string>
+    <string name="aucun_numero">No phone number available</string>
+    <string name="a_instant">Please wait...</string>
+    <string name="loading_current">In progress</string>
+    <string name="connexion_impossible">Connexion failed</string>
+    <string name="inscrire">Sign up</string>
+    <string name="loading_picture">Please wait during the loading</string>
+
+
+</resources>

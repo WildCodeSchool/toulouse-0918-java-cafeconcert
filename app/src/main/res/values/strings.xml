@@ -1,3 +1,74 @@
 <resources>
-    <string name="app_name">Cafe Concert</string>
+    <string name="app_name">Café Concert</string>
+    <string name="title_activity_maps">Café Concert</string>
+    <string name="continuer_en_tant_que_visiteur">Continuer en tant que visiteur</string>
+    <string name="se_connecter">Se connecter</string>
+    <string name="s_inscrire">S\'inscrire</string>
+    <string name="saisissez_votre_mot_de_passe">Saisissez votre mot de passe</string>
+    <string name="valider">Valider !</string>
+    <string name="choisissez_un_pseudo">Choisissez un pseudo</string>
+    <string name="gps_has_been_refused">Veuillez autoriser la localisation de votre position pour bénéficier pleinement des fonctionnalités de l\'application</string>
+    <string name="nom_du_cafe">Nom du Café</string>
+    <string name="renseignez_une_adresse_e_mail">Renseignez une adresse e-mail</string>
+    <string name="pseudo">Pseudo</string>
+    <string name="password">Mot de passe</string>
+    <string name="profile">Profil</string>
+    <string name="map">La Carte</string>
+    <string name="bar_list">Liste de bars</string>
+    <string name="favorite">Filtres</string>
+    <string name="like">Mes favoris</string>
+    <string name="be_social">Être sociable</string>
+    <string name="share">Partager</string>
+    <string name="navigation_drawer_open">Ouvrir le menu</string>
+    //#BurgerMenu String need for onBackPressed method
+    <string name="navigation_drawer_close">Fermer le menu</string>
+    //#BurgerMenu String need for onBackPressed method
+    <string name="cafe_concert">Café Concert</string>
+    <string name="nom_du_bar">Nom du bar</string>
+    <string name="mes_coup_coeur">Mes coups de coeur :</string>
+    <string name="profil">Profil</string>
+    <string name="title_activity_login">Connexion</string>
+    <!-- Strings related to login -->
+    <string name="prompt_Username">Nom d\'utilisateur</string>
+    <string name="camera_has_been_refused">Veuillez autoriser cette application à accéder à votre caméra si vous souhaitez prendre une nouvelle photo de profil !</string>
+    <string name="prompt_email">E-mail</string>
+    <string name="prompt_password">Mot de passe</string>
+    <string name="action_sign_in">Connexion ou Inscription</string>
+    <string name="action_sign_in_short">Connexion</string>
+    <string name="error_invalid_email">Cette adresse e-mail est invalide</string>
+    <string name="error_invalid_password">Ce mot de passe est trop court</string>
+    <string name="error_incorrect_password">Ce mot de passe est incorrect</string>
+    <string name="error_field_required">Veuillez remplir ce champs</string>
+    <string name="permission_rationale">"Vous devez autoriser l'accès à vos contacts pour permettre le remplissage automatique du champs "email"</string>
+    <string name="no_website">Aucun site web disponible</string>
+    <string name="share_text">Va vite tester l\'appli Café-Concert pour découvrir les meilleurs spots où écouter du son à Toulouse ! C\'est gratuit sur le Google Play Store!</string>
+    <string name="les_5_caf_s_les_plus_proches">Les 5 cafés les plus proches</string>
+    <string name="les_5_bars_les_plus_proches">Les 5 bars les plus proches</string>
+    <string name="language">English</string>
+    <string name="deconnexion">Déconnexion</string>
+    <string name="pas_encore_inscrit">Pas encore inscrit?</string>
+    <string name="profil_pic_camera">Changez votre photo de profil</string>
+    <string name="please_password">Renseignez un mot de passe et un identifiant</string>
+    <string name="authentification_fail">Es-tu certain d\'être bien inscrit ?</string>
+    <string name="please_give_password">Veuillez renseigner votre identifiant et votre mot de passe</string>
+    <string name="itineraire">Itinéraire</string>
+    <string name="appeler">Appeler</string>
+    <string name="site_web">Site web</string>
+    <string name="aucun_numero">Aucun numéro disponible pour ce bar</string>
+    <string name="from_gallery">Depuis la galerie</string>
+    <string name="from_camera">Prendre une photo</string>
+    <string name="cancel">Annuler</string>
+    <string name="select_action">Que faire ?</string>
+    <string name="you_need_to_be_connected">Veuillez d\'abord vous inscrire !</string>
+    <string name="location_impossible">Localisation de votre position impossible</string>
+    <string name="access_menu">Accès</string>
+    <string name="connexion_menu">Connexion</string>
+    <string name="gallerie">Gallerie</string>
+    <string name="nophone">Aucun numéro disponible</string>
+    <string name="a_instant">Un moment ...</string>
+    <string name="loading_current">Chargement en cours .</string>
+    <string name="connexion_impossible">Connexion impossible</string>
+    <string name="inscrire">S\'inscrire</string>
+    <string name="loading_picture">Veuillez patienter pendant le chargement de votre nouvelle photo de profil</string>
+
 </resources>
